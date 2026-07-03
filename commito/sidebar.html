@@ -1,0 +1,99 @@
+<aside id="sidebar" class="sidebar-transition absolute lg:relative inset-y-0 left-0 z-50 w-[280px] lg:h-[calc(100vh-32px)] transform -translate-x-full lg:translate-x-0 lg:flex flex-col lg:my-4 lg:ml-4 bg-theme-primary rounded-[2.5rem] shadow-floating border-none hidden transition-all duration-300 group shrink-0">  
+    
+    <div class="logo-wrapper h-20 flex items-center px-6 shrink-0 justify-between rounded-t-[2.5rem] transition-all pt-2 pr-4">  
+        <div class="logo-inner flex items-center gap-3 w-full overflow-hidden">
+            <img src="assets/logo-light.png" alt="Commito Logo" class="w-9 h-9 object-contain shrink-0" onerror="this.outerHTML='<div class=\'w-9 h-9 bg-white/10 text-white flex items-center justify-center font-bold rounded-xl shrink-0\'>C</div>'">
+            <div class="flex flex-col sidebar-text overflow-hidden whitespace-nowrap">
+                <span class='brand-logo-text text-[22px] leading-none text-white'>COMM<span class='text-theme-accent'>I</span>TO</span>
+                <span class="text-[8.5px] uppercase tracking-[0.15em] text-slate-400 font-bold mt-1">Count Connect Grow</span>
+            </div>
+        </div>
+
+        <button id="sidebar-toggle-btn" onclick="toggleDesktopSidebar()" class="hidden lg:flex w-8 h-8 rounded-full items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white transition-colors shrink-0">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+
+        <button onclick="toggleMobileSidebar()" class="lg:hidden text-slate-400 hover:text-white rounded-full bg-white/10 w-8 h-8 flex items-center justify-center shrink-0">
+            <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+    </div>  
+
+    <nav class="flex-1 px-4 py-2 space-y-1 overflow-y-auto overflow-x-hidden w-full">  
+        <a href="index.html" class="nav-item active flex items-center justify-between p-3 font-semibold transition-colors">  
+            <div class="flex items-center gap-3 w-full">  
+                <i data-lucide="layout-dashboard" class="w-[18px] h-[18px] shrink-0"></i>
+                <span class="text-[14px] whitespace-nowrap sidebar-text">Dashboard</span>  
+            </div>  
+        </a>  
+
+        <div>  
+            <button onclick="toggleSubmenu('submenu-company', this)" class="nav-item w-full flex items-center justify-between p-3 font-semibold transition-colors">  
+                <div class="flex items-center gap-3 w-full">  
+                    <i data-lucide="building-2" class="w-[18px] h-[18px] shrink-0"></i> 
+                    <span class="text-[14px] whitespace-nowrap sidebar-text">Company</span>  
+                </div>  
+                <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 transition-transform duration-200 shrink-0"></i>  
+            </button>  
+            <div id="submenu-company" class="submenu pl-[2.5rem] flex flex-col gap-0.5">  
+                <a href="company.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Company Hub</a>  
+                <a href="branches.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Branches</a>  
+                <a href="users.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Users</a>  
+                <a href="company-settings.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Settings</a>  
+            </div>  
+        </div> 
+
+        <div>  
+            <button onclick="toggleSubmenu('submenu-accounts', this)" class="nav-item w-full flex items-center justify-between p-3 font-semibold transition-colors">  
+                <div class="flex items-center gap-3 w-full">  
+                    <i data-lucide="wallet" class="w-[18px] h-[18px] shrink-0"></i>
+                    <span class="text-[14px] whitespace-nowrap sidebar-text">Accounts</span>  
+                </div>  
+                <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 transition-transform duration-200 shrink-0"></i>  
+            </button>  
+            <div id="submenu-accounts" class="submenu pl-[2.5rem] flex flex-col gap-0.5">  
+                <a href="bank-accounts.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Bank Accounts</a>  
+                <a href="cash-book.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Cash book</a>  
+                <a href="ledgers.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Ledgers</a>  
+                <a href="vouchers.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Vouchers</a>  
+            </div>  
+        </div>  
+        
+        <div>  
+            <button onclick="toggleSubmenu('submenu-crm', this)" class="nav-item w-full flex items-center justify-between p-3 font-semibold transition-colors">  
+                <div class="flex items-center gap-3 w-full">  
+                    <i data-lucide="users" class="w-[18px] h-[18px] shrink-0"></i> 
+                    <span class="text-[14px] whitespace-nowrap sidebar-text">CRM</span>  
+                </div>  
+                <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 transition-transform duration-200 shrink-0"></i>  
+            </button>  
+            <div id="submenu-crm" class="submenu pl-[2.5rem] flex flex-col gap-0.5">  
+                <a href="clients.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Clients</a>  
+                <a href="tasks.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Tasks</a>  
+                <a href="credentials.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Credentials</a>  
+            </div>  
+        </div>  
+
+        <div>  
+            <button onclick="toggleSubmenu('submenu-employees', this)" class="nav-item w-full flex items-center justify-between p-3 font-semibold transition-colors">  
+                <div class="flex items-center gap-3 w-full">  
+                    <i data-lucide="contact" class="w-[18px] h-[18px] shrink-0"></i> 
+                    <span class="text-[14px] whitespace-nowrap sidebar-text">Employees</span>  
+                </div>  
+                <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 transition-transform duration-200 shrink-0"></i>  
+            </button>  
+            <div id="submenu-employees" class="submenu pl-[2.5rem] flex flex-col gap-0.5">  
+                <a href="employee-data.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Employee Data</a>  
+                <a href="attendance.html" class="py-1.5 text-[13px] font-medium text-slate-400 hover:text-white whitespace-nowrap">Attendance</a>  
+            </div>  
+        </div>
+    </nav>
+
+    <div class="border-t border-slate-700 p-4 shrink-0 rounded-b-[2.5rem]">
+        <a href="logout.html" class="nav-item flex items-center justify-between px-3 py-2.5 text-slate-400 hover:bg-red-500/10 hover:text-red-400 font-semibold transition-colors group w-full border-l-0 rounded-full">  
+            <div class="flex items-center gap-3 w-full">  
+                <i data-lucide="log-out" class="w-[18px] h-[18px] shrink-0"></i>  
+                <span class="text-[14px] whitespace-nowrap sidebar-text">Logout</span>  
+            </div>  
+        </a>
+    </div>
+</aside>
