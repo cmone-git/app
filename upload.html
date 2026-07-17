@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Documents - CM TaxHub</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/logo-fav.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* CSS Variables for Theming */
+        :root {
+            --primary-blue: #003366;
+            --accent-yellow: #FFD700;
+            --danger-red: #EF4444;
+            --dark-grey-blue: #374151; 
+            
+            /* Light Theme */
+            --bg-main: #F4F6F8;
+            --card-bg: #FFFFFF;
+            --text-dark: #111827;
+            --text-muted: #6B7280;
+            --border-color: rgba(0,0,0,0.06);
+            --shadow-color: rgba(0,0,0,0.04);
+            --nav-bg: #FFFFFF;
+            --icon-bg-light: #F3F4F6;
+            --input-bg: #F9FAFB;
+        }
+
+        /* Dark Theme Override */
+        body.dark-mode {
+            --bg-main: #121212;
+            --card-bg: #1E1E1E;
+            --text-dark: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --border-color: rgba(255,255,255,0.08);
+            --shadow-color: rgba(0,0,0,0.3);
+            --nav-bg: #1E1E1E;
+            --icon-bg-light: #2D2D2D;
+            --input-bg: #121212;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { background-color: var(--bg-main); color: var(--text-dark); padding-bottom: 90px; transition: background-color 0.3s, color 0.3s; }
+        .container { max-width: 600px; margin: 0 auto; padding: 16px; }
+
+        /* App Header */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--bg-main); position: sticky; top: 0; z-index: 50; transition: background-color 0.3s; border-bottom: 1px solid var(--border-color); }
+        .logo-area { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.2rem; color: var(--primary-blue); text-decoration: none; }
+        .logo-area i { color: var(--text-dark); margin-right: 4px; }
+        
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .header-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-dark); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px var(--shadow-color); transition: 0.2s; }
+        .header-btn:active { transform: scale(0.95); }
+        .header-btn i { width: 20px; height: 20px; }
+
+        /* Page Title */
+        .page-title { padding: 12px 0 20px 0; }
+        .page-title h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
+        .page-title p { font-size: 0.95rem; color: var(--text-muted); font-weight: 500; }
+
+        /* Form Sections */
+        .form-section { background: var(--card-bg); border-radius: 20px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 16px var(--shadow-color); border: 1px solid var(--border-color); transition: 0.3s; }
+        .form-section h2 { margin-top: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); padding-bottom: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-color); }
+        .form-section h2 i { color: var(--primary-blue); width: 22px; height: 22px; }
+        
+        /* Inputs */
+        .input-group { margin-bottom: 18px; }
+        .input-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; }
+        .input-group input { width: 100%; padding: 14px 16px; border: 1px solid var(--border-color); border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 0.95rem; background: var(--input-bg); color: var(--text-dark); transition: all 0.2s; }
+        .input-group input:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(0,51,102,0.1); }
+        .input-group input[type="file"] { padding: 12px; border: 1px dashed var(--text-muted); background: transparent; cursor: pointer; font-size: 0.85rem; }
+
+        /* File Upload Helper Box */
+        .file-upload-box { background: var(--icon-bg-light); border: 1px dashed var(--border-color); border-radius: 12px; padding: 16px; text-align: center; margin-bottom: 18px; }
+        .file-upload-box i { color: var(--primary-blue); width: 28px; height: 28px; margin-bottom: 8px; }
+        .file-upload-box p { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+        .file-upload-box input[type="file"] { margin-top: 12px; width: 100%; }
+
+        /* Submit Button */
+        .btn-submit { width: 100%; padding: 16px; background: var(--dark-grey-blue); color: white; border: none; border-radius: 14px; font-weight: 700; font-size: 1.05rem; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 4px 12px rgba(55, 65, 81, 0.3); transition: transform 0.1s; }
+        .btn-submit:active { transform: scale(0.98); }
+
+        /* Loading Overlay */
+        #loading { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--card-bg); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; opacity: 0.95; }
+        .spinner { border: 4px solid var(--icon-bg-light); border-top: 4px solid var(--primary-blue); border-radius: 50%; width: 44px; height: 44px; animation: spin 0.8s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Bottom Nav (Reduced Height) */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 8px 0 12px 0; z-index: 100; box-shadow: 0 -4px 20px rgba(0,0,0,0.03); transition: background-color 0.3s; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; text-decoration: none; cursor: pointer; flex: 1; }
+        .nav-icon-bg { width: 36px; height: 36px; background: var(--icon-bg-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--dark-grey-blue); transition: 0.2s; }
+        .nav-icon-bg i { width: 20px; height: 20px; }
+        .nav-item span { font-size: 0.75rem; font-weight: 700; color: var(--dark-grey-blue); }
+        .nav-item.active .nav-icon-bg { border: 2px solid var(--dark-grey-blue); }
+        
+        body.dark-mode .nav-icon-bg { color: var(--text-dark); }
+        body.dark-mode .nav-item span { color: var(--text-dark); }
+        body.dark-mode .nav-item.active .nav-icon-bg { border-color: var(--text-dark); }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <a href="index.html" class="logo-area">
+            <i data-lucide="arrow-left"></i>
+            CM TaxHub
+        </a>
+        <div class="header-actions">
+            <button class="header-btn" id="themeToggle">
+                <i data-lucide="moon" id="themeIcon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <div class="page-title">
+            <h1>Upload Documents</h1>
+            <p>Send pending docs, statements, and missing files easily.</p>
+        </div>
+
+        <form id="uploadForm">
+            <div class="form-section">
+                <h2><i data-lucide="folder-open"></i> Document Submission</h2>
+                
+                <div class="input-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="Name" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>Contact No *</label>
+                    <input type="tel" id="Mobile" placeholder="Enter your mobile number" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>Email ID *</label>
+                    <input type="email" id="Email" placeholder="Enter your email address" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>Document Name *</label>
+                    <input type="text" id="DocName" placeholder="e.g. Q4 Bank Statement, Missing Form 16" required>
+                </div>
+
+                <div class="file-upload-box">
+                    <i data-lucide="upload-cloud"></i>
+                    <p>Select the file to upload securely.</p>
+                    <input type="file" id="UploadFile" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit"><i data-lucide="send"></i> Upload Document</button>
+        </form>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loading">
+        <div class="spinner"></div>
+        <h3 style="color: var(--text-dark); margin-top:18px; font-weight: 700;">Uploading Document...</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">Please do not close this window.</p>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon-bg"><i data-lucide="home"></i></div>
+            <span>Home</span>
+        </a>
+        <a href="services.html" class="nav-item active">
+            <div class="nav-icon-bg"><i data-lucide="layout-grid"></i></div>
+            <span>Services</span>
+        </a>
+        <a href="https://wa.me/919946151111" class="nav-item">
+            <div class="nav-icon-bg"><i data-lucide="message-square"></i></div>
+            <span>Chat</span>
+        </a>
+        <div class="nav-item" onclick="alert('Menu sidebar toggle can be attached here.')">
+            <div class="nav-icon-bg"><i data-lucide="menu"></i></div>
+            <span>Menu</span>
+        </div>
+    </nav>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.setAttribute('data-lucide', 'sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            themeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            lucide.createIcons(); 
+        });
+
+        // ---------------------------------------------------------
+        // Google Apps Script URL (REPLACE THIS WITH YOUR DEPLOYED URL)
+        // ---------------------------------------------------------
+        const SCRIPT_URL = 'YOUR_GOOGLE_WEB_APP_URL_HERE'; 
+
+        // Helper: Convert File to Base64
+        const getBase64 = (file) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve({ name: file.name, mimeType: file.type, data: reader.result });
+            reader.onerror = error => reject(error);
+        });
+
+        // Form Submission Handler
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            document.getElementById('loading').style.display = 'flex';
+
+            // Gather standard text fields
+            // We map these to the exact variable names your existing Google Apps Script expects.
+            const formData = {
+                Name: document.getElementById('Name').value,
+                Mobile: document.getElementById('Mobile').value,
+                Email: document.getElementById('Email').value,
+                NameOfOthers: document.getElementById('DocName').value, // Mapped to existing App Script column
+                // Leave other ITR form fields blank so they don't break the script
+                PanCard: "", DateOfBirth: "", Gender: "", FathersName: "", CitizenType: "", Address: "",
+                HouseNo: "", Area: "", Pincode: "", District: "", State: "", Country: "", ResidentialStatus: "",
+                FinancialYear: "", PassportNo: "", FirstTimeFiling: "", PortalPassword: "", HOI: "",
+                HeadofIncome: "", NoOfSources: "", PaidAdvanceAmount: ""
+            };
+
+            // Process the uploaded file mapping it to 'UploadAnyOthers' in the Google Apps Script
+            const fileInput = document.getElementById('UploadFile');
+            if (fileInput.files.length > 0) {
+                formData['UploadAnyOthers'] = await getBase64(fileInput.files[0]);
+            }
+
+            try {
+                // Post data to Google Apps Script
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData),
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' } // 'text/plain' bypasses CORS preflight
+                });
+                
+                const result = await response.json();
+                document.getElementById('loading').style.display = 'none';
+                
+                if (result.status === 'success') {
+                    alert('Success! Document uploaded securely. Reference: ' + result.appNo);
+                    document.getElementById('uploadForm').reset();
+                } else {
+                    alert('Upload error: ' + result.message);
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                alert('Connection error occurred. Please verify your SCRIPT_URL or network connection.');
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
