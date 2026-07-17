@@ -2,1774 +2,423 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CMBooks | ERP & CRM</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CM TaxHub</title>
+    <!-- PWA Manifest & Icons -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#10b981"> <!-- Emerald Green -->
-
-    <!-- Google Fonts: Plus Jakarta Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js & HTML2PDF -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
-                    colors: {
-                        brand: {
-                            50: '#ecfdf5',
-                            100: '#d1fae5',
-                            200: '#a7f3d0',
-                            300: '#6ee7b7',
-                            400: '#34d399',
-                            500: '#10b981', // Main Emerald
-                            600: '#059669', // Darker Emerald
-                            700: '#047857',
-                            800: '#065f46',
-                            900: '#064e3b',
-                        },
-                        surface: '#f8fafc',
-                        dark: '#0f172a',
-                        grayDark: '#1e293b'
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="icon" type="image/png" href="assets/logo-fav.png">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        * { -webkit-tap-highlight-color: transparent; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
-        .dark ::-webkit-scrollbar-thumb { background: #475569; }
-
-        .sidebar-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .hide-text { opacity: 0; width: 0; overflow: hidden; white-space: nowrap; margin-left: 0 !important; }
-        .show-text { opacity: 1; width: auto; white-space: nowrap; margin-left: 0.75rem !important; }
-        
-        .modal-enter { animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes scaleIn { from { transform: scale(0.95) translateY(10px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        .syncing { animation: spin 1s linear infinite; }
-
-        .calc-display { font-family: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-
-        /* Professional PI Template - Hidden securely */
-        .pi-template { 
-            background: white; width: 850px; max-width: 100%; padding: 50px; color: #1f2937; 
-            font-family: '"Plus Jakarta Sans"', sans-serif; position: absolute; top: -9999px; left: -9999px; z-index: -1; 
+        /* CSS Variables for Theming */
+        :root {
+            --primary-blue: #003366;
+            --accent-yellow: #FFD700;
+            --danger-red: #EF4444;
+            --dark-grey-blue: #374151; /* Dark grey blue for text and individual donut */
+            
+            /* Light Theme */
+            --bg-main: #F4F6F8;
+            --card-bg: #FFFFFF;
+            --text-dark: #111827;
+            --text-muted: #6B7280;
+            --border-color: rgba(0,0,0,0.06);
+            --shadow-color: rgba(0,0,0,0.04);
+            --nav-bg: #FFFFFF;
+            --icon-bg-light: #F3F4F6;
+            --donut-track: #E5E7EB;
+            
+            /* Icon Specific Colors (Light) */
+            --icon-blue-bg: #EBF3FC; --icon-blue-text: #2563EB;
+            --icon-green-bg: #F0FDF4; --icon-green-text: #16A34A;
+            --icon-yellow-bg: #FFFBEB; --icon-yellow-text: #D97706;
+            --icon-purple-bg: #F5F3FF; --icon-purple-text: #7C3AED;
         }
-        .pi-container { border: 1px solid #e5e7eb; padding: 40px; border-radius: 8px; }
-        .pi-header { border-bottom: 3px solid #10b981; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-start;}
-        .pi-table { width: 100%; border-collapse: collapse; margin: 30px 0; border: 1px solid #e5e7eb; }
-        .pi-table th { background: #ecfdf5; padding: 14px; text-align: left; border-bottom: 2px solid #10b981; color: #065f46; font-weight: 700; font-size: 13px; text-transform: uppercase;}
-        .pi-table td { padding: 14px; border-bottom: 1px solid #e5e7eb; font-size: 14px; }
-        .pi-totals { width: 45%; margin-left: auto; border-collapse: collapse; }
-        .pi-totals td { padding: 10px; border-bottom: 1px solid #f3f4f6; font-size: 14px;}
-        .pi-footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; font-size: 12px; color: #6b7280; }
+
+        /* Dark Theme Override */
+        body.dark-mode {
+            --bg-main: #121212;
+            --card-bg: #1E1E1E;
+            --text-dark: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --border-color: rgba(255,255,255,0.08);
+            --shadow-color: rgba(0,0,0,0.3);
+            --nav-bg: #1E1E1E;
+            --icon-bg-light: #2D2D2D;
+            --donut-track: #374151;
+            
+            --icon-blue-bg: rgba(37, 99, 235, 0.2); --icon-blue-text: #60A5FA;
+            --icon-green-bg: rgba(22, 163, 74, 0.2); --icon-green-text: #4ADE80;
+            --icon-yellow-bg: rgba(217, 119, 6, 0.2); --icon-yellow-text: #FBBF24;
+            --icon-purple-bg: rgba(124, 58, 237, 0.2); --icon-purple-text: #A78BFA;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { background-color: var(--bg-main); color: var(--text-dark); padding-bottom: 85px; transition: background-color 0.3s, color 0.3s; }
+
+        .container { max-width: 500px; margin: 0 auto; padding: 0 16px; }
+
+        /* App Header */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--bg-main); position: sticky; top: 0; z-index: 50; transition: background-color 0.3s; }
+        .logo-area { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.2rem; color: var(--primary-blue); }
+        .logo-area img { height: 36px; width: auto; }
+        
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .header-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-dark); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px var(--shadow-color); transition: 0.2s; }
+        .header-btn:active { transform: scale(0.95); }
+        .header-btn i { width: 20px; height: 20px; }
+        
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--icon-bg-light); display: flex; align-items: center; justify-content: center; color: var(--text-muted); border: 1px solid var(--border-color); }
+        .user-avatar i { width: 22px; height: 22px; }
+
+        /* Search Bar (Hidden by default) */
+        .search-container { background: var(--card-bg); padding: 10px 20px; display: none; border-bottom: 1px solid var(--border-color); box-shadow: 0 4px 12px var(--shadow-color); position: sticky; top: 72px; z-index: 49; }
+        .search-container.active { display: block; animation: slideDown 0.2s ease-out; }
+        .search-box { display: flex; align-items: center; background: var(--bg-main); border-radius: 12px; padding: 8px 12px; border: 1px solid var(--border-color); }
+        .search-box i { color: var(--text-muted); margin-right: 8px; width: 18px; }
+        .search-box input { border: none; background: transparent; width: 100%; outline: none; font-size: 0.95rem; color: var(--text-dark); }
+        
+        @keyframes slideDown { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Welcome Section */
+        .welcome-section { padding: 12px 0 24px 0; }
+        .welcome-section h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .welcome-section p { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
+
+        /* Due Date Full Width Card */
+        .due-card { background: var(--card-bg); border-radius: 24px; padding: 22px; border: 1px solid var(--border-color); box-shadow: 0 4px 24px var(--shadow-color); margin-bottom: 28px; transition: 0.3s; }
+        .badge { display: inline-block; background: #FEF3C7; color: #B45309; font-size: 0.75rem; font-weight: 800; padding: 6px 12px; border-radius: 8px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .due-warning { font-size: 0.95rem; color: var(--text-muted); font-weight: 500; line-height: 1.4; margin-bottom: 20px; }
+        
+        /* Inner 2 Due Dates in a Row */
+        .due-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+        
+        .due-small-card { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; padding: 18px 12px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        
+        .donut-container { position: relative; width: 64px; height: 64px; margin-bottom: 12px; }
+        .donut-chart { width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        /* Individual: Dark Grey Blue, Audit: Red */
+        .donut-chart.dark-blue { background: conic-gradient(var(--dark-grey-blue) 0% 15%, var(--donut-track) 15% 100%); }
+        .donut-chart.red { background: conic-gradient(var(--danger-red) 0% 75%, var(--donut-track) 75% 100%); }
+        
+        .donut-inner { width: 48px; height: 48px; background: var(--bg-main); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .donut-inner .num { font-size: 1.1rem; font-weight: 800; color: var(--text-dark); line-height: 1.1; }
+        .donut-inner .label { font-size: 0.55rem; font-weight: 700; color: var(--text-muted); }
+
+        .due-small-card h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+        .due-small-card span { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+
+        /* Small width 1 File Now Button */
+        .btn-file-now { display: flex; align-items: center; justify-content: center; width: max-content; padding: 14px 40px; margin: 0 auto; background: var(--dark-grey-blue); color: #FFFFFF; font-size: 1rem; font-weight: 700; border-radius: 14px; text-decoration: none; border: none; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(55, 65, 81, 0.3); }
+        .btn-file-now:active { transform: scale(0.96); }
+
+        /* Section Titles */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; text-transform: uppercase; }
+        .section-header h3 { font-size: 0.9rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; }
+
+        /* Services Grid */
+        .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+        .service-card { background: var(--card-bg); border-radius: 20px; padding: 20px 18px; text-decoration: none; display: flex; flex-direction: column; border: 1px solid var(--border-color); box-shadow: 0 4px 16px var(--shadow-color); color: var(--text-dark); transition: transform 0.1s, background-color 0.3s; }
+        .service-card:active { transform: scale(0.97); }
+        
+        .service-card .icon-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+        .service-card .main-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .service-card .main-icon i { width: 22px; height: 22px; }
+        .icon-blue { background: var(--icon-blue-bg); color: var(--icon-blue-text); }
+        .icon-green { background: var(--icon-green-bg); color: var(--icon-green-text); }
+        .icon-yellow { background: var(--icon-yellow-bg); color: var(--icon-yellow-text); }
+        .icon-purple { background: var(--icon-purple-bg); color: var(--icon-purple-text); }
+        
+        .service-card .corner-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--icon-bg-light); display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
+        .service-card .corner-icon i { width: 14px; height: 14px; }
+
+        .service-card h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; line-height: 1.25; }
+        .service-card p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .service-card .card-btn { background: var(--icon-bg-light); color: var(--text-dark); font-size: 0.8rem; font-weight: 700; text-align: center; padding: 10px; border-radius: 12px; margin-top: auto; }
+
+        /* Full Width Bottom Navigation (Height Adjusted) */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 8px 0 12px 0; z-index: 100; box-shadow: 0 -4px 20px rgba(0,0,0,0.03); transition: background-color 0.3s; }
+        
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; cursor: pointer; flex: 1; }
+        /* Light grey icon background - height reduced */
+        .nav-icon-bg { width: 36px; height: 36px; background: var(--icon-bg-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--dark-grey-blue); transition: 0.2s; }
+        .nav-icon-bg i { width: 20px; height: 20px; }
+        /* Dark grey blue text */
+        .nav-item span { font-size: 0.75rem; font-weight: 700; color: var(--dark-grey-blue); }
+        
+        .nav-item:active .nav-icon-bg { transform: scale(0.9); }
+        
+        /* Active State - Matches dark grey blue text */
+        .nav-item.active .nav-icon-bg { border: 2px solid var(--dark-grey-blue); }
+
+        /* Hamburger Sidebar Menu */
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 200; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(2px); }
+        .sidebar-overlay.open { opacity: 1; visibility: visible; }
+        
+        .sidebar { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: var(--card-bg); z-index: 201; box-shadow: -4px 0 24px rgba(0,0,0,0.15); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .sidebar.open { right: 0; }
+        
+        .sidebar-header { padding: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .sidebar-header h2 { font-size: 1.3rem; color: var(--primary-blue); display: flex; align-items: center; gap: 12px; }
+        .close-btn { background: var(--icon-bg-light); border: none; color: var(--text-dark); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        
+        .sidebar-links { padding: 24px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
+        .sidebar-link { display: flex; align-items: center; gap: 16px; padding: 14px 18px; border-radius: 12px; text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 1.05rem; transition: background 0.2s; }
+        .sidebar-link:hover { background: var(--bg-main); }
+        .sidebar-link i { color: var(--primary-blue); width: 22px; height: 22px; }
+
+        /* Minimal Styled Sidebar CTA */
+        .sidebar-cta { padding: 24px; border-top: 1px solid var(--border-color); background: var(--card-bg); }
+        .sidebar-cta p { font-size: 1rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 600; }
+        
+        .cta-btn { display: flex; align-items: center; width: 100%; padding: 10px 14px; border-radius: 14px; text-decoration: none; font-weight: 600; font-size: 1rem; margin-bottom: 12px; color: var(--text-dark); transition: background 0.2s; }
+        .cta-btn:active { background: var(--icon-bg-light); transform: scale(0.98); }
+        
+        .cta-icon-bg { background: var(--icon-bg-light); width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 16px; border: 1px solid var(--border-color); }
+        .cta-icon-bg i { width: 22px; height: 22px; color: var(--text-dark); }
     </style>
 </head>
+<body>
 
-<body class="bg-surface dark:bg-dark text-gray-800 dark:text-gray-100 font-sans transition-colors selection:bg-brand-500 selection:text-white flex h-screen overflow-hidden">
-
-    <!-- Global Datalists for Searchable Inputs -->
-    <datalist id="clientDatalist"></datalist>
-    <datalist id="ledgerDatalist"></datalist>
-
-    <!-- Splash Screen -->
-<div id="splash-screen" class="fixed inset-0 bg-white z- flex flex-col items-center justify-center transition-opacity duration-500">
-        <img src="assets/logo.png" alt="CMBooks Logo" class="w-20 h-20 object-contain mb-4">
-        <img src="assets/name.png" alt="CMBooks" class="h-8 object-contain">
-    </div>
-
-    <!-- Mobile Sidebar Overlay -->
-    <div id="sidebarOverlay" class="fixed inset-0 bg-gray-900/50 z-40 hidden lg:hidden backdrop-blur-sm" onclick="toggleMobileSidebar()"></div>
-
-    <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar-transition fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-grayDark border-r border-gray-200 dark:border-gray-800 transform -translate-x-full lg:relative lg:translate-x-0 flex flex-col shadow-sm">
-        <button onclick="toggleDesktopSidebar()" class="hidden lg:flex absolute -right-3 top-5 w-6 h-6 bg-white dark:bg-grayDark border border-gray-200 dark:border-gray-700 rounded-full items-center justify-center text-gray-500 hover:text-brand-600 transition-colors shadow-sm z-50" id="collapseBtn">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-        </button>
-
-        <div class="h-16 flex items-center px-4 border-b border-gray-100 dark:border-gray-800 overflow-hidden shrink-0">
-            <div class="flex items-center flex-shrink-0">
-                <div class="w-9 h-9 rounded-lg bg-brand-50 flex items-center justify-center border border-brand-100 p-1 mr-3">
-                    <img src="assets/logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <svg style="display: none;" class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                </div>
-                <img src="assets/name.png" alt="CMBooks" class="h-5 object-contain sidebar-text show-text" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <span style="display: none;" class="font-extrabold text-xl tracking-tight sidebar-text show-text">CMBooks</span>
+    <!-- Header Section -->
+    <header>
+        <div class="logo-area">
+            <img src="assets/logo-name.png" alt="" onerror="this.src='https://via.placeholder.com/40x40/003366/FFD700?text=CM'">
+            CM TaxHub
+        </div>
+        <div class="header-actions">
+            <!-- Search Working Icon -->
+            <button class="header-btn" id="searchToggleBtn">
+                <i data-lucide="search"></i>
+            </button>
+            <!-- Theme Toggle Icon -->
+            <button class="header-btn" id="themeToggle">
+                <i data-lucide="moon" id="themeIcon"></i>
+            </button>
+            <!-- User Avatar -->
+            <div class="user-avatar">
+                <i data-lucide="user"></i>
             </div>
         </div>
+    </header>
 
-        <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-1.5 overflow-x-hidden" id="desktop-nav">
-            <button class="side-item w-full flex items-center px-3 py-2.5 bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400 rounded-xl font-semibold transition-colors group" id="side-dashboard" onclick="switchTab('dashboard')">
-                <i class="fa-solid fa-chart-pie w-5 text-center flex-shrink-0"></i><span class="sidebar-text show-text ml-3">Overview</span>
-            </button>
-            <button class="side-item w-full flex items-center px-3 py-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-xl font-medium transition-colors group" id="side-clients" onclick="switchTab('clients')">
-                <i class="fa-solid fa-users w-5 text-center flex-shrink-0"></i><span class="sidebar-text show-text ml-3">Clients Directory</span>
-            </button>
-            <button class="side-item w-full flex items-center px-3 py-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-xl font-medium transition-colors group" id="side-credentials" onclick="switchTab('credentials')">
-                <i class="fa-solid fa-key w-5 text-center flex-shrink-0"></i><span class="sidebar-text show-text ml-3">Credentials Vault</span>
-            </button>
-            <button class="side-item w-full flex items-center px-3 py-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-xl font-medium transition-colors group" id="side-tasks" onclick="switchTab('tasks')">
-                <i class="fa-solid fa-list-check w-5 text-center flex-shrink-0"></i><span class="sidebar-text show-text ml-3">Task Manager</span>
-            </button>
+    <!-- Hidden Search Bar Overlay -->
+    <div class="search-container" id="searchContainer">
+        <div class="search-box">
+            <i data-lucide="search"></i>
+            <input type="text" placeholder="Search forms, services, or updates..." autoFocus>
+        </div>
+    </div>
+
+    <main class="container">
+        
+        <!-- Welcome Message -->
+        <div class="welcome-section">
+            <h1>Welcome back! 👋</h1>
+            <p>Manage your filings & compliance easily.</p>
+        </div>
+
+        <!-- Full Width Due Date Card -->
+        <div class="due-card">
+            <div class="badge">Urgent Action</div>
+            <p class="due-warning">File your income tax return before due date and avoid late fee and interest.</p>
             
-            <div class="my-3 border-t border-gray-100 dark:border-gray-800"></div>
-            <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 sidebar-text show-text">Finance</p>
+            <div class="due-row">
+                <!-- Due Date 1: Individuals (Dark Grey Blue Donut) -->
+                <div class="due-small-card">
+                    <div class="donut-container">
+                        <div class="donut-chart dark-blue">
+                            <div class="donut-inner">
+                                <span class="num">14</span>
+                                <span class="label">DAYS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>For Individual</h4>
+                    <span>July 31, 2026</span>
+                </div>
+
+                <!-- Due Date 2: Audit Cases (Red Donut) -->
+                <div class="due-small-card">
+                    <div class="donut-container">
+                        <div class="donut-chart red">
+                            <div class="donut-inner">
+                                <span class="num">75</span>
+                                <span class="label">DAYS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>For Audit Cases</h4>
+                    <span>Sep 30, 2026</span>
+                </div>
+            </div>
             
-            <button class="side-item w-full flex items-center px-3 py-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-xl font-medium transition-colors group" id="side-ledgers" onclick="switchTab('ledgers')">
-                <i class="fa-solid fa-book-open w-5 text-center flex-shrink-0"></i><span class="sidebar-text show-text ml-3">Ledger Master</span>
-            </button>
-            <button class="side-item w-full flex items-center px-3 py-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-xl font-medium transition-colors group" id="side-transactions" onclick="switchTab('transactions')">
-                <i class="fa-solid fa-money-bill-transfer w-5 text-center flex-shrink-0"></i><span class="sidebar-text show-text ml-3">Transactions</span>
-            </button>
-            <button class="side-item w-full flex items-center px-3 py-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-xl font-medium transition-colors group" id="side-calc" onclick="switchTab('calc')">
-                <i class="fa-solid fa-calculator w-5 text-center flex-shrink-0"></i><span class="sidebar-text show-text ml-3">Calculator</span>
-            </button>
-            
-            <div class="my-3 border-t border-gray-100 dark:border-gray-800"></div>
-            <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 sidebar-text show-text">Tools</p>
-            
-            <a href="gstr1/index.html" class="w-full flex items-center px-3 py-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-xl font-medium transition-colors group">
-                <i class="fa-solid fa-file-invoice-dollar w-5 text-center flex-shrink-0"></i><span class="sidebar-text show-text ml-3">GST Return Tool</span>
+            <!-- Single Small Width File Now Button -->
+            <a href="form.html" class="btn-file-now">File Return Now</a>
+        </div>
+
+        <!-- Quick Services Grid -->
+        <div class="section-header">
+            <h3>Quick Services</h3>
+        </div>
+        
+        <div class="services-grid">
+            <a href="form.html" class="service-card">
+                <div class="icon-row">
+                    <div class="main-icon icon-blue"><i data-lucide="file-text"></i></div>
+                    <div class="corner-icon"><i data-lucide="arrow-up-right"></i></div>
+                </div>
+                <h4>Income Tax<br>Filing</h4>
+                <p>Submit your returns accurately and securely.</p>
+                <div class="card-btn">File Now</div>
             </a>
-            <a href="tma.html" class="w-full flex items-center px-3 py-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-xl font-medium transition-colors group">
-                <i class="fa-solid fa-trademark w-5 text-center flex-shrink-0"></i><span class="sidebar-text show-text ml-3">Trademark App</span>
+            
+            <a href="upload.html" class="service-card">
+                <div class="icon-row">
+                    <div class="main-icon icon-green"><i data-lucide="upload-cloud"></i></div>
+                    <div class="corner-icon"><i data-lucide="arrow-up-right"></i></div>
+                </div>
+                <h4>Upload<br>Statement</h4>
+                <p>Attach Form 16, bank statements, and more.</p>
+                <div class="card-btn">Upload</div>
             </a>
-        </nav>
 
-        <div class="p-4 border-t border-gray-100 dark:border-gray-800 shrink-0 overflow-hidden">
-            <div class="flex items-center">
-                <div class="w-9 h-9 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-bold flex-shrink-0">AD</div>
-                <div class="sidebar-text show-text min-w-0 ml-3">
-                    <p class="text-sm font-bold text-gray-900 dark:text-white truncate">Admin User</p>
-                    <p class="text-xs text-gray-500 truncate">CMBooks</p>
+            <a href="pay.html" class="service-card">
+                <div class="icon-row">
+                    <div class="main-icon icon-yellow"><i data-lucide="credit-card"></i></div>
+                    <div class="corner-icon"><i data-lucide="arrow-up-right"></i></div>
                 </div>
-            </div>
+                <h4>Secure<br>Payment</h4>
+                <p>Clear advance tax or penalty dues instantly.</p>
+                <div class="card-btn">Pay Now</div>
+            </a>
+
+            <a href="news.html" class="service-card">
+                <div class="icon-row">
+                    <div class="main-icon icon-purple"><i data-lucide="bell-ring"></i></div>
+                    <div class="corner-icon"><i data-lucide="arrow-up-right"></i></div>
+                </div>
+                <h4>Tax<br>Updates</h4>
+                <p>Stay informed on the latest IT slabs and news.</p>
+                <div class="card-btn">Learn more</div>
+            </a>
         </div>
-    </aside>
 
-    <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col h-screen overflow-hidden bg-surface dark:bg-dark">
-        <!-- Top Header -->
-        <header id="main-header" class="hidden h-16 bg-white dark:bg-grayDark border-b border-gray-200 dark:border-gray-800 items-center justify-between px-4 sm:px-6 lg:px-8 shadow-sm z-10 shrink-0">
-            <!-- Mobile Menu Button -->
-            <div class="flex items-center gap-3 lg:hidden">
-                <button onclick="toggleMobileSidebar()" class="p-2 -ml-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
-                <img src="assets/name.png" alt="CMBooks" class="h-5 object-contain">
-            </div>
+    </main>
 
-            <!-- Search Bar with working Focus Icon -->
-            <div class="hidden lg:flex flex-1 justify-start pl-2">
-                <div class="max-w-md w-full relative group">
-                    <label for="global-search" class="absolute inset-y-0 left-0 pl-3 flex items-center cursor-pointer">
-                        <i class="fa-solid fa-search text-gray-400 group-focus-within:text-brand-500 transition-colors"></i>
-                    </label>
-                    <input type="text" id="global-search" class="block w-full pl-10 pr-3 py-2 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50/50 dark:bg-dark focus:bg-white dark:focus:bg-grayDark focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm transition-all outline-none" placeholder="Search clients, tasks, amounts..." onkeyup="handleSearch()">
-                </div>
-            </div>
-
-            <!-- Right Actions -->
-            <div class="flex items-center gap-2 sm:gap-3 ml-auto">
-                <button id="themeToggle" class="w-10 h-10 rounded-full bg-gray-50 dark:bg-dark text-gray-500 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-center border border-gray-200 dark:border-gray-700" title="Toggle Theme">
-                    <i class="fa-solid fa-moon dark:hidden"></i><i class="fa-solid fa-sun hidden dark:block"></i>
-                </button>
-                <button class="w-10 h-10 rounded-full bg-gray-50 dark:bg-dark text-gray-500 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-center border border-gray-200 dark:border-gray-700" onclick="toggleViewMode()" title="Toggle View">
-                    <i id="view-icon" class="fa-solid fa-grip"></i> 
-                </button>
-                <button class="w-10 h-10 rounded-full bg-gray-50 dark:bg-dark text-gray-500 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-center border border-gray-200 dark:border-gray-700" onclick="fetchApiData()" title="Sync Data">
-                    <i class="fa-solid fa-rotate" id="sync-icon"></i>
-                </button>
-            </div>
-        </header>
-
-        <!-- Dynamic Views Area -->
-        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 relative">
-            
-            <!-- Dashboard View -->
-            <div id="view-dashboard" class="tab-section hidden opacity-0 transition-opacity space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div>
-                        <h2 class="text-2xl font-extrabold tracking-tight">Dashboard Overview</h2>
-                        <p class="text-sm text-gray-500 mt-1">Track your active assignments and financial metrics.</p>
-                    </div>
-                </div>
-                
-                <!-- 4 KPI CARDS -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="bg-white dark:bg-grayDark rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden">
-                        <div class="absolute -right-4 -top-4 w-20 h-20 bg-brand-50 dark:bg-brand-900/30 rounded-full opacity-50"></div>
-                        <p class="text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider relative">Total Clients</p>
-                        <h3 class="text-3xl font-black text-brand-600 dark:text-brand-400 relative" id="dash-client-count">0</h3>
-                    </div>
-                    <div class="bg-white dark:bg-grayDark rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden">
-                        <div class="absolute -right-4 -top-4 w-20 h-20 bg-amber-50 dark:bg-amber-900/30 rounded-full opacity-50"></div>
-                        <p class="text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider relative">Pending Tasks</p>
-                        <h3 class="text-3xl font-black text-amber-500 dark:text-amber-400 relative" id="dash-pending-task-count">0</h3>
-                    </div>
-                    <div class="bg-white dark:bg-grayDark rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden">
-                        <div class="absolute -right-4 -top-4 w-20 h-20 bg-emerald-50 dark:bg-emerald-900/30 rounded-full opacity-50"></div>
-                        <p class="text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider relative">Receivables (₹)</p>
-                        <h3 class="text-3xl font-black text-emerald-600 dark:text-emerald-400 relative" id="dash-receivables">₹0</h3>
-                    </div>
-                    <div class="bg-white dark:bg-grayDark rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden">
-                        <div class="absolute -right-4 -top-4 w-20 h-20 bg-rose-50 dark:bg-rose-900/30 rounded-full opacity-50"></div>
-                        <p class="text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider relative">Payables (₹)</p>
-                        <h3 class="text-3xl font-black text-rose-600 dark:text-rose-400 relative" id="dash-payables">₹0</h3>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="bg-white dark:bg-grayDark rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm lg:col-span-1">
-                        <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-pie text-brand-500"></i> Task Status
-                        </h3>
-                        <div class="relative h-64 w-full">
-                            <canvas id="taskChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white dark:bg-grayDark rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm lg:col-span-2 overflow-hidden flex flex-col">
-                        <div class="px-6 py-5 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
-                            <h3 class="text-lg font-bold flex items-center gap-2">
-                                <i class="fa-solid fa-clock-rotate-left text-brand-500"></i> Latest Pending Tasks
-                            </h3>
-                            <button onclick="switchTab('tasks')" class="text-sm font-bold text-brand-600 hover:text-brand-700">View All</button>
-                        </div>
-                        <div class="overflow-x-auto flex-1">
-                            <table class="w-full text-left border-collapse min-w-[500px]">
-                                <thead class="bg-gray-50/50 dark:bg-gray-800/50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Client</th>
-                                        <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Task</th>
-                                        <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Status</th>
-                                        <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase text-right">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dash-pending-list" class="divide-y divide-gray-100 dark:divide-gray-800">
-                                    <!-- Populated via JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Clients View -->
-            <div id="view-clients" class="tab-section hidden opacity-0 transition-opacity space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <h2 class="text-2xl font-extrabold tracking-tight">Clients Directory</h2>
-                    <button class="px-5 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-semibold hover:bg-brand-700 transition-colors shadow-sm flex items-center gap-2 justify-center" onclick="openModal('modal-client')">
-                        <i class="fa-solid fa-plus"></i> New Client
-                    </button>
-                </div>
-                <div id="clients-list">Loading...</div>
-            </div>
-
-            <!-- Credentials View -->
-            <div id="view-credentials" class="tab-section hidden opacity-0 transition-opacity space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <h2 class="text-2xl font-extrabold tracking-tight">Credentials Vault</h2>
-                    <button class="px-5 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-semibold hover:bg-brand-700 transition-colors shadow-sm flex items-center gap-2 justify-center" onclick="openModal('modal-cred')">
-                        <i class="fa-solid fa-plus"></i> New Credential
-                    </button>
-                </div>
-                <div id="creds-list">Loading...</div>
-            </div>
-
-            <!-- Tasks View -->
-            <div id="view-tasks" class="tab-section hidden opacity-0 transition-opacity space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <h2 class="text-2xl font-extrabold tracking-tight">Task Manager</h2>
-                    <button class="px-5 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-semibold hover:bg-brand-700 transition-colors shadow-sm flex items-center gap-2 justify-center" onclick="openModal('modal-task')">
-                        <i class="fa-solid fa-plus"></i> New Task
-                    </button>
-                </div>
-                <div id="tasks-list">Loading...</div>
-            </div>
-
-            <!-- Ledgers View -->
-            <div id="view-ledgers" class="tab-section hidden opacity-0 transition-opacity space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-2xl font-extrabold tracking-tight">Ledgers Master</h2>
-                        <p class="text-sm text-gray-500 mt-1">Manage Chart of Accounts and internal ledgers.</p>
-                    </div>
-                    <button class="px-5 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-semibold hover:bg-brand-700 transition-colors shadow-sm flex items-center gap-2 justify-center" onclick="openModal('modal-ledger')">
-                        <i class="fa-solid fa-book-medical"></i> Add Ledger
-                    </button>
-                </div>
-                <div id="ledgers-list">Loading...</div>
-            </div>
-
-            <!-- Transactions View -->
-            <div id="view-transactions" class="tab-section hidden opacity-0 transition-opacity space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-2xl font-extrabold tracking-tight">Financial Transactions</h2>
-                        <p class="text-sm text-gray-500 mt-1">Double-entry accounting, receipts, payments, and auto-mapped task sales.</p>
-                    </div>
-                    <button class="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-sm flex items-center gap-2 justify-center" onclick="openModal('modal-transaction')">
-                        <i class="fa-solid fa-money-check-dollar"></i> Add Transaction
-                    </button>
-                </div>
-                <div id="transactions-list">Loading...</div>
-            </div>
-
-            <!-- Calc View -->
-            <div id="view-calc" class="tab-section hidden opacity-0 transition-opacity space-y-6">
-                <h2 class="text-2xl font-extrabold tracking-tight">Calculator</h2>
-                <div class="bg-white dark:bg-grayDark rounded-3xl p-6 border border-gray-200 dark:border-gray-700 shadow-xl max-w-sm mx-auto">
-                    <input type="text" id="calc-display" class="calc-display w-full bg-gray-50 dark:bg-dark text-gray-900 dark:text-white p-5 text-4xl font-extrabold text-right rounded-2xl mb-6 border border-gray-200 dark:border-gray-700 outline-none" value="0" disabled>
-                    <div class="grid grid-cols-4 gap-3">
-                        <button class="bg-rose-50 dark:bg-rose-900/30 text-rose-600 hover:bg-rose-100 border border-rose-100 dark:border-rose-800 rounded-2xl text-xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('C')">C</button>
-                        <button class="bg-brand-50 dark:bg-brand-900/30 text-brand-600 hover:bg-brand-100 border border-brand-100 dark:border-brand-800 rounded-2xl text-xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('/')">/</button>
-                        <button class="bg-brand-50 dark:bg-brand-900/30 text-brand-600 hover:bg-brand-100 border border-brand-100 dark:border-brand-800 rounded-2xl text-xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('*')">×</button>
-                        <button class="bg-brand-50 dark:bg-brand-900/30 text-brand-600 hover:bg-brand-100 border border-brand-100 dark:border-brand-800 rounded-2xl text-xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('-')">-</button>
-                        
-                        <button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl text-2xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('7')">7</button>
-                        <button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl text-2xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('8')">8</button>
-                        <button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl text-2xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('9')">9</button>
-                        <button class="bg-brand-50 dark:bg-brand-900/30 text-brand-600 hover:bg-brand-100 border border-brand-100 dark:border-brand-800 rounded-2xl text-2xl font-bold flex items-center justify-center transition-colors active:scale-95 row-span-2" onclick="calcAction('+')">+</button>
-                        
-                        <button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl text-2xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('4')">4</button>
-                        <button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl text-2xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('5')">5</button>
-                        <button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl text-2xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('6')">6</button>
-                        
-                        <button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl text-2xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('1')">1</button>
-                        <button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl text-2xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('2')">2</button>
-                        <button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl text-2xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('3')">3</button>
-                        <button class="bg-brand-600 text-white hover:bg-brand-700 rounded-2xl text-2xl font-bold flex items-center justify-center transition-colors active:scale-95 row-span-2 shadow-md shadow-brand-500/30" onclick="calcAction('=')">=</button>
-                        
-                        <button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl text-2xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95 col-span-2" onclick="calcAction('0')">0</button>
-                        <button class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl text-2xl font-bold h-16 flex items-center justify-center transition-colors active:scale-95" onclick="calcAction('.')">.</button>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- HIDDEN BY DEFAULT: Mobile Bottom Nav -->
-        <nav id="mobile-bottom-nav" class="hidden lg:hidden absolute bottom-0 left-0 w-full bg-white dark:bg-grayDark border-t border-gray-200 dark:border-gray-800 justify-around items-center pb-safe pt-2 px-1 z-40 overflow-x-auto gap-1 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-            <button class="nav-item flex flex-col items-center justify-center min-w-[50px] h-14 text-brand-600 transition-colors" id="nav-dashboard" onclick="switchTab('dashboard')">
-                <i class="fa-solid fa-chart-pie text-[18px] mb-1"></i><span class="text-[10px] font-bold">Home</span>
-            </button>
-            <button class="nav-item flex flex-col items-center justify-center min-w-[50px] h-14 text-gray-400 hover:text-brand-500 transition-colors" id="nav-clients" onclick="switchTab('clients')">
-                <i class="fa-solid fa-users text-[18px] mb-1"></i><span class="text-[10px] font-bold">Clients</span>
-            </button>
-            <button class="nav-item flex flex-col items-center justify-center min-w-[50px] h-14 text-gray-400 hover:text-brand-500 transition-colors" id="nav-tasks" onclick="switchTab('tasks')">
-                <i class="fa-solid fa-list-check text-[18px] mb-1"></i><span class="text-[10px] font-bold">Tasks</span>
-            </button>
-            <button class="nav-item flex flex-col items-center justify-center min-w-[50px] h-14 text-gray-400 hover:text-brand-500 transition-colors" id="nav-transactions" onclick="switchTab('transactions')">
-                <i class="fa-solid fa-money-bill-transfer text-[18px] mb-1"></i><span class="text-[10px] font-bold">Trans</span>
-            </button>
-            <button class="nav-item flex flex-col items-center justify-center min-w-[50px] h-14 text-gray-400 hover:text-brand-500 transition-colors" id="nav-calc" onclick="switchTab('calc')">
-                <i class="fa-solid fa-calculator text-[18px] mb-1"></i><span class="text-[10px] font-bold">Calc</span>
-            </button>
-        </nav>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full text-sm font-bold z-[3000] transition-all duration-300 opacity-0 pointer-events-none shadow-xl flex items-center gap-2">Action Successful</div>
-
-    <!-- MODALS -->
-
-    <!-- Client Modal -->
-    <div id="modal-client" class="fixed inset-0 bg-gray-900/70 z-[2000] hidden items-center justify-center backdrop-blur-sm p-4 sm:p-0">
-        <div class="modal-enter bg-white dark:bg-grayDark w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 shadow-2xl relative">
-            <div class="flex justify-between items-center mb-6 sticky top-0 bg-white/90 dark:bg-grayDark/90 backdrop-blur-md pb-4 border-b border-gray-100 dark:border-gray-800 z-10 pt-2 -mt-2">
-                <h3 class="text-xl font-extrabold" id="client-modal-title">Add Client</h3>
-                <button class="w-8 h-8 bg-gray-100 dark:bg-dark text-gray-500 rounded-full flex items-center justify-center hover:bg-rose-50 hover:text-rose-600 transition-colors" onclick="closeModal('modal-client')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <input type="hidden" id="c_Client_ID">
-            <div class="space-y-4">
-                <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Client Name</label><input type="text" id="c_Client_Name" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Mobile</label><input type="tel" id="c_Mobile" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" pattern="[0-9]{10}" maxlength="10" placeholder="10 Digit Number" oninput="this.value=this.value.replace(/[^0-9]/g,'');"></div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Email</label><input type="email" id="c_Email" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" placeholder="client@email.com"></div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Aadhaar No</label><input type="text" id="c_Adhar_No" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">PAN No</label><input type="text" id="c_Pan_No" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none uppercase focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" maxlength="10"></div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Constitution Type</label>
-                        <select id="c_Constitution_Type" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"><option value="">Select...</option><option>Individual</option><option>HUF</option><option>Partnership</option><option>Company</option><option>Trust</option></select>
-                    </div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Status</label>
-                        <select id="c_Status" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"><option>Active</option><option>Inactive</option></select>
-                    </div>
-                </div>
-                <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Branch</label><input type="text" id="c_Branch" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Doc Folder URL</label><input type="url" id="c_Doc_Folder_Link_URL" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none text-brand-600 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" placeholder="https://..."></div>
-                <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Notes</label><input type="text" id="c_Notes" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                
-                <button class="w-full mt-6 px-4 py-3.5 bg-brand-600 text-white rounded-xl text-base font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/30 flex justify-center items-center gap-2" onclick="saveRecord('Clients')"><i class="fa-solid fa-floppy-disk"></i> Save Client</button>
-            </div>
+    <!-- Standard Bottom Navigation Dock -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <div class="nav-icon-bg"><i data-lucide="home"></i></div>
+            <span>Home</span>
+        </a>
+        <a href="services.html" class="nav-item">
+            <div class="nav-icon-bg"><i data-lucide="layout-grid"></i></div>
+            <span>Services</span>
+        </a>
+        <a href="https://wa.me/919946151111" class="nav-item">
+            <div class="nav-icon-bg"><i data-lucide="message-square"></i></div>
+            <span>Chat</span>
+        </a>
+        <div class="nav-item" id="menuToggle">
+            <div class="nav-icon-bg"><i data-lucide="menu"></i></div>
+            <span>Menu</span>
         </div>
-    </div>
+    </nav>
 
-    <!-- Credential Modal (Searchable Dropdown) -->
-    <div id="modal-cred" class="fixed inset-0 bg-gray-900/70 z-[2000] hidden items-center justify-center backdrop-blur-sm p-4 sm:p-0">
-        <div class="modal-enter bg-white dark:bg-grayDark w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 shadow-2xl relative">
-            <div class="flex justify-between items-center mb-6 sticky top-0 bg-white/90 dark:bg-grayDark/90 backdrop-blur-md pb-4 border-b border-gray-100 dark:border-gray-800 z-10 pt-2 -mt-2">
-                <h3 class="text-xl font-extrabold" id="cred-modal-title">Add Credential</h3>
-                <button class="w-8 h-8 bg-gray-100 dark:bg-dark text-gray-500 rounded-full flex items-center justify-center hover:bg-rose-50 hover:text-rose-600 transition-colors" onclick="closeModal('modal-cred')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <input type="hidden" id="cr_Cred_ID">
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-bold text-gray-500 mb-1.5">Search Client</label>
-                    <input type="text" list="clientDatalist" id="cr_Client_Search" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" placeholder="Type to select client..." onchange="handleClientSelection(this, 'cr')">
-                    <input type="hidden" id="cr_Client_ID">
-                    <input type="hidden" id="cr_Client_Name">
-                </div>
-                <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Portal Name</label><input type="text" id="cr_Portal_Name" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" placeholder="e.g. Income Tax, GST"></div>
-                <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Portal Doc No</label><input type="text" id="cr_Portal_Doc_No" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" placeholder="e.g. PAN/GSTIN"></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Username</label><input type="text" id="cr_User_Name" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none font-mono focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Password</label><input type="text" id="cr_Password" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none font-mono focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                </div>
-                <button class="w-full mt-6 px-4 py-3.5 bg-brand-600 text-white rounded-xl text-base font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/30 flex justify-center items-center gap-2" onclick="saveRecord('Credentials')"><i class="fa-solid fa-floppy-disk"></i> Save Credential</button>
-            </div>
+    <!-- Sidebar & Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>
+                <img src="assets/logo-fav.png" alt="" style="height: 28px;" onerror="this.style.display='none'"> 
+                Menu
+            </h2>
+            <button class="close-btn" id="closeSidebar"><i data-lucide="x"></i></button>
         </div>
-    </div>
-
-    <!-- Task Modal (Searchable Dropdown) -->
-    <div id="modal-task" class="fixed inset-0 bg-gray-900/70 z-[2000] hidden items-center justify-center backdrop-blur-sm p-4 sm:p-0">
-        <div class="modal-enter bg-white dark:bg-grayDark w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 shadow-2xl relative">
-            <div class="flex justify-between items-center mb-6 sticky top-0 bg-white/90 dark:bg-grayDark/90 backdrop-blur-md pb-4 border-b border-gray-100 dark:border-gray-800 z-10 pt-2 -mt-2">
-                <h3 class="text-xl font-extrabold" id="task-modal-title">Add Task</h3>
-                <button class="w-8 h-8 bg-gray-100 dark:bg-dark text-gray-500 rounded-full flex items-center justify-center hover:bg-rose-50 hover:text-rose-600 transition-colors" onclick="closeModal('modal-task')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <input type="hidden" id="t_Task_ID">
-            <div class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-500 mb-1.5">Search Client</label>
-                        <input type="text" list="clientDatalist" id="t_Client_Search" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" placeholder="Type to select..." onchange="handleClientSelection(this, 't')">
-                        <input type="hidden" id="t_Client_ID">
-                        <input type="hidden" id="t_Client_Name">
-                    </div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Task Date</label><input type="date" id="t_Task_Date" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Task Name</label><input type="text" id="t_Task_Name" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Period</label><input type="text" id="t_Period" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" placeholder="e.g. FY 23-24"></div>
-                </div>
-                
-                <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Task Status</label>
-                    <select id="t_Task_Status" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none font-semibold focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"><option>Pending</option><option>In Progress</option><option>Completed</option></select>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Amount Received (₹)</label>
-                        <input type="number" id="t_Amount_Received" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none fee-calc font-bold text-emerald-600 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" value="0">
-                    </div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Balance Due (₹)</label>
-                        <input type="number" id="t_Balance_Due" class="block w-full px-4 py-2.5 border border-transparent rounded-xl bg-rose-50 dark:bg-rose-900/30 text-rose-600 text-sm outline-none font-bold" readonly value="0">
-                    </div>
-                </div>
-
-                <!-- Special Sections -->
-                <div class="border border-brand-100 dark:border-brand-800 bg-brand-50/30 dark:bg-brand-900/10 p-5 rounded-2xl">
-                    <label class="block text-sm font-bold text-brand-700 dark:text-brand-400 mb-3"><i class="fa-solid fa-file-invoice mr-1"></i> Proforma Invoice</label>
-                    <input type="text" id="t_Invoice_No" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-grayDark focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm transition-all outline-none mb-3" placeholder="Invoice No">
-                    <button type="button" class="w-full px-4 py-2.5 bg-gray-800 dark:bg-gray-700 text-white rounded-xl text-sm font-bold hover:bg-gray-900 dark:hover:bg-gray-600 transition-colors shadow-sm flex justify-center items-center gap-2" onclick="generateAndUploadPI()"><i class="fa-solid fa-file-pdf"></i> Generate PI & Save to Drive</button>
-                </div>
-
-                <div class="border border-brand-100 dark:border-brand-800 bg-brand-50/30 dark:bg-brand-900/10 p-5 rounded-2xl">
-                    <label class="block text-sm font-bold text-brand-700 dark:text-brand-400 mb-3"><i class="fa-brands fa-google-drive mr-1"></i> Acknowledgement</label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                        <div><label class="block text-xs font-bold text-gray-500 mb-1">Akn No</label><input type="text" id="t_Akn_No" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-grayDark text-sm outline-none"></div>
-                        <div><label class="block text-xs font-bold text-gray-500 mb-1">Akn Date</label><input type="date" id="t_Akn_Date" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-grayDark text-sm outline-none"></div>
-                    </div>
-                    <input type="file" id="t_Akn_File" class="block w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-grayDark text-sm outline-none mb-3 text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
-                    <div class="flex gap-2 mb-3">
-                        <button type="button" class="flex-1 px-4 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-bold hover:bg-brand-700 transition-colors shadow-sm flex justify-center items-center gap-2" onclick="handleDriveOp('upload_file')"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Akn</button>
-                        <button type="button" class="flex-1 px-4 py-2.5 bg-white dark:bg-grayDark border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm flex justify-center items-center gap-2" onclick="handleDriveOp('create_folder')"><i class="fa-solid fa-folder-plus"></i> Make Folder</button>
-                    </div>
-                    <input type="url" id="t_Akn_Link" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-grayDark text-sm outline-none text-brand-600" placeholder="Akn Link (Auto generates here)">
-                </div>
-
-                <div class="border border-dashed border-gray-300 dark:border-gray-700 p-5 rounded-2xl bg-gray-50/50 dark:bg-dark/50">
-                    <label class="block text-sm font-bold text-gray-500 mb-3">Portal Override (Optional)</label>
-                    <input type="text" id="t_Portal_No" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-grayDark focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm transition-all outline-none mb-3" placeholder="Portal Name/No">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <input type="text" id="t_User_Name" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-grayDark focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm transition-all outline-none font-mono" placeholder="Username">
-                        <input type="text" id="t_Password" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-grayDark focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm transition-all outline-none font-mono" placeholder="Password">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Govt Fee (₹)</label><input type="number" id="t_Govt_Fee" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark focus:bg-white dark:focus:bg-grayDark focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm transition-all outline-none fee-calc" value="0"></div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Add. Fee (₹)</label><input type="number" id="t_Additional_Fee" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark focus:bg-white dark:focus:bg-grayDark focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm transition-all outline-none fee-calc" value="0"></div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Prof. Fee (₹)</label><input type="number" id="t_Professional_Fee" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark focus:bg-white dark:focus:bg-grayDark focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm transition-all outline-none fee-calc" value="0"></div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Total (₹)</label><input type="number" id="t_Total_Amount" class="block w-full px-4 py-2.5 border border-transparent rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white text-sm outline-none font-black" readonly value="0"></div>
-                </div>
-
-                <button class="w-full mt-6 px-4 py-4 bg-brand-600 text-white rounded-xl text-base font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/30 flex justify-center items-center gap-2" onclick="saveRecord('Tasks')"><i class="fa-solid fa-floppy-disk"></i> Save Task</button>
-            </div>
+        
+        <div class="sidebar-links">
+            <a href="services.html" class="sidebar-link"><i data-lucide="grid"></i> All Services</a>
+            <a href="form.html" class="sidebar-link"><i data-lucide="file-text"></i> File ITR</a>
+            <a href="about.html" class="sidebar-link"><i data-lucide="info"></i> About App</a>
+            <a href="privacy.html" class="sidebar-link"><i data-lucide="shield-check"></i> Privacy & Policy</a>
         </div>
-    </div>
 
-    <!-- Ledger Modal -->
-    <div id="modal-ledger" class="fixed inset-0 bg-gray-900/70 z-[2000] hidden items-center justify-center backdrop-blur-sm p-4 sm:p-0">
-        <div class="modal-enter bg-white dark:bg-grayDark w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 shadow-2xl relative">
-            <div class="flex justify-between items-center mb-6 sticky top-0 bg-white/90 dark:bg-grayDark/90 backdrop-blur-md pb-4 border-b border-gray-100 dark:border-gray-800 z-10 pt-2 -mt-2">
-                <h3 class="text-xl font-extrabold">Add Ledger</h3>
-                <button class="w-8 h-8 bg-gray-100 dark:bg-dark text-gray-500 rounded-full flex items-center justify-center hover:bg-rose-50 hover:text-rose-600 transition-colors" onclick="closeModal('modal-ledger')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <input type="hidden" id="l_Ledger_ID">
-            <div class="space-y-4">
-                <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Ledger Name</label><input type="text" id="l_Ledger_Name" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Category Group</label>
-                    <select id="l_Ledger_Category" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all">
-                        <option>Sundry Debtors</option><option>Sundry Creditors</option><option>Bank Accounts</option><option>Cash in Hand</option><option>Sales Accounts</option><option>Purchase Accounts</option><option>Indirect Expenses</option><option>Direct Incomes</option><option>Duties & Taxes</option>
-                    </select>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Opening Bal</label><input type="number" id="l_Op_Bal" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" value="0"></div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Dr / Cr</label>
-                        <select id="l_Dr_Cr" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all">
-                            <option>Dr</option><option>Cr</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button class="w-full mt-6 px-4 py-3.5 bg-brand-600 text-white rounded-xl text-base font-bold hover:bg-brand-700 transition-colors shadow-lg flex justify-center items-center gap-2" onclick="saveRecord('Ledgers')"><i class="fa-solid fa-save"></i> Save Ledger</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Transaction Modal (Double Entry) -->
-    <div id="modal-transaction" class="fixed inset-0 bg-gray-900/70 z-[2000] hidden items-center justify-center backdrop-blur-sm p-4 sm:p-0">
-        <div class="modal-enter bg-white dark:bg-grayDark w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 shadow-2xl relative">
-            <div class="flex justify-between items-center mb-6 sticky top-0 bg-white/90 dark:bg-grayDark/90 backdrop-blur-md pb-4 border-b border-gray-100 dark:border-gray-800 z-10 pt-2 -mt-2">
-                <h3 class="text-xl font-extrabold">Add Transaction</h3>
-                <button class="w-8 h-8 bg-gray-100 dark:bg-dark text-gray-500 rounded-full flex items-center justify-center hover:bg-rose-50 hover:text-rose-600 transition-colors" onclick="closeModal('modal-transaction')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <input type="hidden" id="tx_Transaction_ID">
-            <div class="space-y-4">
-                <div class="bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 p-3 rounded-lg text-xs font-semibold mb-2">
-                    <i class="fa-solid fa-circle-info"></i> If you select a Client and Reference No (Task ID), saving this will also update the Task's received amount in the backend.
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Date</label><input type="date" id="tx_Date" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                    <div>
-                        <label class="block text-sm font-bold text-gray-500 mb-1.5">Voucher Type</label>
-                        <select id="tx_Voucher_Type" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none font-bold text-brand-600 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all">
-                            <option>Receipt</option><option>Payment</option><option>Sales</option><option>Purchase</option><option>Contra</option><option>Journal</option><option>Debit Note</option><option>Credit Note</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-500 mb-1.5">Client Name (Optional)</label>
-                        <input type="text" list="clientDatalist" id="tx_Client_Name" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" placeholder="Link to a client...">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-gray-500 mb-1.5">Reference / Task No</label>
-                        <input type="text" id="tx_Reference_No" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" placeholder="e.g., TSK-101 or UTR No">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-200 dark:border-gray-700 p-4 rounded-xl bg-gray-50 dark:bg-dark/50">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-500 mb-1.5">Ledger (Dr) - By</label>
-                        <input type="text" list="ledgerDatalist" id="tx_Ledger_Dr" class="block w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-grayDark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" placeholder="Type ledger...">
-                    </div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Amount (Dr)</label><input type="number" id="tx_Amount_Dr" class="block w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-grayDark text-sm outline-none font-bold text-rose-600 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" oninput="document.getElementById('tx_Amount').value=this.value"></div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-200 dark:border-gray-700 p-4 rounded-xl bg-gray-50 dark:bg-dark/50">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-500 mb-1.5">Ledger (Cr) - To</label>
-                        <input type="text" list="ledgerDatalist" id="tx_Ledger_Cr" class="block w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-grayDark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" placeholder="Type ledger...">
-                    </div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Amount (Cr)</label><input type="number" id="tx_Amount_Cr" class="block w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-grayDark text-sm outline-none font-bold text-emerald-600 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" oninput="document.getElementById('tx_Amount').value=this.value"></div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Total Amount</label><input type="number" id="tx_Amount" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none font-black text-brand-600 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                    <div><label class="block text-sm font-bold text-gray-500 mb-1.5">Notes</label><input type="text" id="tx_Notes" class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-dark text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"></div>
-                </div>
-
-                <button class="w-full mt-6 px-4 py-3.5 bg-brand-600 text-white rounded-xl text-base font-bold hover:bg-brand-700 transition-colors shadow-lg flex justify-center items-center gap-2" onclick="saveRecord('Transactions')"><i class="fa-solid fa-check-double"></i> Save Transaction</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Professional PI Template HTML (Hidden until export) -->
-    <div id="pi-template" class="pi-template">
-        <div class="pi-container">
-            <div class="pi-header">
-                <div>
-                    <h1 style="color: #065f46; font-size: 36px; margin:0; font-weight: 800; letter-spacing: -1px;">CM Filings</h1>
-                    <p style="margin:8px 0 0; color: #4b5563; font-size: 14px; font-weight: 500;">Professional Tax & Compliance Services</p>
-                    <p style="margin:4px 0 0; color: #9ca3af; font-size: 12px;">Shakthi Complex, Mahe, Kannur Dist, Kerala 670672<br>Email: contact@cmexperts.in</p>
-                </div>
-                <div style="text-align: right;">
-                    <h2 style="font-size: 28px; color: #111827; margin:0; font-weight: 800; letter-spacing: 1px;">PROFORMA INVOICE</h2>
-                    <div style="margin-top: 15px; background: #f9fafb; padding: 10px 15px; border-radius: 6px; border: 1px solid #e5e7eb; display: inline-block; text-align: left;">
-                        <p style="margin:0; font-weight: 700; font-size: 13px;">PI No: <span id="pi-disp-no" style="font-weight: 500;"></span></p>
-                        <p style="margin:4px 0 0; font-weight: 700; font-size: 13px;">Date: <span id="pi-disp-date" style="font-weight: 500;"></span></p>
-                    </div>
-                </div>
-            </div>
-            
-            <div style="margin-bottom: 40px; display: flex; justify-content: space-between;">
-                <div style="width: 48%;">
-                    <h3 style="color: #6b7280; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; margin-bottom: 10px;">Billed To:</h3>
-                    <p style="margin:0; font-weight: 800; font-size: 18px; color: #111827;" id="pi-disp-client">Client Name</p>
-                    <p style="margin:5px 0 0; color:#4b5563; font-size: 13px;">Client ID: <span id="pi-disp-id" style="font-weight: 600;"></span></p>
-                </div>
-            </div>
-
-            <table class="pi-table">
-                <thead>
-                    <tr>
-                        <th>Description of Service</th>
-                        <th style="width: 20%;">Period</th>
-                        <th style="text-align: right; width: 25%;">Amount (INR)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="font-weight: 600; color: #1f2937;" id="pi-disp-task">Task Name</td>
-                        <td id="pi-disp-period" style="color: #4b5563;">Period</td>
-                        <td style="text-align: right; font-weight: 600; color: #1f2937;" id="pi-disp-prof">0.00</td>
-                    </tr>
-                    <tr>
-                        <td style="color: #4b5563;">Government Fees / Challan</td>
-                        <td style="color: #4b5563;">-</td>
-                        <td style="text-align: right; color: #4b5563;" id="pi-disp-govt">0.00</td>
-                    </tr>
-                    <tr>
-                        <td style="color: #4b5563;">Additional Fees / Out of Pocket Exp.</td>
-                        <td style="color: #4b5563;">-</td>
-                        <td style="text-align: right; color: #4b5563;" id="pi-disp-add">0.00</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <table class="pi-totals">
-                <tr>
-                    <td style="text-align: right; color: #6b7280; font-weight: 600;">Subtotal:</td>
-                    <td style="text-align: right; font-weight: 600; color: #1f2937;" id="pi-disp-subtotal">₹0.00</td>
-                </tr>
-                <tr>
-                    <td style="text-align: right; font-weight: 800; font-size: 16px; color: #111827; padding-top: 15px;">Total Amount:</td>
-                    <td style="text-align: right; font-weight: 800; font-size: 18px; color: #10b981; padding-top: 15px;" id="pi-disp-total">₹0.00</td>
-                </tr>
-            </table>
-
-            <div style="margin-top: 50px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                <p style="font-weight: 800; color: #1e293b; margin-top: 0; margin-bottom: 10px; font-size: 14px;">Bank Details for Payment:</p>
-                <div style="display: flex; justify-content: space-between;">
-                    <p style="margin: 0; color: #475569; font-size: 13px; line-height: 1.6;">
-                        <strong>Bank Name:</strong> Example Bank<br>
-                        <strong>Account Name:</strong> CM Experts Group<br>
-                        <strong>Account No:</strong> 1234567890<br>
-                        <strong>IFSC Code:</strong> EXAM0001234
-                    </p>
-                    <div style="text-align: right; width: 200px;">
-                        <div style="border-bottom: 1px solid #9ca3af; height: 50px; margin-bottom: 5px;"></div>
-                        <p style="margin: 0; font-size: 12px; color: #6b7280; font-weight: 600;">Authorized Signatory</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pi-footer">
-                <div>This is a computer-generated Proforma Invoice and does not require a physical signature.</div>
-                <div style="font-weight: 600; color: #111827;">Thank you for your business!</div>
-            </div>
+        <!-- Minimal Styled Sidebar CTA -->
+        <div class="sidebar-cta">
+            <p>Need Expert Assistance?</p>
+            <a href="https://wa.me/919946151111" class="cta-btn">
+                <div class="cta-icon-bg"><i data-lucide="message-circle"></i></div>
+                WhatsApp Support
+            </a>
+            <a href="tel:9946151111" class="cta-btn">
+                <div class="cta-icon-bg"><i data-lucide="phone-call"></i></div>
+                Call 9946151111
+            </a>
+            <a href="mailto:support@cmfilings.com" class="cta-btn">
+                <div class="cta-icon-bg"><i data-lucide="mail"></i></div>
+                Email Us
+            </a>
         </div>
     </div>
 
     <!-- Scripts -->
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbwlf-yR6XtUtkSQcuTjf8BcsUWBQJJziHakqIVoMA9vKW9Pz45tu0QSf4jsLFWw2KTP/exec";
+        // Initialize Lucide Icons
+        lucide.createIcons();
 
-        // Set viewMode: 'table' as the default for all forms/lists
-        let state = { 
-            clients: [], credentials: [], tasks: [], ledgers: [], transactions: [],
-            activeTab: 'dashboard', viewMode: 'table', 
-            sortCol: null, sortAsc: true 
-        };
-        let taskChartInstance = null;
-
-        // --- Sidebar Logic ---
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-        const sidebarTexts = document.querySelectorAll('.sidebar-text');
-        const collapseBtnIcon = document.querySelector('#collapseBtn svg path');
-        let isMobileSidebarOpen = false;
-        let isDesktopCollapsed = false;
-
-        function toggleMobileSidebar() {
-            isMobileSidebarOpen = !isMobileSidebarOpen;
-            if (isMobileSidebarOpen) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
+        // Search Bar Toggle
+        const searchToggleBtn = document.getElementById('searchToggleBtn');
+        const searchContainer = document.getElementById('searchContainer');
+        searchToggleBtn.addEventListener('click', () => {
+            searchContainer.classList.toggle('active');
+            if(searchContainer.classList.contains('active')) {
+                searchContainer.querySelector('input').focus();
             }
-        }
-
-        function toggleDesktopSidebar() {
-            isDesktopCollapsed = !isDesktopCollapsed;
-            if (isDesktopCollapsed) {
-                sidebar.classList.remove('w-64');
-                sidebar.classList.add('w-20');
-                sidebarTexts.forEach(el => { el.classList.remove('show-text'); el.classList.add('hide-text'); });
-                collapseBtnIcon.setAttribute('d', 'M9 5l7 7-7 7');
-            } else {
-                sidebar.classList.remove('w-20');
-                sidebar.classList.add('w-64');
-                sidebarTexts.forEach(el => { el.classList.remove('hide-text'); el.classList.add('show-text'); });
-                collapseBtnIcon.setAttribute('d', 'M15 19l-7-7 7-7');
-            }
-        }
-
-        // --- Theme Toggle Logic ---
-        const themeToggles = document.querySelectorAll('#themeToggle');
-        themeToggles.forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.documentElement.classList.toggle('dark');
-            });
         });
 
-        window.onload = () => { 
-            setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                if (splash) { splash.classList.add('opacity-0'); setTimeout(() => splash.style.display = 'none', 500); }
-            }, 1000);
-
-            document.getElementById('view-icon').className = state.viewMode === 'grid' ? 'fa-solid fa-table' : 'fa-solid fa-grip';
-
-            document.querySelectorAll('.fee-calc').forEach(el => {
-                el.addEventListener('input', () => {
-                    const g = parseFloat(document.getElementById('t_Govt_Fee').value) || 0;
-                    const a = parseFloat(document.getElementById('t_Additional_Fee').value) || 0;
-                    const p = parseFloat(document.getElementById('t_Professional_Fee').value) || 0;
-                    const received = parseFloat(document.getElementById('t_Amount_Received').value) || 0;
-                    
-                    const total = g + a + p;
-                    document.getElementById('t_Total_Amount').value = total;
-                    document.getElementById('t_Balance_Due').value = total - received;
-                });
-            });
-
-            // Focus search input when clicking search icon wrapper label
-            document.querySelectorAll('label[for="global-search"]').forEach(label => {
-                label.addEventListener('click', () => {
-                    document.getElementById('global-search').focus();
-                });
-            });
-
-            fetchApiData(); 
-            switchTab('dashboard'); 
-            
-            window.addEventListener('resize', () => {
-                if(window.innerWidth <= 768 && state.viewMode === 'table') toggleViewMode();
-            });
-        };
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(e => console.log(e)));
-        }
-
-        function toggleViewMode() {
-            state.viewMode = state.viewMode === 'grid' ? 'table' : 'grid';
-            document.getElementById('view-icon').className = state.viewMode === 'grid' ? 'fa-solid fa-table' : 'fa-solid fa-grip';
-            renderData();
-        }
-
-        function setSort(column) {
-            if (state.sortCol === column) state.sortAsc = !state.sortAsc;
-            else { state.sortCol = column; state.sortAsc = true; }
-            renderData();
-        }
-
-        function getSortIcon(column) {
-            if (state.sortCol !== column) return '<i class="fa-solid fa-sort ml-1 text-gray-300"></i>';
-            return state.sortAsc ? '<i class="fa-solid fa-sort-up ml-1 text-brand-500"></i>' : '<i class="fa-solid fa-sort-down ml-1 text-brand-500"></i>';
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-section').forEach(el => {
-                el.classList.add('hidden', 'opacity-0');
-            });
-            const activeSection = document.getElementById('view-' + tabId);
-            activeSection.classList.remove('hidden');
-            setTimeout(() => activeSection.classList.remove('opacity-0'), 50);
-            
-            document.querySelectorAll('.side-item').forEach(el => {
-                el.className = "side-item w-full flex items-center px-3 py-2.5 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-brand-600 dark:hover:text-brand-400 rounded-xl font-medium transition-colors group";
-            });
-            const desktopBtn = document.getElementById('side-' + tabId);
-            if(desktopBtn) desktopBtn.className = "side-item w-full flex items-center px-3 py-2.5 bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400 rounded-xl font-semibold transition-colors group";
-            
-            document.querySelectorAll('.nav-item').forEach(el => {
-                el.className = "nav-item flex flex-col items-center justify-center min-w-[60px] h-14 text-gray-400 hover:text-brand-500 transition-colors";
-            });
-            const mobileBtn = document.getElementById('nav-' + tabId);
-            if(mobileBtn) mobileBtn.className = "nav-item flex flex-col items-center justify-center min-w-[60px] h-14 text-brand-600 transition-colors";
-            
-            state.activeTab = tabId;
-            document.getElementById('global-search').value = '';
-            
-            if(window.innerWidth < 1024 && isMobileSidebarOpen) toggleMobileSidebar();
-            renderData();
-        }
-
-        async function fetchApiData() {
-            const icon = document.getElementById('sync-icon');
-            if(icon) icon.classList.add('syncing');
-            try {
-                const [cliRes, credRes, taskRes, ledRes, txRes] = await Promise.all([
-                    fetch(`${API_URL}?action=getClients`).then(r => r.json()).catch(() => []),
-                    fetch(`${API_URL}?action=getCredentials`).then(r => r.json()).catch(() => []),
-                    fetch(`${API_URL}?action=getTasks`).then(r => r.json()).catch(() => []),
-                    fetch(`${API_URL}?action=getLedgers`).then(r => r.json()).catch(() => []),
-                    fetch(`${API_URL}?action=getTransactions`).then(r => r.json()).catch(() => [])
-                ]);
-                
-                state.clients = Array.isArray(cliRes) ? cliRes : [];
-                state.credentials = Array.isArray(credRes) ? credRes : [];
-                state.tasks = Array.isArray(taskRes) ? taskRes : [];
-                state.ledgers = Array.isArray(ledRes) ? ledRes : [];
-                state.transactions = Array.isArray(txRes) ? txRes : [];
-                
-                populateDropdowns();
-                renderData();
-                showToast("Data Synced Successfully");
-                
-                // Show Header/Nav after fetch load if you wanted them hidden initially (optional based on your previous config)
-                document.getElementById('main-header').classList.remove('hidden');
-                document.getElementById('main-header').classList.add('flex');
-                document.getElementById('mobile-bottom-nav').classList.remove('hidden');
-                document.getElementById('mobile-bottom-nav').classList.add('flex');
-
-            } catch (err) {
-                console.error(err);
-                showToast("Sync Failed!");
-            }
-            if(icon) icon.classList.remove('syncing');
-        }
-
-        function populateDropdowns() {
-            // Populate Client Datalist
-            const cDatalist = document.getElementById('clientDatalist');
-            if(cDatalist) cDatalist.innerHTML = state.clients.map(c => `<option value="${c.Client_Name} (${c.Client_ID})">`).join('');
-
-            // Populate Ledger Datalist
-            const lDatalist = document.getElementById('ledgerDatalist');
-            if(lDatalist) lDatalist.innerHTML = state.ledgers.map(l => `<option value="${l.Ledger_Name}">`).join('');
-        }
-
-        function handleClientSelection(inputEl, prefix) {
-            const val = inputEl.value;
-            const match = val.match(/\((.*?)\)$/);
-            if (match) {
-                const clientId = match[1];
-                const client = state.clients.find(c => c.Client_ID === clientId);
-                if (client) {
-                    if(document.getElementById(prefix + '_Client_ID')) document.getElementById(prefix + '_Client_ID').value = client.Client_ID;
-                    if(document.getElementById(prefix + '_Client_Name')) document.getElementById(prefix + '_Client_Name').value = client.Client_Name;
-                }
-            } else {
-                if(document.getElementById(prefix + '_Client_ID')) document.getElementById(prefix + '_Client_ID').value = '';
-                if(document.getElementById(prefix + '_Client_Name')) document.getElementById(prefix + '_Client_Name').value = val;
-            }
-        }
-
-        function renderData(search = '') {
-            const term = search.toLowerCase();
-            
-            if (state.activeTab === 'dashboard') {
-                document.getElementById('dash-client-count').innerText = state.clients.length;
-                
-                let pending = 0;
-                let receivables = 0;
-                let payables = 0;
-                
-                state.tasks.forEach(t => {
-                    if (t.Task_Status !== 'Completed') pending++;
-                    let bal = parseFloat(t.Balance_Due) || 0;
-                    if (bal > 0) receivables += bal;
-                    if (bal < 0) payables += Math.abs(bal);
-                });
-                
-                document.getElementById('dash-pending-task-count').innerText = pending;
-                document.getElementById('dash-receivables').innerText = '₹' + receivables.toLocaleString('en-IN');
-                document.getElementById('dash-payables').innerText = '₹' + payables.toLocaleString('en-IN');
-                
-                renderChart();
-
-                // Dashboard Pending Tasks List
-                const pendingTasks = state.tasks.filter(t => t.Task_Status !== 'Completed').slice(0, 5);
-                const pendingContainer = document.getElementById('dash-pending-list');
-                
-                if (pendingTasks.length > 0) {
-                    pendingContainer.innerHTML = pendingTasks.map(t => {
-                        const statusColor = t.Task_Status === 'In Progress' ? 'text-amber-500' : 'text-rose-600';
-                        return `
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                                <td class="px-6 py-4 font-bold text-gray-900 dark:text-white">
-                                    <div class="text-xs text-gray-500 dark:text-gray-400 font-normal mb-1">${t.Task_ID}</div>
-                                    ${t.Client_Name}
-                                </td>
-                                <td class="px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-300">${t.Task_Name} <span class="text-gray-400 text-xs ml-1">${t.Period || ''}</span></td>
-                                <td class="px-6 py-4 text-sm font-extrabold ${statusColor}">${t.Task_Status}</td>
-                                <td class="px-6 py-4 text-right">
-                                    <button class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-gray-600 inline-flex items-center justify-center transition-colors" onclick='openEditTask(${JSON.stringify(t).replace(/'/g, "&apos;")})' title="Edit Task"><i class="fa-solid fa-arrow-right"></i></button>
-                                </td>
-                            </tr>
-                        `;
-                    }).join('');
-                } else {
-                    pendingContainer.innerHTML = `<tr><td colspan="4" class="px-6 py-8 text-center text-gray-400 dark:text-gray-500 font-medium">No pending tasks to display</td></tr>`;
-                }
-            }
-
-            // === CLIENTS ===
-            if (state.activeTab === 'clients') {
-                const container = document.getElementById('clients-list');
-                let filtered = state.clients.filter(c => (c.Client_Name||'').toLowerCase().includes(term) || (c.Client_ID||'').toLowerCase().includes(term) || (c.Pan_No||'').toLowerCase().includes(term));
-                
-                if (state.sortCol) {
-                    filtered.sort((a, b) => {
-                        let valA = (a[state.sortCol] || '').toString().toLowerCase();
-                        let valB = (b[state.sortCol] || '').toString().toLowerCase();
-                        if (valA < valB) return state.sortAsc ? -1 : 1;
-                        if (valA > valB) return state.sortAsc ? 1 : -1;
-                        return 0;
-                    });
-                }
-
-                if (filtered.length === 0) {
-                    container.innerHTML = '<div class="text-center text-gray-400 py-10 font-semibold">No Clients Found</div>';
-                    container.className = "";
-                    return;
-                }
-
-                if (state.viewMode === 'grid') {
-                    container.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5";
-                    container.innerHTML = filtered.map(c => `
-                        <div class="bg-white dark:bg-grayDark rounded-2xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-                            <div>
-                                <div class="flex justify-between items-start mb-3">
-                                    <span class="inline-flex items-center py-1 px-2.5 rounded-lg text-xs font-bold bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400 border border-brand-100 dark:border-brand-800/50">${c.Client_ID}</span>
-                                    <span class="text-[11px] font-bold ${c.Status==='Active'?'text-emerald-600 dark:text-emerald-400':'text-rose-600 dark:text-rose-400'}">${c.Status || 'Active'}</span>
-                                </div>
-                                <div class="text-lg font-extrabold text-gray-900 dark:text-white mb-1">${c.Client_Name}</div>
-                                <div class="text-sm text-gray-500 dark:text-gray-400 font-medium mb-1"><i class="fa-solid fa-phone w-4 text-center"></i> ${c.Mobile || 'N/A'}</div>
-                                <div class="text-sm text-gray-500 dark:text-gray-400 font-medium mb-3"><i class="fa-solid fa-envelope w-4 text-center"></i> ${c.Email || 'N/A'}</div>
-                                <div class="text-xs text-gray-400 dark:text-gray-500 font-semibold">PAN: ${c.Pan_No || '-'} | Type: ${c.Constitution_Type || '-'}</div>
-                            </div>
-                            <div class="flex gap-2 mt-5 pt-5 border-t border-gray-100 dark:border-gray-800">
-                                <button class="w-9 h-9 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center" onclick='openEditClient(${JSON.stringify(c).replace(/'/g, "&apos;")})'><i class="fa-solid fa-pen text-sm"></i></button>
-                                ${c.Doc_Folder_Link_URL ? `<a href="${c.Doc_Folder_Link_URL}" target="_blank" class="w-9 h-9 rounded-xl bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800 hover:bg-brand-100 dark:hover:bg-brand-900/50 flex items-center justify-center transition-colors"><i class="fa-solid fa-folder-open text-sm"></i></a>` : ''}
-                                <button class="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/50 flex items-center justify-center transition-colors ml-auto" onclick="deleteRecord('Clients', '${c.Client_ID}')"><i class="fa-solid fa-trash text-sm"></i></button>
-                            </div>
-                        </div>
-                    `).join('');
-                } else {
-                    container.className = "";
-                    container.innerHTML = `
-                        <div class="bg-white dark:bg-grayDark rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-x-auto">
-                            <table class="w-full text-left border-collapse min-w-[800px]">
-                                <thead>
-                                    <tr class="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Client_ID')">ID ${getSortIcon('Client_ID')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Client_Name')">Name ${getSortIcon('Client_Name')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Mobile')">Mobile ${getSortIcon('Mobile')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Pan_No')">PAN ${getSortIcon('Pan_No')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                                    ${filtered.map(c => `
-                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                            <td class="px-6 py-4"><span class="inline-flex py-1 px-2 rounded border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-xs font-bold text-gray-600 dark:text-gray-300">${c.Client_ID}</span></td>
-                                            <td class="px-6 py-4 font-bold text-gray-900 dark:text-white">${c.Client_Name}</td>
-                                            <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">${c.Mobile}</td>
-                                            <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 font-mono">${c.Pan_No}</td>
-                                            <td class="px-6 py-4">
-                                                <div class="flex gap-2">
-                                                    <button class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-gray-700 flex items-center justify-center transition-colors" onclick='openEditClient(${JSON.stringify(c).replace(/'/g, "&apos;")})'><i class="fa-solid fa-pen text-xs"></i></button>
-                                                    <button class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-gray-700 flex items-center justify-center transition-colors" onclick="deleteRecord('Clients', '${c.Client_ID}')"><i class="fa-solid fa-trash text-xs"></i></button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>`;
-                }
-            }
-            
-            // === CREDENTIALS ===
-            if (state.activeTab === 'credentials') {
-                const container = document.getElementById('creds-list');
-                let filtered = state.credentials.filter(c => (c.Portal_Name||'').toLowerCase().includes(term) || (c.Client_Name||'').toLowerCase().includes(term) || (c.Client_ID||'').toLowerCase().includes(term));
-                
-                if (state.sortCol) {
-                    filtered.sort((a, b) => {
-                        let valA = (a[state.sortCol] || '').toString().toLowerCase();
-                        let valB = (b[state.sortCol] || '').toString().toLowerCase();
-                        if (valA < valB) return state.sortAsc ? -1 : 1;
-                        if (valA > valB) return state.sortAsc ? 1 : -1;
-                        return 0;
-                    });
-                }
-
-                if (filtered.length === 0) {
-                    container.innerHTML = '<div class="text-center text-gray-400 py-10 font-semibold">No Credentials Found</div>';
-                    container.className = "";
-                    return;
-                }
-
-                if (state.viewMode === 'grid') {
-                    container.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5";
-                    container.innerHTML = filtered.map(c => `
-                        <div class="bg-white dark:bg-grayDark rounded-2xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-                            <div>
-                                <span class="inline-flex py-1 px-2.5 rounded-lg text-xs font-bold bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400 border border-brand-100 dark:border-brand-800/50 cursor-pointer hover:bg-brand-100 dark:hover:bg-brand-900/50 transition-colors" onclick="document.getElementById('global-search').value='${c.Client_ID}'; handleSearch();" title="Filter by this client">${c.Client_ID}</span>
-                                <div class="text-lg font-extrabold text-gray-900 dark:text-white mt-2">${c.Client_Name}</div>
-                                <div class="text-sm font-bold text-brand-600 dark:text-brand-400 mt-1"><i class="fa-solid fa-globe mr-1"></i> ${c.Portal_Name} ${c.Portal_Doc_No ? `<span class="text-gray-500 font-medium ml-1">(${c.Portal_Doc_No})</span>` : ''}</div>
-                                
-                                <div class="bg-gray-50 dark:bg-dark p-4 rounded-xl mt-4 border border-gray-100 dark:border-gray-800">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <span class="text-sm font-mono text-gray-700 dark:text-gray-300 font-medium truncate pr-2"><strong class="text-gray-400">U:</strong> ${c.User_Name || '-'}</span>
-                                        <button class="w-7 h-7 rounded bg-white dark:bg-grayDark border border-gray-200 dark:border-gray-700 text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 shrink-0 flex items-center justify-center transition-colors" onclick="copyText('${c.User_Name}')"><i class="fa-regular fa-copy text-xs"></i></button>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm font-mono text-gray-700 dark:text-gray-300 font-medium truncate pr-2"><strong class="text-gray-400">P:</strong> ${c.Password || '-'}</span>
-                                        <button class="w-7 h-7 rounded bg-white dark:bg-grayDark border border-gray-200 dark:border-gray-700 text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 shrink-0 flex items-center justify-center transition-colors" onclick="copyText('${c.Password}')"><i class="fa-regular fa-copy text-xs"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex gap-2 mt-5 pt-5 border-t border-gray-100 dark:border-gray-800">
-                                <button class="w-9 h-9 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-200 flex items-center justify-center transition-colors" onclick='openEditCred(${JSON.stringify(c).replace(/'/g, "&apos;")})'><i class="fa-solid fa-pen text-sm"></i></button>
-                                <button class="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 flex items-center justify-center transition-colors ml-auto" onclick="deleteRecord('Credentials', '${c.Client_ID}')"><i class="fa-solid fa-trash text-sm"></i></button>
-                            </div>
-                        </div>`
-                    ).join('');
-                } else {
-                    container.className = "";
-                    container.innerHTML = `
-                        <div class="bg-white dark:bg-grayDark rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-x-auto">
-                            <table class="w-full text-left border-collapse min-w-[800px]">
-                                <thead>
-                                    <tr class="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Client_Name')">Client ${getSortIcon('Client_Name')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Portal_Name')">Portal ${getSortIcon('Portal_Name')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('User_Name')">User ${getSortIcon('User_Name')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                                    ${filtered.map(c => `
-                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                            <td class="px-6 py-4 font-bold text-gray-900 dark:text-white">${c.Client_Name}</td>
-                                            <td class="px-6 py-4 font-bold text-brand-600 dark:text-brand-400">${c.Portal_Name}</td>
-                                            <td class="px-6 py-4 text-sm">
-                                                <div class="flex items-center gap-3 font-mono text-gray-700 dark:text-gray-300 font-medium">
-                                                    ${c.User_Name} 
-                                                    <button class="text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" onclick="copyText('${c.User_Name}')" title="Copy"><i class="fa-regular fa-copy"></i></button>
-                                                </div>
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                <div class="flex gap-2">
-                                                    <button class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 hover:text-brand-600 dark:hover:text-brand-400 flex items-center justify-center transition-colors" onclick='openEditCred(${JSON.stringify(c).replace(/'/g, "&apos;")})'><i class="fa-solid fa-pen text-xs"></i></button>
-                                                    <button class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 hover:text-rose-600 dark:hover:text-rose-400 flex items-center justify-center transition-colors" onclick="deleteRecord('Credentials', '${c.Client_ID}')"><i class="fa-solid fa-trash text-xs"></i></button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>`;
-                }
-            }
-
-            // === TASKS ===
-            if (state.activeTab === 'tasks') {
-                const container = document.getElementById('tasks-list');
-                let filtered = state.tasks.filter(t => (t.Task_Name||'').toLowerCase().includes(term) || (t.Client_Name||'').toLowerCase().includes(term) || (t.Client_ID||'').toLowerCase().includes(term));
-                
-                if (state.sortCol) {
-                    filtered.sort((a, b) => {
-                        let valA = (a[state.sortCol] || '').toString().toLowerCase();
-                        let valB = (b[state.sortCol] || '').toString().toLowerCase();
-                        if (valA < valB) return state.sortAsc ? -1 : 1;
-                        if (valA > valB) return state.sortAsc ? 1 : -1;
-                        return 0;
-                    });
-                }
-
-                if (filtered.length === 0) {
-                    container.innerHTML = '<div class="text-center text-gray-400 py-10 font-semibold">No Tasks Found</div>';
-                    container.className = "";
-                    return;
-                }
-
-                if (state.viewMode === 'grid') {
-                    container.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5";
-                    container.innerHTML = filtered.map(t => {
-                        const isComplete = t.Task_Status === 'Completed';
-                        const isProg = t.Task_Status === 'In Progress';
-                        const statusColorClass = isComplete ? 'text-emerald-600 dark:text-emerald-400' : (isProg ? 'text-amber-500 dark:text-amber-400' : 'text-rose-600 dark:text-rose-400');
-                        const statusBgClass = isComplete ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:border-emerald-800/50' : (isProg ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:border-amber-800/50' : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/30 dark:border-rose-800/50');
-                        
-                        const payColorClass = (parseFloat(t.Balance_Due) <= 0) ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400';
-                        
-                        let aknHtml = t.Akn_Link ? `<a href="${t.Akn_Link}" target="_blank" class="mt-3 w-full px-3 py-2 text-xs font-bold text-brand-600 bg-white border border-brand-200 rounded-lg hover:bg-brand-50 flex items-center justify-center gap-2 transition-colors"><i class="fa-solid fa-link"></i> View Acknowledgement</a>` : '';
-
-                        return `
-                        <div class="bg-white dark:bg-grayDark rounded-2xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-                            <div>
-                                <div class="flex justify-between items-start mb-3">
-                                    <span class="inline-flex items-center py-1 px-2.5 rounded-lg text-xs font-bold bg-gray-50 dark:bg-dark text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-800 cursor-pointer hover:bg-gray-100" onclick="document.getElementById('global-search').value='${t.Client_ID}'; handleSearch();">${t.Task_ID} | ${t.Client_ID}</span>
-                                    <span class="text-[11px] font-bold px-2 py-0.5 rounded border ${statusBgClass}">${t.Task_Status || 'Pending'}</span>
-                                </div>
-                                <div class="text-lg font-extrabold text-gray-900 dark:text-white mb-1">${t.Client_Name}</div>
-                                <div class="text-sm font-bold text-brand-600 dark:text-brand-400 mb-1">${t.Task_Name} ${t.Period ? `<span class="text-gray-500 ml-1">(${t.Period})</span>` : ''}</div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-4"><i class="fa-regular fa-calendar mr-1"></i> Date: ${t.Task_Date}</div>
-                                
-                                <div class="bg-gray-50 dark:bg-dark border border-gray-100 dark:border-gray-800 p-4 rounded-xl">
-                                    <div class="flex justify-between items-center mb-1">
-                                        <span class="text-xs font-bold text-gray-500">Status</span>
-                                        <span class="text-xs font-extrabold ${statusColorClass}">${t.Task_Status}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-xs font-bold text-gray-500">Balance Due</span>
-                                        <span class="text-xs font-extrabold ${payColorClass}">₹${t.Balance_Due||0} <span class="font-medium text-gray-400 dark:text-gray-500 ml-1">(Paid: ₹${t.Amount_Received||0})</span></span>
-                                    </div>
-                                    ${aknHtml}
-                                </div>
-                            </div>
-
-                            <div class="flex gap-2 mt-5 pt-5 border-t border-gray-100 dark:border-gray-800">
-                                <button class="w-9 h-9 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-600 border border-gray-200 dark:border-gray-700 hover:bg-brand-50 hover:text-brand-600 flex items-center justify-center transition-colors" onclick='openEditTask(${JSON.stringify(t).replace(/'/g, "&apos;")})'><i class="fa-solid fa-pen text-sm"></i></button>
-                                <button class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 flex items-center justify-center transition-colors" onclick="sendTaskMsg('${t.Task_ID}')" title="WhatsApp Update"><i class="fa-brands fa-whatsapp text-sm"></i></button>
-                                <button class="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-900/30 text-rose-600 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 flex items-center justify-center transition-colors ml-auto" onclick="deleteRecord('Tasks', '${t.Task_ID}')"><i class="fa-solid fa-trash text-sm"></i></button>
-                            </div>
-                        </div>`
-                    }).join('');
-                } else {
-                    container.className = "";
-                    container.innerHTML = `
-                        <div class="bg-white dark:bg-grayDark rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-x-auto">
-                            <table class="w-full text-left border-collapse min-w-[800px]">
-                                <thead>
-                                    <tr class="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Task_ID')">ID ${getSortIcon('Task_ID')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Client_Name')">Client ${getSortIcon('Client_Name')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Task_Name')">Task ${getSortIcon('Task_Name')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Task_Status')">Status ${getSortIcon('Task_Status')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Total_Amount')">Amt ${getSortIcon('Total_Amount')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                                    ${filtered.map(t => {
-                                        const isComplete = t.Task_Status === 'Completed';
-                                        const isProg = t.Task_Status === 'In Progress';
-                                        const statusColorClass = isComplete ? 'text-emerald-600 dark:text-emerald-400' : (isProg ? 'text-amber-500 dark:text-amber-400' : 'text-rose-600 dark:text-rose-400');
-                                        const payColorClass = (parseFloat(t.Balance_Due) <= 0) ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400';
-                                        
-                                        return `
-                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                            <td class="px-6 py-4"><span class="inline-flex py-1 px-2 rounded border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-xs font-bold text-gray-600 dark:text-gray-300">${t.Task_ID}</span></td>
-                                            <td class="px-6 py-4 font-bold text-gray-900 dark:text-white">${t.Client_Name}</td>
-                                            <td class="px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-300">${t.Task_Name} <span class="text-gray-400 text-xs">${t.Period}</span></td>
-                                            <td class="px-6 py-4 font-extrabold ${statusColorClass} text-sm">${t.Task_Status}</td>
-                                            <td class="px-6 py-4 font-bold text-gray-900 dark:text-white">₹${t.Total_Amount} <br><span class="text-xs ${payColorClass}">Bal: ₹${t.Balance_Due||0}</span></td>
-                                            <td class="px-6 py-4">
-                                                <div class="flex gap-2">
-                                                    <button class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 hover:text-brand-600 flex items-center justify-center transition-colors" onclick='openEditTask(${JSON.stringify(t).replace(/'/g, "&apos;")})'><i class="fa-solid fa-pen text-xs"></i></button>
-                                                    <button class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 hover:text-emerald-600 flex items-center justify-center transition-colors" onclick="sendTaskMsg('${t.Task_ID}')"><i class="fa-brands fa-whatsapp text-xs"></i></button>
-                                                    <button class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 hover:text-rose-600 flex items-center justify-center transition-colors" onclick="deleteRecord('Tasks', '${t.Task_ID}')"><i class="fa-solid fa-trash text-xs"></i></button>
-                                                </div>
-                                            </td>
-                                        </tr>`;
-                                    }).join('')}
-                                </tbody>
-                            </table>
-                        </div>`;
-                }
-            }
-
-            // === LEDGERS ===
-            if (state.activeTab === 'ledgers') {
-                const container = document.getElementById('ledgers-list');
-                let filtered = state.ledgers.filter(l => (l.Ledger_Name||'').toLowerCase().includes(term));
-                
-                container.className = "";
-                container.innerHTML = `
-                    <div class="bg-white dark:bg-grayDark rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[700px]">
-                            <thead>
-                                <tr class="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Ledger ID</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Ledger Name</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Category</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Op. Bal</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                                ${filtered.map(l => `
-                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                        <td class="px-6 py-4 text-sm font-mono text-gray-500 dark:text-gray-400">${l.Ledger_ID || '-'}</td>
-                                        <td class="px-6 py-4 font-bold text-brand-600 dark:text-brand-400">${l.Ledger_Name}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">${l.Ledger_Category}</td>
-                                        <td class="px-6 py-4 text-sm font-bold text-right ${l.Dr_Cr==='Cr' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}">₹${l.Op_Bal} ${l.Dr_Cr}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>`;
-            }
-
-            // === TRANSACTIONS ===
-            if (state.activeTab === 'transactions') {
-                const container = document.getElementById('transactions-list');
-                
-                // 1. Map existing Tasks to "Sales" Transactions for unified view
-                const mappedTasks = state.tasks.map(t => ({
-                    Transaction_ID: t.Task_ID || '-',
-                    Date: t.Task_Date || '-',
-                    Voucher_Type: 'Sales (Auto)',
-                    Client_Name: t.Client_Name || '-',
-                    Ledger_Dr: t.Client_Name || 'Sundry Debtors',
-                    Amount_Dr: t.Total_Amount || 0,
-                    Ledger_Cr: 'Sales Accounts',
-                    Amount_Cr: t.Total_Amount || 0,
-                    Amount: t.Total_Amount || 0,
-                    Reference_No: t.Invoice_No || '-',
-                    Notes: `Task: ${t.Task_Name} | ${t.Period}`
-                }));
-
-                // Combine tasks with manual transactions
-                let allTransactions = [...mappedTasks, ...state.transactions];
-
-                let filtered = allTransactions.filter(tx => 
-                    (tx.Client_Name||'').toLowerCase().includes(term) || 
-                    (tx.Transaction_ID||'').toLowerCase().includes(term) ||
-                    (tx.Voucher_Type||'').toLowerCase().includes(term)
-                );
-
-                if (state.sortCol) {
-                    filtered.sort((a, b) => {
-                        let valA = (a[state.sortCol] || '').toString().toLowerCase();
-                        let valB = (b[state.sortCol] || '').toString().toLowerCase();
-                        if (valA < valB) return state.sortAsc ? -1 : 1;
-                        if (valA > valB) return state.sortAsc ? 1 : -1;
-                        return 0;
-                    });
-                }
-
-                if (filtered.length === 0) {
-                    container.innerHTML = '<div class="text-center text-gray-400 py-10 font-semibold">No Transactions Found</div>';
-                    container.className = "";
-                    return;
-                }
-
-                if (state.viewMode === 'grid') {
-                    container.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5";
-                    container.innerHTML = filtered.map(tx => {
-                        return `
-                        <div class="bg-white dark:bg-grayDark rounded-2xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-                            <div>
-                                <div class="flex justify-between items-start mb-3">
-                                    <span class="inline-flex py-1 px-2.5 rounded-lg text-xs font-bold bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400 border border-brand-100 dark:border-brand-800/50">${tx.Transaction_ID}</span>
-                                    <span class="text-xs font-bold text-gray-400">${tx.Date}</span>
-                                </div>
-                                <div class="text-lg font-extrabold text-gray-900 dark:text-white mb-1">${tx.Client_Name}</div>
-                                <div class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-4">${tx.Voucher_Type}</div>
-                                
-                                <div class="bg-gray-50 dark:bg-dark border border-gray-100 dark:border-gray-800 p-4 rounded-xl">
-                                    <div class="flex justify-between items-center mb-2 pb-2 border-b border-gray-200 dark:border-gray-700">
-                                        <span class="text-xs font-bold text-gray-500">Dr: ${tx.Ledger_Dr}</span>
-                                        <span class="text-sm font-extrabold text-rose-600 dark:text-rose-400">₹${tx.Amount_Dr||tx.Amount||0}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-xs font-bold text-gray-500">Cr: ${tx.Ledger_Cr}</span>
-                                        <span class="text-sm font-extrabold text-emerald-600 dark:text-emerald-400">₹${tx.Amount_Cr||tx.Amount||0}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`
-                    }).join('');
-                } else {
-                    container.className = "";
-                    container.innerHTML = `
-                        <div class="bg-white dark:bg-grayDark rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-x-auto">
-                            <table class="w-full text-left border-collapse min-w-[1000px]">
-                                <thead>
-                                    <tr class="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Date')">Date ${getSortIcon('Date')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onclick="setSort('Transaction_ID')">Voucher / Ref ${getSortIcon('Transaction_ID')}</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Particulars (Dr / Cr)</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Debit (₹)</th>
-                                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Credit (₹)</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                                    ${filtered.map(tx => `
-                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                            <td class="px-6 py-4 text-sm font-bold text-gray-600 dark:text-gray-400">${tx.Date}</td>
-                                            <td class="px-6 py-4">
-                                                <span class="inline-flex py-1 px-2.5 rounded bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400 text-[11px] font-bold border border-brand-100 dark:border-brand-800/50 uppercase tracking-wide mb-1">${tx.Voucher_Type}</span><br>
-                                                <span class="text-xs text-gray-400 font-mono">${tx.Transaction_ID}</span>
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                <div class="font-bold text-gray-900 dark:text-white">By ${tx.Ledger_Dr}</div>
-                                                <div class="text-sm text-gray-500 ml-4">To ${tx.Ledger_Cr}</div>
-                                                <div class="text-xs text-gray-400 mt-1 italic">${tx.Notes || '-'}</div>
-                                            </td>
-                                            <td class="px-6 py-4 text-right font-bold text-rose-600 dark:text-rose-400">₹${tx.Amount_Dr || tx.Amount || 0}</td>
-                                            <td class="px-6 py-4 text-right font-bold text-emerald-600 dark:text-emerald-400">₹${tx.Amount_Cr || tx.Amount || 0}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>`;
-                }
-            }
-        }
-
-        function renderChart() {
-            const ctx = document.getElementById('taskChart');
-            if(!ctx) return;
-            let pending = 0, progress = 0, completed = 0;
-            state.tasks.forEach(t => {
-                if(t.Task_Status === 'Completed') completed++;
-                else if (t.Task_Status === 'In Progress') progress++;
-                else pending++;
-            });
-
-            if(taskChartInstance) taskChartInstance.destroy();
-            
-            Chart.defaults.font.family = '"Plus Jakarta Sans", sans-serif';
-            
-            taskChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Pending', 'In Progress', 'Completed'],
-                    datasets: [{ 
-                        data: [pending, progress, completed], 
-                        backgroundColor: ['#e11d48', '#f59e0b', '#10b981'], // Rose, Amber, Emerald
-                        borderWidth: 0,
-                        hoverOffset: 4
-                    }]
-                },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    cutout: '75%', 
-                    plugins: { 
-                        legend: { 
-                            position: 'bottom', 
-                            labels: { usePointStyle: true, padding: 20, font: {size: 12, weight: '600'} } 
-                        } 
-                    } 
-                }
-            });
-        }
-
-        function openModal(id) { 
-            const el = document.getElementById(id);
-            el.classList.remove('hidden'); 
-            el.classList.add('flex');
-            
-            document.querySelectorAll(`#${id} input:not([type="hidden"]), #${id} select`).forEach(el => el.value = '');
-            document.querySelectorAll(`#${id} input[type="hidden"]`).forEach(el => el.value = '');
-            
-            if(id==='modal-client') document.getElementById('client-modal-title').innerText = 'Add Client';
-            if(id==='modal-cred') document.getElementById('cred-modal-title').innerText = 'Add Credential';
-            if(id==='modal-ledger') {
-                document.getElementById('l_Op_Bal').value = '0';
-                document.getElementById('l_Dr_Cr').value = 'Dr';
-            }
-            if(id==='modal-task') {
-                document.getElementById('task-modal-title').innerText = 'Add Task';
-                document.getElementById('t_Task_Date').valueAsDate = new Date();
-                ['t_Govt_Fee','t_Additional_Fee','t_Professional_Fee','t_Total_Amount','t_Amount_Received','t_Balance_Due'].forEach(i => document.getElementById(i).value='0');
-                document.getElementById('t_Task_Status').value = 'Pending';
-                document.getElementById('t_Akn_File').value = '';
-            }
-            if(id==='modal-transaction') {
-                document.getElementById('tx_Date').valueAsDate = new Date();
-                document.getElementById('tx_Voucher_Type').value = 'Receipt';
-            }
-        }
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
         
-        function closeModal(id) { 
-            const el = document.getElementById(id);
-            el.classList.add('hidden');
-            el.classList.remove('flex');
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.setAttribute('data-lucide', 'sun');
         }
 
-        function openEditClient(c) {
-            openModal('modal-client');
-            document.getElementById('client-modal-title').innerText = 'Edit Client';
-            document.getElementById('c_Client_ID').value = c.Client_ID || '';
-            document.getElementById('c_Client_Name').value = c.Client_Name || '';
-            document.getElementById('c_Mobile').value = c.Mobile || '';
-            document.getElementById('c_Email').value = c.Email || '';
-            document.getElementById('c_Adhar_No').value = c.Adhar_No || '';
-            document.getElementById('c_Pan_No').value = c.Pan_No || '';
-            document.getElementById('c_Constitution_Type').value = c.Constitution_Type || '';
-            document.getElementById('c_Status').value = c.Status || 'Active';
-            document.getElementById('c_Branch').value = c.Branch || '';
-            document.getElementById('c_Notes').value = c.Notes || '';
-            document.getElementById('c_Doc_Folder_Link_URL').value = c.Doc_Folder_Link_URL || '';
-        }
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            themeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            lucide.createIcons(); 
+        });
 
-        function openEditCred(c) {
-            openModal('modal-cred');
-            document.getElementById('cred-modal-title').innerText = 'Edit Credential';
-            document.getElementById('cr_Cred_ID').value = c.Client_ID;
-            document.getElementById('cr_Client_Search').value = c.Client_Name ? `${c.Client_Name} (${c.Client_ID})` : '';
-            document.getElementById('cr_Client_ID').value = c.Client_ID || '';
-            document.getElementById('cr_Client_Name').value = c.Client_Name || '';
-            document.getElementById('cr_Portal_Name').value = c.Portal_Name || '';
-            document.getElementById('cr_Portal_Doc_No').value = c.Portal_Doc_No || '';
-            document.getElementById('cr_User_Name').value = c.User_Name || '';
-            document.getElementById('cr_Password').value = c.Password || '';
-        }
+        // Sidebar Navigation Logic
+        const menuToggle = document.getElementById('menuToggle');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
 
-        function openEditTask(t) {
-            openModal('modal-task');
-            document.getElementById('task-modal-title').innerText = 'Edit Task';
-            document.getElementById('t_Task_ID').value = t.Task_ID || '';
-            document.getElementById('t_Task_Date').value = t.Task_Date || '';
-            document.getElementById('t_Client_Search').value = t.Client_Name ? `${t.Client_Name} (${t.Client_ID})` : '';
-            document.getElementById('t_Client_ID').value = t.Client_ID || '';
-            document.getElementById('t_Client_Name').value = t.Client_Name || '';
-            document.getElementById('t_Task_Name').value = t.Task_Name || '';
-            document.getElementById('t_Period').value = t.Period || '';
-            document.getElementById('t_Task_Status').value = t.Task_Status || 'Pending';
-            document.getElementById('t_Portal_No').value = t.Portal_No || '';
-            document.getElementById('t_User_Name').value = t.User_Name || '';
-            document.getElementById('t_Password').value = t.Password || '';
-            document.getElementById('t_Govt_Fee').value = t.Govt_Fee || 0;
-            document.getElementById('t_Additional_Fee').value = t.Additional_Fee || 0;
-            document.getElementById('t_Professional_Fee').value = t.Professional_Fee || 0;
-            document.getElementById('t_Total_Amount').value = t.Total_Amount || 0;
-            document.getElementById('t_Amount_Received').value = t.Amount_Received || 0;
-            document.getElementById('t_Balance_Due').value = t.Balance_Due || 0;
-            document.getElementById('t_Invoice_No').value = t.Invoice_No || '';
-            document.getElementById('t_Akn_No').value = t.Akn_No || '';
-            document.getElementById('t_Akn_Date').value = t.Akn_Date || '';
-            document.getElementById('t_Akn_Link').value = t.Akn_Link || '';
-        }
-
-        function getBase64(file) {
-           return new Promise((resolve, reject) => {
-             const reader = new FileReader();
-             reader.readAsDataURL(file);
-             reader.onload = () => resolve(reader.result.split(',')[1]);
-             reader.onerror = error => reject(error);
-           });
-        }
-
-        async function handleDriveOp(mode) {
-            const clientId = document.getElementById('t_Client_ID').value;
-            const clientName = document.getElementById('t_Client_Name').value;
-            const taskName = document.getElementById('t_Task_Name').value;
-            const period = document.getElementById('t_Period').value;
-
-            if (!clientId || !clientName) return showToast("Select a Client first!");
-
-            const payload = { action: 'drive_op', mode, clientId, clientName, taskName, period };
-
-            if (mode === 'upload_file') {
-                const fileInput = document.getElementById('t_Akn_File');
-                if (!fileInput.files.length) return showToast("Select a file to upload!");
-                const file = fileInput.files[0];
-                if (file.size > 5 * 1024 * 1024) return showToast("File is too large! Maximum 5MB.");
-
-                showToast("Uploading Akn...");
-                payload.fileData = await getBase64(file);
-                payload.mimeType = file.type;
-                payload.extension = file.name.split('.').pop();
+        function toggleMenu() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+            
+            if (sidebar.classList.contains('open')) {
+                document.body.style.overflow = 'hidden';
             } else {
-                showToast("Creating folder structure...");
-            }
-
-            try {
-                const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json());
-                if(res.error) throw new Error(res.error);
-                
-                document.getElementById('t_Akn_Link').value = res.url;
-                showToast(mode === 'upload_file' ? "Uploaded! Remember to Save Task." : "Folder Created!");
-            } catch (err) {
-                console.error(err);
-                showToast("Failed to process Drive operation.");
+                document.body.style.overflow = '';
             }
         }
 
-        async function generateAndUploadPI() {
-            const clientId = document.getElementById('t_Client_ID').value;
-            const clientName = document.getElementById('t_Client_Name').value;
-            if (!clientId) return showToast("Select a Client first!");
-
-            const taskName = document.getElementById('t_Task_Name').value || 'Task';
-            const period = document.getElementById('t_Period').value || '-';
-            
-            const now = new Date();
-            const year = now.getFullYear().toString().slice(-2);
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hh = String(now.getHours()).padStart(2, '0');
-            const mm = String(now.getMinutes()).padStart(2, '0');
-            const piNo = `PI${year}${month}${day}${hh}${mm}`;
-            
-            document.getElementById('t_Invoice_No').value = piNo;
-            
-            // Populate Professional PI Template
-            document.getElementById('pi-disp-no').innerText = piNo;
-            document.getElementById('pi-disp-date').innerText = new Date().toLocaleDateString('en-IN');
-            document.getElementById('pi-disp-client').innerText = clientName;
-            document.getElementById('pi-disp-id').innerText = clientId;
-            document.getElementById('pi-disp-task').innerText = taskName;
-            document.getElementById('pi-disp-period').innerText = period;
-            
-            let gFee = parseFloat(document.getElementById('t_Govt_Fee').value) || 0;
-            let aFee = parseFloat(document.getElementById('t_Additional_Fee').value) || 0;
-            let pFee = parseFloat(document.getElementById('t_Professional_Fee').value) || 0;
-            let tAmt = parseFloat(document.getElementById('t_Total_Amount').value) || 0;
-
-            document.getElementById('pi-disp-govt').innerText = gFee.toFixed(2);
-            document.getElementById('pi-disp-add').innerText = aFee.toFixed(2);
-            document.getElementById('pi-disp-prof').innerText = pFee.toFixed(2);
-            document.getElementById('pi-disp-subtotal').innerText = '₹' + tAmt.toFixed(2);
-            document.getElementById('pi-disp-total').innerText = '₹' + tAmt.toFixed(2);
-
-            const element = document.getElementById('pi-template');
-            element.style.display = 'block'; // Make visible for render, absolute positioning hides it
-
-            const opt = {
-                margin: 0.5,
-                filename: `PI_${piNo}_${clientName}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-            };
-
-            showToast("Generating Proforma Invoice...");
-
-            html2pdf().set(opt).from(element).outputPdf('datauristring').then(async function(pdfBase64) {
-                element.style.display = ''; // Reset display
-                const base64Data = pdfBase64.split(',')[1];
-                
-                const payload = {
-                    action: 'drive_op',
-                    mode: 'upload_file',
-                    clientId: clientId,
-                    clientName: clientName,
-                    taskName: taskName,
-                    period: period,
-                    fileData: base64Data,
-                    mimeType: 'application/pdf',
-                    fileName: `PI_${piNo}_${clientName}.pdf`
-                };
-                
-                try {
-                    const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json());
-                    if(res.error) throw new Error(res.error);
-                    showToast("PI Uploaded to Drive! Save Task to complete.");
-                } catch(e) {
-                    showToast("Failed to upload PI to Drive.");
-                }
-            });
-        }
-
-        async function saveRecord(sheetName) {
-    let data = {}, idValue = null;
-    
-    if(sheetName === 'Clients') {
-        idValue = document.getElementById('c_Client_ID').value;
-        data = { 
-            Client_Name: document.getElementById('c_Client_Name').value, 
-            Mobile: document.getElementById('c_Mobile').value, 
-            Email: document.getElementById('c_Email').value,
-            Adhar_No: document.getElementById('c_Adhar_No').value,
-            Pan_No: document.getElementById('c_Pan_No').value,
-            Status: document.getElementById('c_Status').value,
-            Constitution_Type: document.getElementById('c_Constitution_Type').value,
-            Branch: document.getElementById('c_Branch').value,
-            Notes: document.getElementById('c_Notes').value,
-            Doc_Folder_Link_URL: document.getElementById('c_Doc_Folder_Link_URL').value
-        };
-    } else if (sheetName === 'Credentials') {
-        idValue = document.getElementById('cr_Cred_ID').value;
-        data = { 
-            Client_ID: document.getElementById('cr_Client_ID').value, 
-            Client_Name: document.getElementById('cr_Client_Name').value,
-            Portal_Name: document.getElementById('cr_Portal_Name').value, 
-            User_Name: document.getElementById('cr_User_Name').value, 
-            Password: document.getElementById('cr_Password').value,
-            Portal_Doc_No: document.getElementById('cr_Portal_Doc_No').value 
-        };
-    } else if (sheetName === 'Tasks') {
-        idValue = document.getElementById('t_Task_ID').value;
-        data = { 
-            Task_Date: document.getElementById('t_Task_Date').value,
-            Client_ID: document.getElementById('t_Client_ID').value, 
-            Client_Name: document.getElementById('t_Client_Name').value, 
-            Task_Name: document.getElementById('t_Task_Name').value, 
-            Period: document.getElementById('t_Period').value, 
-            Task_Status: document.getElementById('t_Task_Status').value,
-            Portal_No: document.getElementById('t_Portal_No').value,
-            User_Name: document.getElementById('t_User_Name').value,
-            Password: document.getElementById('t_Password').value,
-            Govt_Fee: document.getElementById('t_Govt_Fee').value,
-            Additional_Fee: document.getElementById('t_Additional_Fee').value,
-            Professional_Fee: document.getElementById('t_Professional_Fee').value,
-            Total_Amount: document.getElementById('t_Total_Amount').value,
-            Amount_Received: document.getElementById('t_Amount_Received').value,
-            Balance_Due: document.getElementById('t_Balance_Due').value,
-            Invoice_No: document.getElementById('t_Invoice_No').value,
-            Akn_No: document.getElementById('t_Akn_No').value,
-            Akn_Date: document.getElementById('t_Akn_Date').value,
-            Akn_Link: document.getElementById('t_Akn_Link').value
-        };
-    } else if (sheetName === 'Transactions') {
-        idValue = document.getElementById('tx_Transaction_ID').value || null;
-        data = {
-            Date: document.getElementById('tx_Date').value,
-            Voucher_Type: document.getElementById('tx_Voucher_Type').value,
-            Client_Name: document.getElementById('tx_Client_Name').value,
-            Ledger_Dr: document.getElementById('tx_Ledger_Dr').value,
-            Amount_Dr: document.getElementById('tx_Amount_Dr').value,
-            Reference_No: document.getElementById('tx_Reference_No').value,
-            Ledger_Cr: document.getElementById('tx_Ledger_Cr').value,
-            Amount_Cr: document.getElementById('tx_Amount_Cr').value,
-            Amount: document.getElementById('tx_Amount').value,
-            Notes: document.getElementById('tx_Notes').value
-        };
-    } else if (sheetName === 'Ledgers') {
-        idValue = document.getElementById('l_Ledger_ID').value;
-        data = {
-            Ledger_Name: document.getElementById('l_Ledger_Name').value,
-            Ledger_Category: document.getElementById('l_Ledger_Category').value,
-            Op_Bal: document.getElementById('l_Op_Bal').value,
-            Dr_Cr: document.getElementById('l_Dr_Cr').value
-        };
-    }
-
-    const action = idValue ? 'edit' : 'add';
-    const payload = { action, sheetName, data, idValue };
-
-    showToast("Saving...");
-    closeModal(`modal-${sheetName.toLowerCase().replace(/s$/, '')}`);
-
-    try {
-        const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json());
-        if(res.error) throw new Error(res.error);
-        showToast("Saved Successfully!");
-        fetchApiData();
-    } catch (err) {
-        console.error(err);
-        showToast("Error Saving Data");
-    }
-}
-
-        async function deleteRecord(sheetName, idValue) {
-            if(!confirm(`Delete record?`)) return;
-            showToast("Deleting...");
-            try {
-                const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', sheetName, idValue }) }).then(r=>r.json());
-                if(res.error) throw new Error(res.error);
-                showToast("Deleted!");
-                fetchApiData();
-            } catch (err) {
-                showToast("Error Deleting");
-            }
-        }
-
-        function sendTaskMsg(taskId) {
-            const task = state.tasks.find(t => t.Task_ID === taskId);
-            if (!task) return showToast("Task not found!");
-
-            const client = state.clients.find(c => c.Client_ID === task.Client_ID);
-            if (!client || !client.Mobile) return alert("No mobile number registered for this client.");
-
-            const msg = `Status of ${task.Task_Name || 'Task'}
-Greetings From CMFilings
-
-Dear ${task.Client_Name || 'Client'},
-Your ${task.Task_Name || 'Task'} for the period ${task.Period || '-'} has been ${task.Task_Status || 'processed'}.
-
-Payment Due: ₹${task.Balance_Due || 0}
-
-Regards,
-CMFilings`;
-
-            const phone = client.Mobile.toString().replace(/[^0-9]/g, '');
-            const finalPhone = phone.length === 10 ? '91' + phone : phone; 
-            
-            window.open(`https://wa.me/${finalPhone}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        function copyText(text) {
-            if(!text || text==='-') return;
-            navigator.clipboard.writeText(text);
-            showToast("Copied!");
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.classList.remove('opacity-0', 'translate-y-[-10px]');
-            setTimeout(() => toast.classList.add('opacity-0', 'translate-y-[-10px]'), 2500);
-        }
-
-        // CALCULATOR
-        let calcVal = '0';
-        function calcAction(char) {
-            const display = document.getElementById('calc-display');
-            if (char === 'C') { calcVal = '0'; }
-            else if (char === '=') { 
-                try { calcVal = eval(calcVal).toString(); } 
-                catch(e) { calcVal = 'Error'; }
-            }
-            else {
-                if (calcVal === '0' || calcVal === 'Error') calcVal = char;
-                else calcVal += char;
-            }
-            display.value = calcVal;
-        }
+        menuToggle.addEventListener('click', toggleMenu);
+        closeSidebar.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
     </script>
 </body>
 </html>
