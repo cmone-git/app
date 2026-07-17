@@ -1,30 +1,28 @@
-const CACHE_NAME = 'cmbooks';
-const ASSETS_TO_CACHE = [
-    './',
-    './index.html',
-    './css/style.css',
-    './js/tailwind-config.js',
-    './js/api.js',
-    './js/app.js',
-    './manifest.json',
-    './assets/logo.png',
-    './assets/name.png'
+const CACHE_NAME = 'cm-filings-v1';
+const urlsToCache = [
+  './',
+  './index.html',
+  './manifest.json',
+  './assets/logo-name.png',
+  './assets/logo-splash.png',
+  './assets/logo-fav.png'
 ];
 
-// Install Event
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(ASSETS_TO_CACHE);
-        })
-    );
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        return cache.addAll(urlsToCache);
+      })
+  );
 });
 
-// Fetch Event
-self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request).then((response) => {
-            return response || fetch(event.request);
-        })
-    );
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // Return cached version or fetch new
+        return response || fetch(event.request);
+      })
+  );
 });
