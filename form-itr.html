@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CM Filings - ITR Hub</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-blue: #003366;
+            --accent-yellow: #FFD700;
+            --bg-gray: #f4f7f6;
+            --text-dark: #333;
+        }
+
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-gray); margin: 0; padding: 0; padding-bottom: 70px; color: var(--text-dark); }
+        
+        /* Header */
+        header { background: white; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; position: sticky; top: 0; z-index: 100;}
+        header img { height: 40px; width: 120px; object-fit: contain; }
+
+        /* Main Container */
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        
+        /* Form Sections */
+        .form-section { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-top: 4px solid var(--primary-blue); }
+        .form-section h2 { margin-top: 0; font-size: 1.1rem; color: var(--primary-blue); border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 5px; color: #555; }
+        .input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: 'Inter', sans-serif; }
+        .input-group input[type="file"] { padding: 7px; background: #fafafa; }
+
+        .btn-submit { width: 100%; padding: 14px; background: var(--primary-blue); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-submit:hover { background: #002244; }
+
+        /* CTA Section */
+        .cta-box { background: var(--primary-blue); color: white; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .cta-box h3 { color: var(--accent-yellow); margin-top: 0; }
+        .cta-links { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .cta-btn { background: white; color: var(--primary-blue); padding: 10px 15px; border-radius: 20px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
+        .cta-btn.wa { background: #25D366; color: white; }
+
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 500; }
+        .nav-item.active { color: var(--primary-blue); }
+        .nav-item i { margin-bottom: 4px; }
+
+        /* Loading Overlay */
+        #loading { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-blue); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="assets/logo-name.png" alt="CM Filings Logo" onerror="this.src='https://via.placeholder.com/120x40/003366/FFD700?text=CM+Filings'">
+    </header>
+
+    <div class="container">
+        <!-- Contact CTA -->
+        <div class="cta-box">
+            <h3>Need Assistance?</h3>
+            <p>Our tax experts are here to help you.</p>
+            <div class="cta-links">
+                <a href="https://wa.me/919946151111" class="cta-btn wa"><i data-lucide="message-circle"></i> WhatsApp</a>
+                <a href="tel:9946151111" class="cta-btn"><i data-lucide="phone"></i> Call</a>
+                <a href="mailto:support@cmfilings.com" class="cta-btn"><i data-lucide="mail"></i> Email</a>
+            </div>
+        </div>
+
+        <form id="itrForm">
+            <!-- Personal Details -->
+            <div class="form-section">
+                <h2><i data-lucide="user"></i> Personal Details</h2>
+                <div class="input-group"><label>Full Name</label><input type="text" id="Name" required></div>
+                <div class="input-group"><label>Mobile</label><input type="tel" id="Mobile" required></div>
+                <div class="input-group"><label>Email</label><input type="email" id="Email" required></div>
+                <div class="input-group"><label>PAN Card Number</label><input type="text" id="PanCard" required></div>
+                <div class="input-group"><label>Date of Birth</label><input type="date" id="DateOfBirth" required></div>
+                <div class="input-group">
+                    <label>Gender</label>
+                    <select id="Gender"><option>Male</option><option>Female</option><option>Other</option></select>
+                </div>
+                <div class="input-group"><label>Father's Name</label><input type="text" id="FathersName"></div>
+                <div class="input-group"><label>Citizen Type</label><select id="CitizenType"><option>Indian</option><option>NRI</option></select></div>
+            </div>
+
+            <!-- Address Details -->
+            <div class="form-section">
+                <h2><i data-lucide="map-pin"></i> Address Details</h2>
+                <div class="input-group"><label>Full Address</label><input type="text" id="Address"></div>
+                <div class="input-group"><label>House No / Name</label><input type="text" id="HouseNo"></div>
+                <div class="input-group"><label>Area</label><input type="text" id="Area"></div>
+                <div class="input-group"><label>Pincode</label><input type="text" id="Pincode"></div>
+                <div class="input-group"><label>District</label><input type="text" id="District"></div>
+                <div class="input-group"><label>State</label><input type="text" id="State"></div>
+                <div class="input-group"><label>Country</label><input type="text" id="Country" value="India"></div>
+                <div class="input-group"><label>Residential Status</label><select id="ResidentialStatus"><option>Resident</option><option>Non-Resident</option></select></div>
+            </div>
+
+            <!-- Tax Info -->
+            <div class="form-section">
+                <h2><i data-lucide="briefcase"></i> Tax & Income Info</h2>
+                <div class="input-group"><label>Financial Year</label><input type="text" id="FinancialYear" placeholder="e.g. 2023-24" required></div>
+                <div class="input-group"><label>Passport No (If applicable)</label><input type="text" id="PassportNo"></div>
+                <div class="input-group"><label>First Time Filing?</label><select id="FirstTimeFiling"><option>Yes</option><option>No</option></select></div>
+                <div class="input-group"><label>IT Portal Password</label><input type="password" id="PortalPassword"></div>
+                <div class="input-group"><label>HOI (Head of Institution/Family)</label><input type="text" id="HOI"></div>
+                <div class="input-group"><label>Head of Income</label><input type="text" id="HeadofIncome"></div>
+                <div class="input-group"><label>No of Sources</label><input type="number" id="NoOfSources"></div>
+                <div class="input-group"><label>Paid Advance Amount</label><input type="number" id="PaidAdvanceAmount"></div>
+            </div>
+
+            <!-- Document Uploads -->
+            <div class="form-section">
+                <h2><i data-lucide="upload-cloud"></i> Document Uploads</h2>
+                <div class="input-group"><label>PAN Card (Image/PDF)</label><input type="file" id="UploadPanCard"></div>
+                <div class="input-group"><label>Aadhaar Card (Image/PDF)</label><input type="file" id="AdharLinkUpload"></div>
+                <div class="input-group"><label>Form 16</label><input type="file" id="UploadForm16"></div>
+                <div class="input-group"><label>Bank Statement</label><input type="file" id="BankStatement"></div>
+                <div class="input-group"><label>Trade / VDA / US Stocks Stmt</label><input type="file" id="UploadTrade"></div>
+                <div class="input-group"><label>Upload Payment Acknowledgement</label><input type="file" id="UploadPaymentAkn"></div>
+                <div class="input-group"><label>Any Other Document</label><input type="file" id="UploadAnyOthers"></div>
+                <div class="input-group"><label>Name of Other Document</label><input type="text" id="NameOfOthers"></div>
+            </div>
+
+            <button type="submit" class="btn-submit"><i data-lucide="send"></i> Submit Application</button>
+        </form>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loading">
+        <div class="spinner"></div>
+        <h3 style="color: var(--primary-blue); margin-top:15px;">Uploading Documents & Submitting...</h3>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item"><i data-lucide="home"></i>Home</a>
+        <a href="#" class="nav-item active"><i data-lucide="file-text"></i>File ITR</a>
+        <a href="#" class="nav-item"><i data-lucide="bell"></i>Alerts</a>
+        <a href="#" class="nav-item"><i data-lucide="menu"></i>Menu</a>
+    </nav>
+
+    <script>
+        lucide.createIcons();
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+
+        const SCRIPT_URL = 'YOUR_GOOGLE_WEB_APP_URL_HERE'; // <--- REPLACE THIS
+
+        // Helper to convert file to Base64
+        const getBase64 = (file) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve({ name: file.name, mimeType: file.type, data: reader.result });
+            reader.onerror = error => reject(error);
+        });
+
+        document.getElementById('itrForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            document.getElementById('loading').style.display = 'flex';
+
+            const formData = {
+                Name: document.getElementById('Name').value,
+                Mobile: document.getElementById('Mobile').value,
+                Email: document.getElementById('Email').value,
+                PanCard: document.getElementById('PanCard').value,
+                DateOfBirth: document.getElementById('DateOfBirth').value,
+                Gender: document.getElementById('Gender').value,
+                FathersName: document.getElementById('FathersName').value,
+                CitizenType: document.getElementById('CitizenType').value,
+                Address: document.getElementById('Address').value,
+                HouseNo: document.getElementById('HouseNo').value,
+                Area: document.getElementById('Area').value,
+                Pincode: document.getElementById('Pincode').value,
+                District: document.getElementById('District').value,
+                State: document.getElementById('State').value,
+                Country: document.getElementById('Country').value,
+                ResidentialStatus: document.getElementById('ResidentialStatus').value,
+                FinancialYear: document.getElementById('FinancialYear').value,
+                PassportNo: document.getElementById('PassportNo').value,
+                FirstTimeFiling: document.getElementById('FirstTimeFiling').value,
+                PortalPassword: document.getElementById('PortalPassword').value,
+                HOI: document.getElementById('HOI').value,
+                HeadofIncome: document.getElementById('HeadofIncome').value,
+                NoOfSources: document.getElementById('NoOfSources').value,
+                PaidAdvanceAmount: document.getElementById('PaidAdvanceAmount').value,
+                NameOfOthers: document.getElementById('NameOfOthers').value,
+            };
+
+            // Process Files
+            const fileIds = ['UploadPanCard', 'AdharLinkUpload', 'UploadForm16', 'BankStatement', 'UploadTrade', 'UploadPaymentAkn', 'UploadAnyOthers'];
+            
+            for (let id of fileIds) {
+                const fileInput = document.getElementById(id);
+                if (fileInput.files.length > 0) {
+                    formData[id] = await getBase64(fileInput.files[0]);
+                }
+            }
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData),
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' } // text/plain prevents preflight CORS issues
+                });
+                
+                const result = await response.json();
+                document.getElementById('loading').style.display = 'none';
+                
+                if (result.status === 'success') {
+                    alert('Success! Your Application Number is: ' + result.appNo);
+                    document.getElementById('itrForm').reset();
+                } else {
+                    alert('Error submitting form: ' + result.message);
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                alert('Network Error. Please try again.');
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
