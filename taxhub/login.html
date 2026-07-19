@@ -4,145 +4,197 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In - CM TaxHub</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/logo-fav.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- External Scripts -->
-    <script src="biometrics.js"></script>
+    <!-- Official Google Identity Script -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
     <style>
-        :root { --primary-blue: #003366; --bg-main: #F4F6F8; --card-bg: #FFFFFF; --text-dark: #111827; --border-color: rgba(0,0,0,0.06); }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-dark); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .login-card { background: var(--card-bg); padding: 40px 30px; border-radius: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.08); width: 100%; max-width: 420px; text-align: center; border: 1px solid var(--border-color); }
-        .btn-action { width: 100%; padding: 14px; background: #374151; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; }
-        .btn-bio { background: #10B981; }
-        .divider { display: flex; align-items: center; margin: 20px 0; color: #6B7280; font-size: 0.8rem; font-weight: 600; }
-        .divider::before, .divider::after { content: ""; flex: 1; border-bottom: 1px solid var(--border-color); margin: 0 10px; }
-        .input-group input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; margin-bottom: 12px; box-sizing: border-box; }
-        .google-btn-wrapper { display: flex; justify-content: center; margin-bottom: 16px; }
+        :root {
+            --primary-blue: #003366;
+            --accent-yellow: #FFD700;
+            --dark-grey-blue: #374151; 
+            --bg-main: #F4F6F8;
+            --card-bg: #FFFFFF;
+            --text-dark: #111827;
+            --text-muted: #6B7280;
+            --border-color: rgba(0,0,0,0.06);
+            --shadow-color: rgba(0,0,0,0.08);
+            --icon-bg-light: #F3F4F6;
+        }
+
+        body.dark-mode {
+            --bg-main: #121212;
+            --card-bg: #1E1E1E;
+            --text-dark: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --border-color: rgba(255,255,255,0.08);
+            --shadow-color: rgba(0,0,0,0.3);
+            --icon-bg-light: #2D2D2D;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body { background-color: var(--bg-main); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; transition: background-color 0.3s; }
+
+        /* Floating Theme Toggle */
+        .theme-toggle-wrapper { position: absolute; top: 20px; right: 20px; z-index: 10; }
+        .theme-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-dark); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px var(--shadow-color); transition: 0.2s; }
+        .theme-btn:active { transform: scale(0.95); }
+
+        /* Login Container Centered */
+        .login-wrapper { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .login-card { background: var(--card-bg); width: 100%; max-width: 400px; border-radius: 24px; padding: 40px 30px; text-align: center; border: 1px solid var(--border-color); box-shadow: 0 8px 32px var(--shadow-color); position: relative; overflow: hidden; }
+        
+        .logo { height: 48px; margin-bottom: 24px; }
+        
+        .login-card h1 { font-size: 1.5rem; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+        .login-card p { font-size: 0.95rem; color: var(--text-muted); font-weight: 500; margin-bottom: 32px; line-height: 1.4; }
+
+        /* Google Button Wrapper */
+        .google-btn-wrapper { display: flex; justify-content: center; margin-bottom: 24px; min-height: 44px; }
+
+        /* Divider */
+        .divider { display: flex; align-items: center; margin: 24px 0; }
+        .divider::before, .divider::after { content: ""; flex: 1; border-bottom: 1px solid var(--border-color); }
+        .divider span { padding: 0 12px; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+
+        /* Secure Badge */
+        .secure-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; background: var(--icon-bg-light); padding: 8px 16px; border-radius: 20px; margin-top: 10px; }
+        .secure-badge i { width: 14px; height: 14px; color: var(--primary-blue); }
+        body.dark-mode .secure-badge i { color: #60A5FA; }
+
+        /* Loading State Overlay */
+        #loadingOverlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--card-bg); z-index: 10; flex-direction: column; align-items: center; justify-content: center; opacity: 0.95; }
+        .spinner { border: 3px solid var(--icon-bg-light); border-top: 3px solid var(--primary-blue); border-radius: 50%; width: 36px; height: 36px; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { font-size: 0.9rem; font-weight: 700; color: var(--text-dark); }
     </style>
 </head>
 <body>
 
-    <div class="login-card">
-        <!-- FIXED Path to ensure your logo shows up -->
-        <img src="assets/logo-name.png" alt="CM TaxHub" style="height: 40px; margin-bottom: 20px;" onerror="this.style.display='none'">
-        <h2 style="margin-bottom: 6px; font-weight: 800;">Secure Login</h2>
-        <p style="color: #6B7280; font-size: 0.9rem; margin-bottom: 24px;">Access your corporate filing dashboard.</p>
-
-        <!-- Biometric Quick Login (Hidden by default) -->
-        <button id="btnBiometricLogin" class="btn-action btn-bio" style="display: none;">
-            <i data-lucide="fingerprint"></i> Sign In with Biometrics
+    <div class="theme-toggle-wrapper">
+        <button class="theme-btn" id="themeToggle">
+            <i data-lucide="moon" id="themeIcon"></i>
         </button>
+    </div>
 
-        <!-- Google Configuration Container -->
-        <div id="g_id_onload"
-             data-client_id="294144253040-v2l17rbvq3t11ngu7c5bsemvlg4780oj.apps.googleusercontent.com"
-             data-context="signin"
-             data-ux_mode="popup"
-             data-callback="handleGoogleLogin"
-             data-auto_prompt="false">
-        </div>
-
-        <!-- FIXED: The explicit button visual marker for Google layout rendering -->
-        <div class="google-btn-wrapper">
-            <div class="g_id_signin" data-type="standard" data-shape="semibold" data-theme="outline" data-size="large" data-logo_alignment="left"></div>
-        </div>
-
-        <div class="divider">OR USE MOBILE</div>
-
-        <!-- Firebase OTP Section -->
-        <div id="phoneSection">
-            <div class="input-group">
-                <input type="tel" id="phoneNumber" placeholder="+91 9895470148">
+    <div class="login-wrapper">
+        <div class="login-card">
+            
+            <!-- Loading Overlay -->
+            <div id="loadingOverlay">
+                <div class="spinner"></div>
+                <div class="loading-text">Verifying and Logging in...</div>
             </div>
-            <div id="recaptcha-container" style="display: flex; justify-content: center; margin-bottom: 10px;"></div>
-            <button class="btn-action" id="sendOtpBtn"><i data-lucide="message-square"></i> Send OTP</button>
-        </div>
 
-        <div id="otpSection" style="display: none;">
-            <div class="input-group">
-                <input type="number" id="otpCode" placeholder="Enter 6-digit code">
+            <img src="assets/logo-name.png" alt="CM TaxHub" class="logo" onerror="this.src='https://via.placeholder.com/150x50/003366/FFD700?text=CM+TaxHub'">
+            
+            <h1>Welcome Back</h1>
+            <p>Sign in to manage your tax filings, track refunds, and submit documents securely.</p>
+
+            <!-- Google Identity Services configuration -->
+            <div id="g_id_onload"
+                 data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="handleGoogleCredentialResponse"
+                 data-auto_prompt="false">
             </div>
-            <button class="btn-action" id="verifyOtpBtn"><i data-lucide="shield-check"></i> Verify</button>
+
+            <!-- The Google Sign-In Button -->
+            <div class="google-btn-wrapper">
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-shape="rectangular"
+                     data-theme="outline"
+                     data-text="continue_with"
+                     data-size="large"
+                     data-logo_alignment="center"
+                     data-width="250">
+                </div>
+            </div>
+
+            <div class="divider"><span>OR</span></div>
+
+            <div class="secure-badge">
+                <i data-lucide="shield-check"></i> 256-bit Encrypted Connection
+            </div>
         </div>
     </div>
 
     <script>
         lucide.createIcons();
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwh7sAj97ZoQ1EY3cKZGX7blOCWk9IS00QxQHz8tmaydiq3bTY0NKpfn_dsolyoX1Kxsg/exec';
 
-        // 1. Biometric Auto-Prompt Setup
-        if (localStorage.getItem('biometricsEnabled') === 'true') {
-            const bioBtn = document.getElementById('btnBiometricLogin');
-            bioBtn.style.display = 'flex';
-            bioBtn.addEventListener('click', authenticateWithBiometrics);
-        }
-
-        // 2. Google Login Handler
-        function decodeJwt(token) {
-            return JSON.parse(decodeURIComponent(atob(token.split('.')[1]).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')));
-        }
-        function handleGoogleLogin(response) {
-            const payload = decodeJwt(response.credential);
-            localStorage.setItem('userEmail', payload.email);
-            localStorage.setItem('userName', payload.name);
-            logSessionAndRedirect(payload.email, 'Google');
-        }
-
-        // 3. FIXED: Populated actual keys extracted from your dynamic console profile panel
-        const firebaseConfig = {
-            apiKey: "AIzaSyAY0eJ0iAVxP2tn2RLe7wVNB8Q15Vnjd-g",
-            authDomain: "cmb-40001.firebaseapp.com",
-            projectId: "cmb-40001",
-            storageBucket: "cmb-40001.firebasestorage.app",
-            messagingSenderId: "294144253040",
-            appId: "1:294144253040:web:852b7c378ee8049f4268b5",
-            measurementId: "G-RX05KNR8Y3"
-        };
-        firebase.initializeApp(firebaseConfig);
+        // Theme Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
         
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'normal' });
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.setAttribute('data-lucide', 'sun');
+        }
 
-        document.getElementById('sendOtpBtn').addEventListener('click', () => {
-            // FIXED: Automatically strips all whitespace characters from user string entry
-            let phone = document.getElementById('phoneNumber').value.trim().replace(/\s+/g, '');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            themeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            lucide.createIcons(); 
+        });
+
+        // Backend Apps Script URL
+        const SCRIPT_URL = 'YOUR_GOOGLE_WEB_APP_URL_HERE'; 
+
+        // Function to safely decode the Google JWT
+        function decodeJwtResponse(token) {
+            let base64Url = token.split('.')[1];
+            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // Callback function triggered by Google upon successful login
+        function handleGoogleCredentialResponse(response) {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'flex'; // Show loading spinner
+
+            // Decode the credentials payload
+            const responsePayload = decodeJwtResponse(response.credential);
             
-            if(!phone.startsWith('+')) {
-                alert("Please explicitly enter a country code (e.g., +91).");
-                return;
-            }
+            const userEmail = responsePayload.email;
+            const userName = responsePayload.name;
+            const userPic = responsePayload.picture;
 
-            firebase.auth().signInWithPhoneNumber(phone, window.recaptchaVerifier)
-                .then((res) => {
-                    window.confirmationResult = res;
-                    document.getElementById('phoneSection').style.display = 'none';
-                    document.getElementById('otpSection').style.display = 'block';
-                }).catch(err => {
-                    console.error(err);
-                    alert("Error sending OTP. Ensure string format matches precisely.");
-                });
-        });
-
-        document.getElementById('verifyOtpBtn').addEventListener('click', () => {
-            const code = document.getElementById('otpCode').value;
-            confirmationResult.confirm(code).then((result) => {
-                localStorage.setItem('userPhone', result.user.phoneNumber);
-                logSessionAndRedirect(result.user.phoneNumber, 'Phone_OTP');
-            }).catch(err => alert("Invalid OTP"));
-        });
-
-        // 4. Record to Sheet & Redirect
-        function logSessionAndRedirect(identifier, method) {
+            // Save user info to local storage for use across the app (like auto-filling form.html)
+            localStorage.setItem('userEmail', userEmail);
+            localStorage.setItem('userName', userName);
+            localStorage.setItem('userPic', userPic);
             localStorage.setItem('isLoggedIn', 'true');
+
+            // Send the verified email auto to the Google Sheet
             fetch(SCRIPT_URL, {
                 method: 'POST',
-                body: JSON.stringify({ action: 'record_login', email: identifier, method: method }),
+                body: JSON.stringify({ 
+                    action: 'record_login', 
+                    email: userEmail, 
+                    name: userName 
+                }),
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-            }).finally(() => window.location.href = 'index.html');
+            })
+            .then(res => res.json())
+            .then(data => {
+                // Instantly redirect to the main dashboard
+                window.location.href = 'index.html';
+            })
+            .catch(error => {
+                console.error('Error logging to sheet:', error);
+                // Even if sheet logging fails, we redirect the user to the app
+                window.location.href = 'index.html';
+            });
         }
     </script>
 </body>
