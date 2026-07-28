@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CM TaxApp | Corporate Dashboard</title>
+    <link rel="manifest" href="manifest.json">
     
-    <meta name="theme-color" content="#111827"> <!-- Dark Theme Color -->
+    <meta name="theme-color" content="#0B1120">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
@@ -36,6 +37,11 @@
                             success: '#10B981',
                             info: '#2563EB'
                         }
+                    },
+                    boxShadow: {
+                        'corporate': '0 10px 30px -10px rgba(11, 17, 32, 0.4)', 
+                        'modal': '0 10px 40px -10px rgba(15, 23, 42, 0.1)',
+                        'header': '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
                     }
                 }
             }
@@ -44,12 +50,14 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: var(--tw-colors-brand-bg); -webkit-tap-highlight-color: transparent; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        .corp-input, .corp-select {
+        /* Larger Corporate Form Inputs */
+        .corp-input, .corp-select, .corp-textarea {
             width: 100%; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px;
             font-size: 15px; color: #0F172A; background: #F8FAFC; transition: all 0.2s ease; outline: none;
         }
-        .corp-input:focus, .corp-select:focus { 
+        .corp-input:focus, .corp-select:focus, .corp-textarea:focus { 
             border-color: #c80000; box-shadow: 0 0 0 3px rgba(200, 0, 0, 0.1); background: #FFFFFF;
         }
         
@@ -65,7 +73,10 @@
         @keyframes slideRight { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes drawCheck { to { stroke-dashoffset: 0; } }
         @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .animated-check { stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawCheck 0.5s ease forwards; }
 
         /* Toast Styling */
         .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 14px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 999999; display: flex; align-items: center; gap: 10px; white-space: nowrap; box-shadow: 0 6px 20px rgba(0,0,0,0.15); color: #FFFFFF; border: none; }
@@ -87,7 +98,7 @@
         <p class="text-xs text-brand-muted font-bold mt-2 tracking-widest uppercase">Corporate Portal</p>
     </div>
 
-    <!-- Login Modal (Now a triggerable modal instead of forced overlay) -->
+    <!-- Login Modal -->
     <div id="loginScreen" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-sm transition-opacity items-center justify-center px-4">
         <div class="bg-white rounded-3xl w-full max-w-[400px] p-8 shadow-2xl relative flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
             <button onclick="closeLoginModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-800"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -120,7 +131,9 @@
     <div id="paymentSuccessModal" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
         <div class="bg-gray-800 border border-gray-700 rounded-2xl w-full max-w-[340px] p-8 shadow-2xl flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
             <div class="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 mb-4 border-2 border-green-500/50">
-                <i data-lucide="check" class="w-8 h-8"></i>
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path class="animated-check" d="M20 6L9 17l-5-5"/>
+                </svg>
             </div>
             <h3 class="text-center font-bold text-xl text-white mb-2">Upload Successful</h3>
             <p class="text-center text-sm text-gray-300 mb-6">
@@ -132,10 +145,10 @@
         </div>
     </div>
 
-    <!-- MAIN APP WRAPPER (Now visible by default) -->
+    <!-- MAIN APP WRAPPER -->
     <div id="mainApp" class="flex flex-col flex-grow">
         
-        <!-- Header (Dark Grey, White Text) -->
+        <!-- Header -->
         <header class="flex justify-between items-center px-5 pt-5 pb-3 sticky top-0 z-30 bg-gray-900 shadow-md">
             <button onclick="openMenu()" class="w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center text-white shadow-sm hover:bg-gray-700 transition">
                 <i data-lucide="menu" class="w-5 h-5"></i>
@@ -245,7 +258,7 @@
             </div>
         </main>
 
-        <!-- Bottom Navigation Bar (Dark Grey, White Text) -->
+        <!-- Bottom Navigation Bar -->
         <nav class="fixed bottom-0 left-0 w-full bg-gray-900 border-t border-gray-800 px-8 py-3.5 flex justify-between items-center z-30 pb-safe shadow-lg">
             <a href="#" class="flex flex-col items-center gap-1 text-white w-16">
                 <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
@@ -296,11 +309,9 @@
                 </a>
             </div>
             <div class="p-6 border-t border-brand-border pb-safe flex flex-col gap-2">
-                <!-- Sign In Button (Visible to Guests) -->
                 <button id="navSignInBtn" onclick="openLoginModal()" class="w-full flex items-center justify-center gap-2 text-white font-bold bg-brand-primary py-3.5 rounded-xl shadow-md transition text-sm">
                     <i data-lucide="log-in" class="w-4 h-4"></i> Sign In
                 </button>
-                <!-- Sign Out Button (Visible to Logged In Users) -->
                 <button id="navSignOutBtn" onclick="handleLogout()" class="hidden w-full flex items-center justify-center gap-2 text-brand-dark font-semibold border border-brand-border py-3.5 rounded-xl hover:bg-gray-50 transition text-sm">
                     <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
                 </button>
@@ -414,7 +425,7 @@
                 </div>
             </form>
 
-            <!-- Success Screen (Hidden by Default) -->
+            <!-- Success Screen -->
             <div id="itrSuccessScreen" class="hidden flex-col items-center justify-center text-center h-full max-w-[400px] mx-auto animate-[fadeIn_0.5s_ease-out] pt-8 pb-10">
                 <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-5 border-[8px] border-white shadow-sm">
                     <i data-lucide="check-circle" class="w-12 h-12 text-brand-success"></i>
@@ -447,7 +458,7 @@
         </div>
     </div>
 
-    <!-- 2. PLUNDER PAYMENT MODAL -->
+    <!-- 2. PAYMENT MODAL -->
     <div id="paymentModal" class="fixed inset-0 z-[60] hidden flex-col bg-brand-bg">
         <div class="px-5 py-4 border-b border-brand-border flex justify-between items-center bg-white sticky top-0 z-10 shadow-header">
             <h3 class="font-bold text-base text-brand-heading">Payment Portal</h3>
@@ -1117,6 +1128,21 @@
         }
         function nextStep() { showStep(currentStep + 1); }
         function prevStep() { showStep(currentStep - 1); }
+    </script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('PWA ServiceWorker successfully registered with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.error('PWA ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
