@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CM TaxApp | Corporate Dashboard</title>
-    <link rel="manifest" href="manifest.json">
     
-    <meta name="theme-color" content="#0B1120">
+    <meta name="theme-color" content="#111827"> <!-- Dark Theme Color -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
@@ -37,11 +36,6 @@
                             success: '#10B981',
                             info: '#2563EB'
                         }
-                    },
-                    boxShadow: {
-                        'corporate': '0 10px 30px -10px rgba(11, 17, 32, 0.4)', 
-                        'modal': '0 10px 40px -10px rgba(15, 23, 42, 0.1)',
-                        'header': '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
                     }
                 }
             }
@@ -50,14 +44,12 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: var(--tw-colors-brand-bg); -webkit-tap-highlight-color: transparent; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Larger Corporate Form Inputs */
-        .corp-input, .corp-select, .corp-textarea {
+        .corp-input, .corp-select {
             width: 100%; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px;
             font-size: 15px; color: #0F172A; background: #F8FAFC; transition: all 0.2s ease; outline: none;
         }
-        .corp-input:focus, .corp-select:focus, .corp-textarea:focus { 
+        .corp-input:focus, .corp-select:focus { 
             border-color: #c80000; box-shadow: 0 0 0 3px rgba(200, 0, 0, 0.1); background: #FFFFFF;
         }
         
@@ -73,10 +65,7 @@
         @keyframes slideRight { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes drawCheck { to { stroke-dashoffset: 0; } }
         @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .animated-check { stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawCheck 0.5s ease forwards; }
 
         /* Toast Styling */
         .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 14px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 999999; display: flex; align-items: center; gap: 10px; white-space: nowrap; box-shadow: 0 6px 20px rgba(0,0,0,0.15); color: #FFFFFF; border: none; }
@@ -89,7 +78,7 @@
         .bank-details-wrapper.expanded { max-height: 350px; opacity: 1; }
     </style>
 </head>
-<body class="text-brand-text min-h-screen flex flex-col relative pb-24 overflow-x-hidden">
+<body class="font-sans text-brand-text min-h-screen flex flex-col relative pb-24 overflow-x-hidden">
 
     <!-- Splash Screen -->
     <div id="splash" class="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center transition-opacity duration-500">
@@ -98,20 +87,16 @@
         <p class="text-xs text-brand-muted font-bold mt-2 tracking-widest uppercase">Corporate Portal</p>
     </div>
 
-    <!-- Login Overlay -->
-    <div id="loginScreen" class="fixed inset-0 z-[90] bg-white flex flex-col transition-opacity duration-500">
-        <div class="flex-grow flex flex-col justify-center px-8 max-w-[400px] mx-auto w-full">
-            <div class="w-16 h-16 bg-brand-bg border border-brand-border rounded-xl flex items-center justify-center mb-6">
+    <!-- Login Modal (Now a triggerable modal instead of forced overlay) -->
+    <div id="loginScreen" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-sm transition-opacity items-center justify-center px-4">
+        <div class="bg-white rounded-3xl w-full max-w-[400px] p-8 shadow-2xl relative flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
+            <button onclick="closeLoginModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-800"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <div class="w-16 h-16 bg-brand-bg border border-brand-border rounded-xl flex items-center justify-center mb-6 mt-2">
                 <i data-lucide="landmark" class="w-8 h-8 text-brand-primary"></i>
             </div>
-            <h1 class="text-3xl font-extrabold text-brand-heading tracking-tight mb-2">Welcome back</h1>
-            <p class="text-brand-muted text-base mb-8">Sign in to access your corporate tax dashboard and secure documents.</p>
-            
+            <h1 class="text-2xl font-extrabold text-brand-heading tracking-tight mb-2">Welcome</h1>
+            <p class="text-brand-muted text-sm mb-8 text-center">Sign in to sync your tax dashboard securely.</p>
             <div id="googleAuthContainer" class="w-full flex justify-center mb-4"></div>
-            
-            <button onclick="demoLogin()" class="w-full text-sm text-gray-500 hover:text-brand-primary font-semibold py-3.5 border border-gray-200 rounded-lg transition mt-2 shadow-sm">
-                Bypass & Continue with Demo Mode
-            </button>
         </div>
     </div>
 
@@ -135,9 +120,7 @@
     <div id="paymentSuccessModal" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
         <div class="bg-gray-800 border border-gray-700 rounded-2xl w-full max-w-[340px] p-8 shadow-2xl flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
             <div class="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 mb-4 border-2 border-green-500/50">
-                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path class="animated-check" d="M20 6L9 17l-5-5"/>
-                </svg>
+                <i data-lucide="check" class="w-8 h-8"></i>
             </div>
             <h3 class="text-center font-bold text-xl text-white mb-2">Upload Successful</h3>
             <p class="text-center text-sm text-gray-300 mb-6">
@@ -149,22 +132,23 @@
         </div>
     </div>
 
-    <!-- MAIN APP WRAPPER -->
-    <div id="mainApp" class="hidden flex-col flex-grow animate-[fadeIn_0.5s_ease-out]">
-        <!-- Header -->
-        <header class="flex justify-between items-center px-5 pt-5 pb-3 sticky top-0 z-30 bg-white/95 backdrop-blur-md shadow-header">
-            <button onclick="openMenu()" class="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-700 shadow-sm hover:bg-gray-50 transition">
+    <!-- MAIN APP WRAPPER (Now visible by default) -->
+    <div id="mainApp" class="flex flex-col flex-grow">
+        
+        <!-- Header (Dark Grey, White Text) -->
+        <header class="flex justify-between items-center px-5 pt-5 pb-3 sticky top-0 z-30 bg-gray-900 shadow-md">
+            <button onclick="openMenu()" class="w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center text-white shadow-sm hover:bg-gray-700 transition">
                 <i data-lucide="menu" class="w-5 h-5"></i>
             </button>
             <div class="flex items-center gap-3">
-                <button onclick="openAlarmModal()" class="relative w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-700 shadow-sm hover:bg-gray-50 transition">
+                <button onclick="openAlarmModal()" class="relative w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center text-white shadow-sm hover:bg-gray-700 transition">
                     <i data-lucide="bell" class="w-5 h-5"></i>
-                    <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                    <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-brand-primary rounded-full animate-pulse"></span>
                 </button>
-                <button onclick="openSearch()" class="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-700 shadow-sm hover:bg-gray-50 transition">
+                <button onclick="openSearch()" class="w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center text-white shadow-sm hover:bg-gray-700 transition">
                     <i data-lucide="search" class="w-5 h-5"></i>
                 </button>
-                <img id="headerAvatar" src="" class="w-10 h-10 rounded-lg border border-gray-200 object-cover hidden cursor-pointer shadow-sm" onclick="openSettingsModal()" alt="Profile">
+                <img id="headerAvatar" src="" class="w-10 h-10 rounded-lg border border-gray-700 object-cover hidden cursor-pointer shadow-sm" onclick="openSettingsModal()" alt="Profile">
             </div>
         </header>
 
@@ -173,13 +157,12 @@
             <!-- Welcome Section -->
             <div>
                 <p class="text-sm text-brand-muted font-medium mb-1">Corporate Profile</p>
-                <h1 id="dashName" class="text-2xl font-bold text-brand-heading tracking-tight">Loading...</h1>
+                <h1 id="dashName" class="text-2xl font-bold text-brand-heading tracking-tight">Guest User</h1>
             </div>
 
             <!-- Due Date Reminder Card -->
             <div class="bg-brand-dark rounded-3xl p-6 shadow-corporate relative overflow-hidden text-white cursor-pointer" onclick="openAlarmModal()">
                 <i data-lucide="calculator" class="absolute -right-4 -bottom-4 w-36 h-36 text-white opacity-[0.03]"></i>
-                
                 <div class="flex justify-between items-center relative z-10">
                     <div>
                         <h2 class="font-bold text-base mb-1.5 flex items-center gap-2 text-gray-100">
@@ -196,8 +179,6 @@
                             <span class="block text-sm font-bold text-white mt-0.5">31 July 2026</span>
                         </div>
                     </div>
-
-                    <!-- White Donut Chart -->
                     <div class="relative w-28 h-28 flex items-center justify-center bg-white rounded-full shadow-lg border-2 border-white/10">
                         <svg class="w-full h-full transform -rotate-90 absolute" viewBox="0 0 100 100">
                             <circle cx="50" cy="50" r="42" fill="none" stroke="#fee2e2" stroke-width="12"></circle>
@@ -264,21 +245,21 @@
             </div>
         </main>
 
-        <!-- Bottom Navigation Bar -->
-        <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-brand-border px-8 py-3.5 flex justify-between items-center z-30 pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
-            <a href="#" class="flex flex-col items-center gap-1 text-brand-primary w-16">
+        <!-- Bottom Navigation Bar (Dark Grey, White Text) -->
+        <nav class="fixed bottom-0 left-0 w-full bg-gray-900 border-t border-gray-800 px-8 py-3.5 flex justify-between items-center z-30 pb-safe shadow-lg">
+            <a href="#" class="flex flex-col items-center gap-1 text-white w-16">
                 <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
                 <span class="text-[10px] font-semibold">Home</span>
             </a>
-            <a href="#" onclick="openBusinessModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-primary transition w-16">
+            <a href="#" onclick="openBusinessModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition w-16">
                 <i data-lucide="briefcase" class="w-6 h-6"></i>
                 <span class="text-[10px] font-medium">Services</span>
             </a>
-            <a href="#" onclick="openPaymentModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-primary transition w-16">
+            <a href="#" onclick="openPaymentModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition w-16">
                 <i data-lucide="indian-rupee" class="w-6 h-6"></i>
                 <span class="text-[10px] font-medium">Payments</span>
             </a>
-            <a href="#" onclick="openSettingsModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-primary transition w-16">
+            <a href="#" onclick="openSettingsModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition w-16">
                 <i data-lucide="user" class="w-6 h-6"></i>
                 <span class="text-[10px] font-medium">Profile</span>
             </a>
@@ -295,9 +276,9 @@
             <div class="px-6 py-8 border-b border-brand-border bg-brand-bg flex justify-between items-start">
                 <div>
                     <img id="navAvatar" src="" class="w-12 h-12 rounded-lg border border-brand-border object-cover hidden mb-3" alt="Profile">
-                    <div id="navInitials" class="w-12 h-12 bg-white rounded-lg border border-brand-border flex items-center justify-center text-brand-primary mb-3 shadow-sm font-bold text-base">MS</div>
-                    <h2 id="navName" class="text-base font-bold text-brand-heading leading-tight">User</h2>
-                    <p id="navEmail" class="text-xs font-medium text-brand-muted mt-1">user@example.com</p>
+                    <div id="navInitials" class="w-12 h-12 bg-white rounded-lg border border-brand-border flex items-center justify-center text-brand-primary mb-3 shadow-sm font-bold text-base">GU</div>
+                    <h2 id="navName" class="text-base font-bold text-brand-heading leading-tight">Guest User</h2>
+                    <p id="navEmail" class="text-xs font-medium text-brand-muted mt-1">Please Sign In</p>
                 </div>
                 <button onclick="closeMenu()" class="w-8 h-8 rounded-md bg-white border border-brand-border flex items-center justify-center text-gray-500 hover:text-brand-dark transition">
                     <i data-lucide="x" class="w-4 h-4"></i>
@@ -314,8 +295,13 @@
                     <i data-lucide="indian-rupee" class="w-5 h-5 text-gray-400"></i> Payments
                 </a>
             </div>
-            <div class="p-6 border-t border-brand-border pb-safe">
-                <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 text-brand-dark font-semibold border border-brand-border py-3 rounded-xl hover:bg-gray-50 transition text-sm">
+            <div class="p-6 border-t border-brand-border pb-safe flex flex-col gap-2">
+                <!-- Sign In Button (Visible to Guests) -->
+                <button id="navSignInBtn" onclick="openLoginModal()" class="w-full flex items-center justify-center gap-2 text-white font-bold bg-brand-primary py-3.5 rounded-xl shadow-md transition text-sm">
+                    <i data-lucide="log-in" class="w-4 h-4"></i> Sign In
+                </button>
+                <!-- Sign Out Button (Visible to Logged In Users) -->
+                <button id="navSignOutBtn" onclick="handleLogout()" class="hidden w-full flex items-center justify-center gap-2 text-brand-dark font-semibold border border-brand-border py-3.5 rounded-xl hover:bg-gray-50 transition text-sm">
                     <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
                 </button>
             </div>
@@ -428,7 +414,7 @@
                 </div>
             </form>
 
-            <!-- Success Screen -->
+            <!-- Success Screen (Hidden by Default) -->
             <div id="itrSuccessScreen" class="hidden flex-col items-center justify-center text-center h-full max-w-[400px] mx-auto animate-[fadeIn_0.5s_ease-out] pt-8 pb-10">
                 <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-5 border-[8px] border-white shadow-sm">
                     <i data-lucide="check-circle" class="w-12 h-12 text-brand-success"></i>
@@ -480,6 +466,9 @@
                         <div class="grid grid-cols-2 gap-4">
                             <input type="text" id="payPan" class="corp-input bg-brand-bg uppercase font-mono text-sm" placeholder="PAN Number" required>
                             <input type="tel" id="payMobile" class="corp-input bg-brand-bg text-sm" placeholder="Mobile No" required>
+                        </div>
+                        <div>
+                            <input type="text" id="payAkn" class="corp-input bg-brand-bg uppercase font-mono text-sm" placeholder="Application No (Optional)">
                         </div>
                     </div>
                 </div>
@@ -555,7 +544,7 @@
                         <span class="text-xs font-semibold text-brand-heading block">Select Screenshot</span>
                         <input type="file" id="payProof" accept="image/*,.pdf">
                     </div>
-                    <button onclick="submitPaymentForm()" class="w-full bg-brand-primary text-white font-bold py-3.5 rounded-xl shadow-sm text-sm">Submit Payment Info</button>
+                    <button id="paySubmitBtn" onclick="submitPaymentForm()" class="w-full bg-brand-primary text-white font-bold py-3.5 rounded-xl shadow-sm text-sm">Submit Payment Info</button>
                 </div>
             </div>
         </div>
@@ -653,6 +642,11 @@
         lucide.createIcons();
 
         // -------------------------
+        // SCRIPT URL (Replace with your actual published Apps Script URL)
+        // -------------------------
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZg2vw8RUFDQVceBDMFDE-I7vb-BRmIsiHcjvoVs44Z92zOW_sBo44OT__pa1_ivfb/exec';
+
+        // -------------------------
         // SPLASH SCREEN REMOVAL
         // -------------------------
         document.addEventListener('DOMContentLoaded', () => {
@@ -662,6 +656,10 @@
                     splash.style.opacity = "0";
                     setTimeout(() => splash.remove(), 500);
                 }
+                // Trigger dashboard
+                document.getElementById('mainApp').classList.remove('hidden');
+                document.getElementById('mainApp').classList.add('flex');
+                calculateCountdown();
             }, 1000);
         });
 
@@ -671,8 +669,8 @@
         const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com"; 
         
         let currentUser = {
-            name: "Mohammed Shanid",
-            email: "shanid@cmexperts.com",
+            name: "Guest User",
+            email: "guest@example.com",
             picture: "",
             pan: "",
             mobile: ""
@@ -710,12 +708,14 @@
             currentUser.email = data.email;
             currentUser.picture = data.picture;
             populateUserData();
-            transitionToDashboard();
+            closeLoginModal();
         }
 
         function demoLogin() {
+            currentUser.name = "Mohammed Shanid";
+            currentUser.email = "shanid@cmexperts.com";
             populateUserData();
-            transitionToDashboard();
+            closeLoginModal();
         }
 
         function populateUserData() {
@@ -738,65 +738,62 @@
             }
             document.getElementById('navName').innerText = currentUser.name;
             document.getElementById('navEmail').innerText = currentUser.email;
-        }
 
-        function transitionToDashboard() {
-            const loginScreen = document.getElementById('loginScreen');
-            loginScreen.style.opacity = '0';
-            setTimeout(() => {
-                loginScreen.classList.add('hidden');
-                document.getElementById('mainApp').classList.remove('hidden');
-                document.getElementById('mainApp').classList.add('flex');
-                
-                calculateCountdown();
-            }, 500);
+            document.getElementById('navSignInBtn').classList.add('hidden');
+            document.getElementById('navSignOutBtn').classList.remove('hidden');
+            document.getElementById('navSignOutBtn').classList.add('flex');
         }
 
         function handleLogout() {
             closeMenu();
-            document.getElementById('mainApp').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('flex');
-            const loginScreen = document.getElementById('loginScreen');
-            loginScreen.classList.remove('hidden');
-            setTimeout(() => loginScreen.style.opacity = '1', 50);
+            currentUser = { name: "Guest User", email: "guest@example.com", picture: "" };
+            
+            document.getElementById('dashName').innerText = currentUser.name;
+            document.getElementById('navName').innerText = currentUser.name;
+            document.getElementById('navEmail').innerText = currentUser.email;
+            document.getElementById('navInitials').innerText = "GU";
+            document.getElementById('navInitials').classList.remove('hidden');
+            document.getElementById('navAvatar').classList.add('hidden');
+            document.getElementById('headerAvatar').classList.add('hidden');
+
+            document.getElementById('navSignInBtn').classList.remove('hidden');
+            document.getElementById('navSignOutBtn').classList.add('hidden');
+            document.getElementById('navSignOutBtn').classList.remove('flex');
+        }
+
+        function openLoginModal() {
+            closeMenu();
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('loginScreen').classList.add('flex');
+            setTimeout(() => { document.getElementById('loginScreen').style.opacity = '1'; }, 10);
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginScreen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('loginScreen').classList.remove('flex');
+            }, 300);
         }
 
         // -------------------------
-        // HEADER ALARM POPUP
+        // MODALS
         // -------------------------
-        function openAlarmModal() {
-            document.getElementById('alarmModal').classList.remove('hidden');
-            document.getElementById('alarmModal').classList.add('flex');
-        }
-        function closeAlarmModal() {
-            document.getElementById('alarmModal').classList.add('hidden');
-            document.getElementById('alarmModal').classList.remove('flex');
-        }
+        function openAlarmModal() { document.getElementById('alarmModal').classList.remove('hidden'); document.getElementById('alarmModal').classList.add('flex'); }
+        function closeAlarmModal() { document.getElementById('alarmModal').classList.add('hidden'); document.getElementById('alarmModal').classList.remove('flex'); }
+        
+        function openPaymentSuccessModal() { document.getElementById('paymentSuccessModal').classList.remove('hidden'); document.getElementById('paymentSuccessModal').classList.add('flex'); }
+        function closePaymentSuccessModal() { document.getElementById('paymentSuccessModal').classList.add('hidden'); document.getElementById('paymentSuccessModal').classList.remove('flex'); }
 
         // -------------------------
-        // PAYMENT SUCCESS MODAL
+        // BUSINESS & WHATSAPP
         // -------------------------
-        function openPaymentSuccessModal() {
-            document.getElementById('paymentSuccessModal').classList.remove('hidden');
-            document.getElementById('paymentSuccessModal').classList.add('flex');
-        }
-        function closePaymentSuccessModal() {
-            document.getElementById('paymentSuccessModal').classList.add('hidden');
-            document.getElementById('paymentSuccessModal').classList.remove('flex');
-        }
-
-        // -------------------------
-        // BUSINESS & WHATSAPP INTEGRATION
-        // -------------------------
-        function callAdmin() {
-            window.location.href = 'tel:+919946151111';
-        }
-
+        function callAdmin() { window.location.href = 'tel:+919946151111'; }
+        
         function whatsappAdminBusiness() {
             const name = document.getElementById('bizName').value || 'User';
             const propName = document.getElementById('bizProposedName').value || 'Not specified';
             const type = document.getElementById('bizType').value || 'Not specified';
-            
             const text = encodeURIComponent(`Hello TaxApp Admin,\nI am interested in setting up a new business.\n\n*Applicant Name:* ${name}\n*Proposed Name:* ${propName}\n*Entity Type:* ${type}\n\nPlease contact me.`);
             window.open(`https://wa.me/919946151111?text=${text}`, '_blank');
             closeBusinessModal();
@@ -809,7 +806,7 @@
         }
 
         // -------------------------
-        // DONUT COUNTDOWN TIMER
+        // DONUT COUNTDOWN
         // -------------------------
         function calculateCountdown() {
             const targetDate = new Date("July 31, 2026 23:59:59").getTime();
@@ -828,16 +825,12 @@
             const safeProgress = Math.max(0, Math.min(1, progress));
             const offset = circumference - (safeProgress * circumference);
             
-            setTimeout(() => {
-                circle.style.strokeDashoffset = offset;
-            }, 100);
+            setTimeout(() => { circle.style.strokeDashoffset = offset; }, 100);
         }
 
         // -------------------------
-        // APPS SCRIPT SUBMISSION
+        // FILE UPLOAD HELPERS
         // -------------------------
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZg2vw8RUFDQVceBDMFDE-I7vb-BRmIsiHcjvoVs44Z92zOW_sBo44OT__pa1_ivfb/exec';
-
         function readFileAsBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -847,6 +840,9 @@
             });
         }
 
+        // -------------------------
+        // ITR SUBMISSION
+        // -------------------------
         async function submitItrFinal() {
             const btn = document.getElementById('btnSubmit');
             const originalText = btn.innerHTML;
@@ -857,7 +853,7 @@
             }
 
             try {
-                btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Submitting...`;
+                btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Submitting...`;
                 btn.disabled = true;
                 lucide.createIcons();
 
@@ -886,8 +882,10 @@
                 currentItrAppNo = appNo; 
                 document.getElementById('payPan').value = document.getElementById('s1_pan').value.toUpperCase();
                 document.getElementById('payMobile').value = document.getElementById('s1_mobile').value;
+                document.getElementById('payAkn').value = appNo; // Pre-fill AKN in payment form
 
                 const payload = {
+                    "action": "ITR",
                     "Timestamp": new Date().toISOString(),
                     "ApplicationNo": appNo,
                     "Name": document.getElementById('s1_name').value.trim(),
@@ -906,13 +904,8 @@
 
                 if (typeof google !== 'undefined' && google.script && google.script.run) {
                     google.script.run
-                        .withSuccessHandler(function(res) {
-                            handleItrSuccess(appNo);
-                        })
-                        .withFailureHandler(function(err) {
-                            showToast("Error submitting application.", true, false);
-                            resetBtn(btn, originalText);
-                        })
+                        .withSuccessHandler(function(res) { handleItrSuccess(appNo); })
+                        .withFailureHandler(function(err) { showToast("Error submitting application.", true, false); resetBtn(btn, originalText); })
                         .processItrForm(payload);
                 } else {
                     await fetch(SCRIPT_URL, {
@@ -930,30 +923,18 @@
             }
         }
 
-        function resetBtn(btn, text) {
-            btn.innerHTML = text;
-            btn.disabled = false;
-            lucide.createIcons();
-        }
-
         function handleItrSuccess(appNo) {
             showToast(`App No: ${appNo} Submitted!`, false, true);
-            
             document.getElementById('itrForm').classList.remove('block');
             document.getElementById('itrForm').classList.add('hidden');
-            
             document.getElementById('itrModalNav').classList.remove('flex');
             document.getElementById('itrModalNav').classList.add('hidden');
-            
             document.getElementById('itrModalFooter').classList.remove('block');
             document.getElementById('itrModalFooter').classList.add('hidden');
-            
             document.getElementById('successAppNo').innerText = appNo;
             document.getElementById('itrSuccessScreen').classList.remove('hidden');
             document.getElementById('itrSuccessScreen').classList.add('flex');
-
             document.getElementById('itrForm').reset();
-            
             const btn = document.getElementById('btnSubmit');
             btn.innerHTML = `Submit Application`;
             btn.disabled = false;
@@ -961,9 +942,80 @@
         }
 
         // -------------------------
+        // PAYMENT SUBMISSION (With Naming Convention)
+        // -------------------------
+        async function submitPaymentForm() {
+            const btn = document.getElementById('paySubmitBtn');
+            const origText = btn.innerHTML;
+            
+            try {
+                btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Uploading...`;
+                btn.disabled = true;
+                lucide.createIcons();
+                
+                const processFile = async (inputId) => {
+                    const fileInput = document.getElementById(inputId);
+                    if (fileInput && fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        const base64 = await readFileAsBase64(file);
+                        return { base64: base64, mimeType: file.type, fileName: file.name };
+                    }
+                    return null;
+                };
+                
+                const payProof = await processFile('payProof');
+                if(!payProof) {
+                    showToast("Please select a payment screenshot.", true);
+                    return;
+                }
+
+                const payload = {
+                    action: 'PAYMENT',
+                    Name: document.getElementById('payName').value,
+                    PAN: document.getElementById('payPan').value,
+                    Mobile: document.getElementById('payMobile').value,
+                    AKN: document.getElementById('payAkn').value,
+                    PaymentProof: payProof
+                };
+
+                if (typeof google !== 'undefined' && google.script && google.script.run) {
+                    google.script.run
+                        .withSuccessHandler(function(res) { 
+                            closePaymentModal(); 
+                            openPaymentSuccessModal(); 
+                        })
+                        .withFailureHandler(function(err) { 
+                            showToast("Error uploading payment proof.", true); 
+                        })
+                        .processItrForm(payload);
+                } else {
+                    await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(payload),
+                        mode: 'no-cors'
+                    });
+                    closePaymentModal();
+                    openPaymentSuccessModal();
+                }
+                
+            } catch(e) {
+                showToast("Error uploading payment proof.", true);
+            } finally {
+                btn.innerHTML = origText;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        }
+
+        function resetBtn(btn, text) {
+            btn.innerHTML = text;
+            btn.disabled = false;
+            lucide.createIcons();
+        }
+
+        // -------------------------
         // UI & UTILITIES
         // -------------------------
-        
         function showToast(message, isError = false, isSuccessGreen = false) {
             const toast = document.getElementById('toast');
             toast.className = 'toast'; 
@@ -991,11 +1043,6 @@
 
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => showToast("Copied to clipboard!", false, false));
-        }
-
-        function submitPaymentForm() {
-            closePaymentModal();
-            openPaymentSuccessModal();
         }
 
         function toggleBankDetails() {
