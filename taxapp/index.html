@@ -332,6 +332,10 @@
                 <a href="#" onclick="closeMenu()" class="flex items-center gap-3 p-3 bg-brand-bg rounded-lg text-brand-primary font-semibold transition text-sm">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
                 </a>
+                <!-- New Tax Updates Menu Item -->
+                <a href="#" onclick="closeMenu(); openTaxUpdatesModal();" class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg text-brand-text font-medium transition text-sm">
+                    <i data-lucide="newspaper" class="w-5 h-5 text-gray-400"></i> Tax Updates
+                </a>
                 <a href="#" onclick="closeMenu(); openItrModal();" class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg text-brand-text font-medium transition text-sm">
                     <i data-lucide="file-text" class="w-5 h-5 text-gray-400"></i> File ITR Return
                 </a>
@@ -354,6 +358,89 @@
                 <button id="navSignOutBtn" onclick="handleLogout()" class="hidden w-full flex items-center justify-center gap-2 text-gray-900 font-semibold border border-gray-200 bg-white py-3.5 rounded-xl hover:bg-gray-50 shadow-sm transition text-sm">
                     <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAX UPDATES MODAL -->
+    <div id="taxUpdatesModal" class="fixed inset-0 z-[60] hidden flex-col bg-brand-bg">
+        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-header sticky top-0 z-10">
+            <h3 class="font-bold text-base text-brand-heading">Tax Updates</h3>
+            <button onclick="closeTaxUpdatesModal()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-md text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-4 h-4"></i></button>
+        </div>
+        <div class="overflow-y-auto no-scrollbar p-5 flex-grow">
+            <div class="max-w-[600px] mx-auto">
+                <div class="flex justify-between items-center mb-4 px-1">
+                    <h2 class="text-xl font-bold text-gray-900">Tax Updates</h2>
+                    <button class="text-sm font-semibold text-brand-primary hover:text-brand-accent transition">View All</button>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-[24px] p-3.5 shadow-sm border border-gray-100 flex items-center gap-4 cursor-pointer hover:shadow-md transition">
+                        <div class="w-[75px] h-[75px] rounded-xl bg-slate-50 border border-slate-100 flex-shrink-0 flex flex-col items-center justify-center relative overflow-hidden">
+                            <i data-lucide="clipboard-list" class="w-8 h-8 text-slate-500 mb-1"></i>
+                            <div class="bg-brand-primary rounded text-[8px] font-bold text-white px-1.5 py-0.5 uppercase tracking-wider">Deadline</div>
+                        </div>
+                        <div class="flex-grow py-1">
+                            <h4 class="text-[15px] font-bold text-gray-900 mb-1 leading-tight">ITR Due Date for Individual</h4>
+                            <p class="text-[13px] text-gray-500 leading-snug pr-2">The due date to file ITR for AY 2025-26 (FY 2024-25) is July 31, 2025.</p>
+                        </div>
+                        <div class="flex flex-col items-center justify-center pl-2 border-l border-gray-50 min-w-[75px]">
+                            <i data-lucide="calendar" class="w-6 h-6 text-brand-primary mb-1"></i>
+                            <span class="text-[11px] font-bold text-brand-primary text-center">Jul 31, 2025</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 ml-1"></i>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white rounded-[24px] p-3.5 shadow-sm border border-gray-100 flex items-center gap-4 cursor-pointer hover:shadow-md transition">
+                        <div class="w-[75px] h-[75px] rounded-xl bg-slate-50 border border-slate-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                            <i data-lucide="search-check" class="w-9 h-9 text-slate-600"></i>
+                        </div>
+                        <div class="flex-grow py-1">
+                            <h4 class="text-[15px] font-bold text-gray-900 mb-1 leading-tight">Tax Audit Due Date</h4>
+                            <p class="text-[13px] text-gray-500 leading-snug pr-2">Tax Audit Report (Form 3CD) due date for FY 2024-25 is September 30, 2025.</p>
+                        </div>
+                        <div class="flex flex-col items-center justify-center pl-2 border-l border-gray-50 min-w-[75px]">
+                            <i data-lucide="calendar" class="w-6 h-6 text-brand-primary mb-1"></i>
+                            <span class="text-[11px] font-bold text-brand-primary text-center">Sep 30, 2025</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 ml-1"></i>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white rounded-[24px] p-3.5 shadow-sm border border-gray-100 flex items-center gap-4 cursor-pointer hover:shadow-md transition">
+                        <div class="w-[75px] h-[75px] rounded-xl bg-slate-50 border border-slate-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                            <i data-lucide="layout-template" class="w-9 h-9 text-slate-500"></i>
+                        </div>
+                        <div class="flex-grow py-1">
+                            <h4 class="text-[15px] font-bold text-gray-900 mb-1 leading-tight">New Key Changes</h4>
+                            <p class="text-[13px] text-gray-500 leading-snug pr-2">Important changes in Income Tax provisions for AY 2025-26.</p>
+                        </div>
+                        <div class="flex flex-col items-center justify-center pl-2 border-l border-gray-50 min-w-[75px]">
+                            <i data-lucide="calendar" class="w-6 h-6 text-brand-primary mb-1"></i>
+                            <span class="text-[11px] font-bold text-brand-primary text-center whitespace-nowrap">AY 2025-26</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 ml-1"></i>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="bg-white rounded-[24px] p-3.5 shadow-sm border border-gray-100 flex items-center gap-4 cursor-pointer hover:shadow-md transition">
+                        <div class="w-[75px] h-[75px] rounded-xl bg-slate-50 border border-slate-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                            <i data-lucide="users" class="w-9 h-9 text-slate-600"></i>
+                        </div>
+                        <div class="flex-grow py-1">
+                            <h4 class="text-[15px] font-bold text-gray-900 mb-1 leading-tight">Who Must File ITR</h4>
+                            <p class="text-[13px] text-gray-500 leading-snug pr-2">Know who is required to file Income Tax Return for AY 2025-26.</p>
+                        </div>
+                        <div class="flex flex-col items-center justify-center pl-2 border-l border-gray-50 min-w-[75px]">
+                            <i data-lucide="calendar" class="w-6 h-6 text-brand-primary mb-1"></i>
+                            <span class="text-[11px] font-bold text-brand-primary text-center whitespace-nowrap">Know More</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 ml-1"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -739,7 +826,7 @@
         // -------------------------
         // GOOGLE LOGIN & STATE
         // -------------------------
-        const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com"; 
+        const GOOGLE_CLIENT_ID = "753272952222-c1pgj8cb8g7vte82sp6kevd3mku17cca.apps.googleusercontent.com"; 
         
         let currentUser = {
             name: "Guest User",
@@ -859,6 +946,11 @@
         
         function openPaymentSuccessModal() { document.getElementById('paymentSuccessModal').classList.remove('hidden'); document.getElementById('paymentSuccessModal').classList.add('flex'); }
         function closePaymentSuccessModal() { document.getElementById('paymentSuccessModal').classList.add('hidden'); document.getElementById('paymentSuccessModal').classList.remove('flex'); }
+
+        // New Tax Updates Modal
+        function openTaxUpdatesModal() { document.getElementById('taxUpdatesModal').classList.remove('hidden'); document.getElementById('taxUpdatesModal').classList.add('flex'); }
+        function closeTaxUpdatesModal() { document.getElementById('taxUpdatesModal').classList.add('hidden'); document.getElementById('taxUpdatesModal').classList.remove('flex'); }
+
 
         // -------------------------
         // PAYMENT UI Logic & External Links
