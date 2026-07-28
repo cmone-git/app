@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CM TaxApp | File Your Taxes WIth Confidence</title>
+    <title>CM TaxApp | Corporate Dashboard</title>
+    
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
     
-    <meta name="theme-color" content="#111827">
+    <meta name="theme-color" content="#F8FAFC">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -94,18 +98,14 @@
 
     <!-- Splash Screen -->
     <div id="splash" class="fixed inset-0 z-[100] bg-[#f8fafc] flex flex-col items-center justify-center transition-opacity duration-500">
-        <i data-lucide="briefcase" class="w-16 h-16 text-brand-primary mb-4 animate-pulse"></i>
-        <h1 class="text-3xl font-extrabold text-brand-dark tracking-tight">CM TaxApp</h1>
-        <p class="text-xs text-brand-muted font-bold mt-2 tracking-widest uppercase">File Taxes With Confidence</p>
+        <img src="assets/name.png" alt="CM TaxApp" class="w-64 h-auto animate-pulse object-contain">
     </div>
 
     <!-- Login Modal -->
     <div id="loginScreen" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-sm transition-opacity items-center justify-center px-4">
         <div class="bg-white rounded-3xl w-full max-w-[400px] p-8 shadow-2xl relative flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
             <button onclick="closeLoginModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-800"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <div class="w-16 h-16 bg-brand-bg border border-brand-border rounded-xl flex items-center justify-center mb-6 mt-2">
-                <i data-lucide="landmark" class="w-8 h-8 text-brand-primary"></i>
-            </div>
+            <img src="assets/logo.png" alt="CM TaxApp" class="w-16 h-16 object-contain mb-6 mt-2 rounded-xl shadow-sm border border-gray-100 p-1">
             <h1 class="text-2xl font-extrabold text-brand-heading tracking-tight mb-2">Welcome</h1>
             <p class="text-brand-muted text-sm mb-8 text-center">Sign in to sync your tax dashboard securely.</p>
             <div id="googleAuthContainer" class="w-full flex justify-center mb-4"></div>
@@ -115,7 +115,7 @@
     <!-- HEADER DUE DATE ALARM MODAL -->
     <div id="alarmModal" class="fixed inset-0 z-[80] hidden flex-col bg-gray-900/60 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
         <div class="bg-white rounded-2xl w-full max-w-[360px] p-8 shadow-2xl relative animate-[slideDown_0.3s_ease-out]">
-            <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 mx-auto mb-4">
+            <div class="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center text-brand-primary mx-auto mb-4">
                 <i data-lucide="bell-ring" class="w-8 h-8 animate-pulse"></i>
             </div>
             <h3 class="text-center font-bold text-xl text-brand-heading mb-3">Important Deadline</h3>
@@ -149,32 +149,32 @@
     <!-- MAIN APP WRAPPER -->
     <div id="mainApp" class="flex flex-col flex-grow">
         
-        <!-- Sticky Header (Deep Grey) -->
-        <header class="flex justify-between items-center px-5 pt-5 pb-3 sticky top-0 z-30 bg-gray-900 shadow-md border-b border-gray-800">
-            <button onclick="openMenu()" class="w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center text-white shadow-sm hover:bg-gray-700 transition">
-                <i data-lucide="menu" class="w-5 h-5"></i>
-            </button>
+        <!-- Sticky Header (Off-White) -->
+        <header class="flex justify-between items-center px-5 pt-5 pb-3 sticky top-0 z-30 bg-[#f8fafc]/90 backdrop-blur-md shadow-sm border-b border-gray-200">
             <div class="flex items-center gap-3">
-                <button onclick="openAlarmModal()" class="relative w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center text-white shadow-sm hover:bg-gray-700 transition">
+                <button onclick="openMenu()" class="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-700 shadow-sm hover:bg-gray-50 transition">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+                <img src="assets/name.png" alt="CM TaxApp" class="h-6 object-contain">
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="openAlarmModal()" class="relative w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-700 shadow-sm hover:bg-gray-50 transition">
                     <i data-lucide="bell" class="w-5 h-5"></i>
                     <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-brand-primary rounded-full animate-pulse"></span>
                 </button>
-                <button onclick="openSearch()" class="w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center text-white shadow-sm hover:bg-gray-700 transition">
-                    <i data-lucide="search" class="w-5 h-5"></i>
-                </button>
-                <img id="headerAvatar" src="" class="w-10 h-10 rounded-lg border border-gray-700 object-cover hidden cursor-pointer shadow-sm" onclick="openSettingsModal()" alt="Profile">
+                <img id="headerAvatar" src="assets/logo.png" class="w-10 h-10 rounded-lg border border-gray-200 object-cover cursor-pointer shadow-sm bg-white" onclick="openSettingsModal()" alt="Profile">
             </div>
         </header>
 
-        <main class="px-5 w-full max-w-[600px] mx-auto space-y-6 pt-4">
+        <main class="px-5 w-full max-w-[600px] mx-auto space-y-6 pt-5">
             
             <!-- Welcome Section -->
             <div>
-                <p class="text-sm text-brand-muted font-medium mb-1">Dear Taxpayer</p>
-                <h1 id="dashName" class="text-2xl font-bold text-brand-heading tracking-tight">Welcome Back to CM TaxApp</h1>
+                <h1 class="text-xl font-bold text-gray-700 tracking-tight">Welcome back to CM <span class="text-[#c80000]">Tax</span><span class="text-gray-500">App</span><span id="dashName" class="hidden"></span></h1>
+                <p class="text-sm text-brand-muted font-medium mt-1">File your Taxes with Confidence.</p>
             </div>
 
-            <!-- Due Date Reminder Card (Deep Grey) -->
+            <!-- Due Date Reminder Card -->
             <div class="bg-gray-800 rounded-3xl p-6 shadow-corporate relative overflow-hidden text-white cursor-pointer" onclick="openAlarmModal()">
                 <i data-lucide="calculator" class="absolute -right-4 -bottom-4 w-36 h-36 text-white opacity-[0.05]"></i>
                 <div class="flex justify-between items-center relative z-10">
@@ -206,7 +206,7 @@
                 </div>
             </div>
 
-            <!-- Quick Actions Grid (Muted Colored Cards) -->
+            <!-- Quick Actions Grid -->
             <div>
                 <h3 class="text-base font-bold text-brand-heading mb-4 px-1">Quick Actions</h3>
                 <div class="grid grid-cols-2 gap-4">
@@ -238,13 +238,13 @@
                         <p class="text-xs text-brand-muted flex-grow">Make secure payments</p>
                     </div>
 
-                    <!-- Muted Red -->
+                    <!-- Muted Red - Changed to More... -->
                     <div class="bg-rose-50 border border-rose-100 rounded-2xl p-5 shadow-sm flex flex-col relative cursor-pointer hover:border-rose-300 transition group" onclick="openBusinessModal()">
                         <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-rose-600 mb-3 shadow-sm border border-rose-50">
-                            <i data-lucide="building" class="w-5 h-5"></i>
+                            <i data-lucide="grid" class="w-5 h-5"></i>
                         </div>
-                        <h4 class="text-sm font-semibold text-brand-heading leading-tight mb-1">Business Setup</h4>
-                        <p class="text-xs text-brand-muted flex-grow">Company registrations</p>
+                        <h4 class="text-sm font-semibold text-brand-heading leading-tight mb-1">More...</h4>
+                        <p class="text-xs text-brand-muted flex-grow">Explore all services</p>
                     </div>
                 </div>
             </div>
@@ -264,23 +264,23 @@
             </div>
         </main>
 
-        <!-- Bottom Navigation Bar (Deep Grey) -->
-        <nav class="fixed bottom-0 left-0 w-full bg-gray-900 border-t border-gray-800 px-8 py-3.5 flex justify-between items-center z-30 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.15)]">
-            <a href="#" class="flex flex-col items-center gap-1 text-white w-16">
+        <!-- Bottom Navigation Bar (Off-White) -->
+        <nav class="fixed bottom-0 left-0 w-full bg-[#f8fafc]/90 backdrop-blur-md border-t border-gray-200 px-8 py-3.5 flex justify-between items-center z-30 pb-safe shadow-sm">
+            <a href="#" class="flex flex-col items-center gap-1 text-brand-primary w-16">
                 <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
                 <span class="text-[10px] font-bold">Home</span>
             </a>
-            <a href="#" onclick="openBusinessModal()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition w-16">
-                <i data-lucide="briefcase" class="w-6 h-6"></i>
-                <span class="text-[10px] font-medium">Services</span>
-            </a>
-            <a href="#" onclick="openPaymentModal()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition w-16">
+            <a href="#" onclick="openPaymentModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-primary transition w-16">
                 <i data-lucide="indian-rupee" class="w-6 h-6"></i>
                 <span class="text-[10px] font-medium">Payments</span>
             </a>
-            <a href="#" onclick="openSettingsModal()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition w-16">
+            <a href="#" onclick="openSettingsModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-primary transition w-16">
                 <i data-lucide="user" class="w-6 h-6"></i>
                 <span class="text-[10px] font-medium">Profile</span>
+            </a>
+            <a href="#" onclick="openBusinessModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-primary transition w-16">
+                <i data-lucide="grid" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">More...</span>
             </a>
         </nav>
     </div>
@@ -294,12 +294,12 @@
         <div class="fixed inset-y-0 left-0 w-[80%] max-w-sm bg-white shadow-2xl flex flex-col animate-[slideRight_0.2s_ease-out]">
             <div class="px-6 py-8 border-b border-brand-border bg-brand-bg flex justify-between items-start">
                 <div>
-                    <img id="navAvatar" src="" class="w-12 h-12 rounded-lg border border-brand-border object-cover hidden mb-3" alt="Profile">
+                    <img id="navAvatar" src="assets/logo.png" class="w-12 h-12 rounded-lg border border-brand-border object-contain bg-white p-1 hidden mb-3" alt="Profile">
                     <div id="navInitials" class="w-12 h-12 bg-white rounded-lg border border-brand-border flex items-center justify-center text-brand-primary mb-3 shadow-sm font-bold text-base">GU</div>
                     <h2 id="navName" class="text-base font-bold text-brand-heading leading-tight">Guest User</h2>
                     <p id="navEmail" class="text-xs font-medium text-brand-muted mt-1">Please Sign In</p>
                 </div>
-                <button onclick="closeMenu()" class="w-8 h-8 rounded-md bg-white border border-brand-border flex items-center justify-center text-gray-500 hover:text-gray-900 transition">
+                <button onclick="closeMenu()" class="w-8 h-8 rounded-md bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-900 transition">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -337,7 +337,7 @@
     <div id="itrModal" class="fixed inset-0 z-[60] hidden flex-col bg-white">
         <div class="px-5 py-4 border-b border-brand-border flex justify-between items-center bg-white sticky top-0 z-10 shadow-header">
             <h3 class="font-bold text-base text-brand-heading">File ITR</h3>
-            <button onclick="closeItrModal()" class="w-8 h-8 flex items-center justify-center bg-brand-bg border border-brand-border rounded-md text-gray-500 hover:text-gray-900">
+            <button onclick="closeItrModal()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 rounded-md text-gray-500 hover:text-gray-900">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
@@ -457,7 +457,7 @@
                         <i data-lucide="message-square" class="w-5 h-5"></i> Fast Processing via WhatsApp
                     </button>
                     <!-- Trigger Payment Modal from Data Submission Section -->
-                    <button onclick="openPaymentModal(); closeItrModal();" class="w-full bg-brand-primary hover:bg-brand-accent text-white font-bold py-4 rounded-xl shadow-md flex items-center justify-center gap-2 transition text-sm">
+                    <button onclick="openPaymentModal(); closeItrModal();" class="w-full bg-brand-primary text-white font-bold py-4 rounded-xl shadow-md flex items-center justify-center gap-2 hover:bg-brand-accent transition text-sm">
                         <i data-lucide="indian-rupee" class="w-5 h-5"></i> Proceed to Payment
                     </button>
                 </div>
@@ -466,8 +466,8 @@
 
         <div id="itrModalFooter" class="p-6 border-t border-brand-border bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.02)] pb-safe block">
             <div class="flex gap-4 max-w-[600px] mx-auto">
-                <button type="button" id="btnBack" onclick="prevStep()" class="w-1/3 bg-brand-bg border border-brand-border text-brand-heading font-semibold py-3 rounded-xl hidden transition hover:bg-gray-100 text-sm">Back</button>
-                <button type="button" id="btnNext" onclick="nextStep()" class="flex-1 bg-brand-primary hover:bg-brand-accent text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">Next Step</button>
+                <button type="button" id="btnBack" onclick="prevStep()" class="w-1/3 bg-white border border-gray-200 text-gray-700 font-semibold py-3 rounded-xl hidden transition hover:bg-gray-50 text-sm">Back</button>
+                <button type="button" id="btnNext" onclick="nextStep()" class="flex-1 bg-brand-primary text-white font-semibold py-3 rounded-xl shadow-sm transition hover:bg-brand-accent text-sm">Next Step</button>
                 <button type="button" id="btnSubmit" onclick="submitItrFinal()" class="flex-1 bg-brand-primary hover:bg-brand-accent text-white font-semibold py-3 rounded-xl shadow-sm hidden transition text-sm flex items-center justify-center gap-2">Submit Application</button>
             </div>
         </div>
@@ -477,7 +477,7 @@
     <div id="paymentModal" class="fixed inset-0 z-[60] hidden flex-col bg-brand-bg">
         <div class="px-5 py-4 border-b border-brand-border flex justify-between items-center bg-white sticky top-0 z-10 shadow-header">
             <h3 class="font-bold text-base text-brand-heading">Payment Portal</h3>
-            <button onclick="closePaymentModal()" class="w-8 h-8 flex items-center justify-center bg-brand-bg border border-brand-border rounded-md text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <button onclick="closePaymentModal()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 rounded-md text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
         <div class="overflow-y-auto no-scrollbar p-5 flex-grow">
             <div class="max-w-[600px] mx-auto space-y-5">
@@ -593,7 +593,7 @@
                         <span class="text-xs font-semibold text-brand-heading block">Select Screenshot</span>
                         <input type="file" id="payProof" accept="image/*,.pdf">
                     </div>
-                    <button id="paySubmitBtn" onclick="submitPaymentForm()" class="w-full bg-brand-primary hover:bg-brand-accent text-white font-bold py-3.5 rounded-xl shadow-sm text-sm transition">Submit Payment Info</button>
+                    <button id="paySubmitBtn" onclick="submitPaymentForm()" class="w-full bg-brand-primary text-white font-bold py-3.5 rounded-xl shadow-sm text-sm hover:bg-brand-accent transition">Submit Payment Info</button>
                 </div>
             </div>
         </div>
@@ -604,7 +604,7 @@
         <div class="px-5 pt-8 pb-4 flex gap-3 items-center border-b border-brand-border bg-white shadow-sm">
             <div class="flex-grow relative">
                 <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                <input type="text" id="searchInput" onkeyup="filterSearch()" placeholder="Search services..." class="w-full bg-brand-bg border border-brand-border rounded-xl py-3 pl-10 pr-4 text-sm text-brand-heading outline-none focus:border-gray-900 transition" autofocus>
+                <input type="text" id="searchInput" onkeyup="filterSearch()" placeholder="Search services..." class="w-full bg-brand-bg border border-brand-border rounded-xl py-3 pl-10 pr-4 text-sm text-brand-heading outline-none focus:border-brand-primary transition" autofocus>
             </div>
             <button onclick="closeSearch()" class="text-sm font-semibold text-gray-500 hover:text-brand-dark transition">Cancel</button>
         </div>
@@ -620,7 +620,7 @@
     <div id="uploadModal" class="fixed inset-0 z-[60] hidden flex-col bg-white">
         <div class="px-5 py-4 border-b border-brand-border flex justify-between items-center bg-white shadow-header">
             <h3 class="font-bold text-base text-brand-heading">Upload Document</h3>
-            <button onclick="closeUploadModal()" class="w-8 h-8 flex items-center justify-center bg-brand-bg border border-brand-border rounded-md text-gray-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <button onclick="closeUploadModal()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 rounded-md text-gray-500"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
         <div class="p-6 bg-brand-bg flex-grow">
             <div class="bg-white p-5 rounded-2xl border border-brand-border shadow-sm space-y-4 max-w-[600px] mx-auto">
@@ -635,15 +635,15 @@
         </div>
     </div>
 
-    <!-- BUSINESS SETUP MODAL -->
+    <!-- MORE SERVICES (BUSINESS SETUP) MODAL -->
     <div id="businessModal" class="fixed inset-0 z-[60] hidden flex-col bg-white">
         <div class="px-5 py-4 border-b border-brand-border flex justify-between items-center bg-white shadow-header">
-            <h3 class="font-bold text-base text-brand-heading">Business Setup</h3>
-            <button onclick="closeBusinessModal()" class="w-8 h-8 flex items-center justify-center bg-brand-bg border border-brand-border rounded-md text-gray-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <h3 class="font-bold text-base text-brand-heading">More Services</h3>
+            <button onclick="closeBusinessModal()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 rounded-md text-gray-500"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
         <div class="p-6 bg-brand-bg flex-grow">
             <div class="bg-white p-6 rounded-2xl border border-brand-border shadow-sm space-y-5 max-w-[600px] mx-auto">
-                <p class="text-xs text-brand-muted mb-2 leading-relaxed">Provide basic details and connect with our expert team to setup your entity.</p>
+                <p class="text-xs text-brand-muted mb-2 leading-relaxed">Provide basic details and connect with our expert team to setup your entity or explore more services.</p>
                 <div>
                     <label class="block text-xs text-brand-muted mb-1 font-medium">Applicant Name *</label>
                     <input type="text" id="bizName" class="corp-input uppercase text-sm" placeholder="Enter Name" required>
@@ -663,7 +663,7 @@
                 </div>
                 
                 <div class="flex gap-3 pt-3 border-t border-brand-border mt-5">
-                    <button onclick="callAdmin()" class="w-[30%] bg-white border border-brand-border text-brand-dark font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition shadow-sm text-xs">
+                    <button onclick="callAdmin()" class="w-[30%] bg-white border border-gray-200 text-brand-dark font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition shadow-sm text-xs">
                         <i data-lucide="phone" class="w-4 h-4"></i> Call
                     </button>
                     <button onclick="whatsappAdminBusiness()" class="w-[70%] bg-[#25D366] hover:bg-green-600 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition shadow-sm text-xs">
@@ -677,7 +677,7 @@
     <div id="settingsModal" class="fixed inset-0 z-[60] hidden flex-col bg-white">
         <div class="px-5 py-4 border-b border-brand-border flex justify-between items-center bg-white shadow-header">
             <h3 class="font-bold text-base text-brand-heading">Settings</h3>
-            <button onclick="closeSettingsModal()" class="w-8 h-8 flex items-center justify-center bg-brand-bg border border-brand-border rounded-md text-gray-500"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <button onclick="closeSettingsModal()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 rounded-md text-gray-500"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
         <div class="p-6 bg-brand-bg flex-grow">
             <div class="bg-white p-5 rounded-2xl border border-brand-border shadow-sm space-y-4 max-w-[600px] mx-auto">
