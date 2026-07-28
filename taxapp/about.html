@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>About | CM TaxApp</title>
+    <meta name="theme-color" content="#111827">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { primary: '#c80000', dark: '#0B1120', bg: '#F8FAFC' } }
+                }
+            }
+        }
+    </script>
+    <style>body { -webkit-tap-highlight-color: transparent; }</style>
+</head>
+<body class="font-sans text-gray-800 bg-brand-bg min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="flex items-center px-5 pt-5 pb-3 sticky top-0 z-30 bg-gray-900 shadow-md border-b border-gray-800">
+        <button onclick="window.history.back()" class="w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center text-white shadow-sm hover:bg-gray-700 transition mr-4">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+        </button>
+        <h1 class="text-white font-bold text-lg tracking-tight">About App</h1>
+    </header>
+
+    <main class="px-5 py-8 w-full max-w-[600px] mx-auto flex-grow flex flex-col items-center justify-center text-center">
+        
+        <div class="w-24 h-24 bg-white rounded-3xl border border-gray-200 shadow-sm flex items-center justify-center text-brand-primary mb-6">
+            <i data-lucide="briefcase" class="w-12 h-12"></i>
+        </div>
+        
+        <h2 class="text-2xl font-bold text-gray-900 mb-1">CM TaxApp</h2>
+        <p class="text-sm font-semibold text-brand-primary uppercase tracking-widest mb-6">Version 2.0</p>
+        
+        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm w-full text-left space-y-4 mb-8">
+            <p class="text-sm text-gray-600 leading-relaxed">
+                CM TaxApp is the official corporate portal designed by <strong>CM Tax Experts</strong>. It streamlines financial workflows, document management, securely manages tax return filings, and handles business setup processes.
+            </p>
+            <div class="border-t border-gray-100 pt-4">
+                <div class="flex items-center gap-3 text-sm text-gray-700 mb-2">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-green-600"></i> Encrypted Data Transmission
+                </div>
+                <div class="flex items-center gap-3 text-sm text-gray-700 mb-2">
+                    <i data-lucide="zap" class="w-4 h-4 text-yellow-500"></i> Automated Processing
+                </div>
+                <div class="flex items-center gap-3 text-sm text-gray-700">
+                    <i data-lucide="headphones" class="w-4 h-4 text-blue-500"></i> Dedicated Advisor Support
+                </div>
+            </div>
+        </div>
+
+        <button onclick="window.location.href='tel:+919946151111'" class="w-full bg-brand-primary text-white font-bold py-3.5 rounded-xl shadow-sm text-sm hover:bg-red-800 transition mb-6">
+            Contact Support
+        </button>
+
+        <p class="text-xs text-gray-400 mt-auto pb-4">
+            &copy; 2026 CM Tax Experts. All rights reserved.
+        </p>
+
+    </main>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>
