@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
     
-    <meta name="theme-color" content="#E2E8F0">
+    <meta name="theme-color" content="#F8FAFC">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     
@@ -35,7 +35,7 @@
                             text: '#334155',    
                             heading: '#0F172A', 
                             muted: '#64748B',   
-                            bg: '#E2E8F0', /* Muted Blue-Grey Dashboard Theme */      
+                            bg: '#E2E8F0',      
                             card: '#FFFFFF',
                             border: '#E2E8F0',
                             success: '#10B981',
@@ -56,7 +56,6 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Larger Corporate Form Inputs */
         .corp-input, .corp-select, .corp-textarea {
             width: 100%; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px;
             font-size: 15px; color: #0F172A; background: #FFFFFF; transition: all 0.2s ease; outline: none; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
@@ -83,7 +82,6 @@
 
         .animated-check { stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawCheck 0.5s ease forwards; }
 
-        /* Toast Styling */
         .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 14px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 999999; display: flex; align-items: center; gap: 10px; white-space: nowrap; box-shadow: 0 6px 20px rgba(0,0,0,0.15); color: #FFFFFF; border: none; }
         .toast.success { background: var(--tw-colors-brand-success); }
         .toast.error { background: #EF4444; }
@@ -149,21 +147,20 @@
     <!-- MAIN APP WRAPPER -->
     <div id="mainApp" class="flex flex-col flex-grow">
         
-        <!-- Sticky Header (Off-White) -->
+        <!-- Sticky Header (Revised: Logo Left, Actions Right) -->
         <header class="flex justify-between items-center px-5 pt-5 pb-3 sticky top-0 z-30 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200">
-            <div class="flex items-center gap-3">
-                <button onclick="openMenu()" class="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-700 shadow-sm hover:bg-gray-50 transition">
-                    <i data-lucide="menu" class="w-5 h-5"></i>
-                </button>
-                <!-- Increased Header Image Size -->
+            <div class="flex items-center">
                 <img src="assets/name.png" alt="CM TaxApp" class="h-9 object-contain">
             </div>
-            <div class="flex items-center gap-3">
-                <button onclick="openAlarmModal()" class="relative w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-700 shadow-sm hover:bg-gray-50 transition">
-                    <i data-lucide="bell" class="w-5 h-5"></i>
-                    <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-brand-primary rounded-full animate-pulse"></span>
+            <div class="flex items-center gap-2">
+                <button onclick="openSearch()" class="w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 shadow-sm hover:bg-gray-100 transition">
+                    <i data-lucide="search" class="w-4 h-4"></i>
                 </button>
-                <img id="headerAvatar" src="assets/logo.png" class="w-10 h-10 rounded-lg border border-gray-200 object-cover cursor-pointer shadow-sm bg-white" onclick="openSettingsModal()" alt="Profile">
+                <button onclick="openAlarmModal()" class="relative w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 shadow-sm hover:bg-gray-100 transition">
+                    <i data-lucide="bell" class="w-4 h-4"></i>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-brand-primary rounded-full animate-pulse"></span>
+                </button>
+                <img id="headerAvatar" src="assets/logo.png" class="w-9 h-9 rounded-full border border-gray-200 object-cover cursor-pointer shadow-sm bg-white" onclick="openSettingsModal()" alt="Profile">
             </div>
         </header>
 
@@ -207,68 +204,60 @@
                 </div>
             </div>
 
-            <!-- Quick Actions Grid (3D Tabbed Cards - Muted Blues/Greys) -->
+            <!-- Quick Actions Grid (Revised Corporate Muted Cards) -->
             <div>
                 <h3 class="text-base font-bold text-brand-heading mb-4 px-1">Quick Actions</h3>
                 <div class="grid grid-cols-2 gap-4 gap-y-6 pt-2">
                     
                     <!-- Tabbed Card 1: File ITR -->
                     <div class="relative cursor-pointer group" onclick="openItrModal()">
-                        <!-- Muted Slate Tab -->
-                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-slate-400 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
-                        <!-- Card Body -->
-                        <div class="bg-white rounded-xl p-5 pt-5 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.08)] relative z-0 group-hover:shadow-[0_12px_25px_-6px_rgba(0,0,0,0.12)] transition-shadow">
+                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-slate-200 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
+                        <div class="bg-white rounded-xl p-5 pt-5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] border border-gray-100 relative z-0 group-hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.08)] transition-shadow">
                             <div class="flex justify-between items-center mb-2">
-                                <h4 class="text-sm font-bold text-slate-600 uppercase tracking-wider">File ITR</h4>
-                                <i data-lucide="file-text" class="w-5 h-5 text-slate-500"></i>
+                                <h4 class="text-[13px] font-bold text-slate-700 uppercase tracking-wider">File ITR</h4>
+                                <i data-lucide="file-text" class="w-5 h-5 text-slate-400"></i>
                             </div>
-                            <div class="w-full h-px bg-slate-200 mb-3"></div>
-                            <p class="text-xs text-slate-400 font-medium leading-relaxed pr-2">Submit your tax returns securely.</p>
+                            <div class="w-full h-px bg-slate-100 mb-3"></div>
+                            <p class="text-[11px] text-slate-500 font-medium leading-relaxed pr-2">Submit your tax returns securely.</p>
                         </div>
                     </div>
 
                     <!-- Tabbed Card 2: Upload Docs -->
                     <div class="relative cursor-pointer group" onclick="openUploadModal()">
-                        <!-- Muted Sky Blue Tab -->
-                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-sky-400 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
-                        <!-- Card Body -->
-                        <div class="bg-white rounded-xl p-5 pt-5 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.08)] relative z-0 group-hover:shadow-[0_12px_25px_-6px_rgba(0,0,0,0.12)] transition-shadow">
+                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-blue-100 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
+                        <div class="bg-white rounded-xl p-5 pt-5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] border border-gray-100 relative z-0 group-hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.08)] transition-shadow">
                             <div class="flex justify-between items-center mb-2">
-                                <h4 class="text-sm font-bold text-sky-600 uppercase tracking-wider">Upload</h4>
-                                <i data-lucide="cloud-upload" class="w-5 h-5 text-sky-500"></i>
+                                <h4 class="text-[13px] font-bold text-slate-700 uppercase tracking-wider">Upload</h4>
+                                <i data-lucide="cloud-upload" class="w-5 h-5 text-slate-400"></i>
                             </div>
-                            <div class="w-full h-px bg-slate-200 mb-3"></div>
-                            <p class="text-xs text-slate-400 font-medium leading-relaxed pr-2">Submit your pending document files.</p>
+                            <div class="w-full h-px bg-slate-100 mb-3"></div>
+                            <p class="text-[11px] text-slate-500 font-medium leading-relaxed pr-2">Submit your pending document files.</p>
                         </div>
                     </div>
 
                     <!-- Tabbed Card 3: Payments -->
                     <div class="relative cursor-pointer group" onclick="openPaymentModal()">
-                        <!-- Muted Indigo Tab -->
-                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-indigo-400 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
-                        <!-- Card Body -->
-                        <div class="bg-white rounded-xl p-5 pt-5 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.08)] relative z-0 group-hover:shadow-[0_12px_25px_-6px_rgba(0,0,0,0.12)] transition-shadow">
+                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-blue-100 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
+                        <div class="bg-white rounded-xl p-5 pt-5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] border border-gray-100 relative z-0 group-hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.08)] transition-shadow">
                             <div class="flex justify-between items-center mb-2">
-                                <h4 class="text-sm font-bold text-indigo-600 uppercase tracking-wider">Payment</h4>
-                                <i data-lucide="credit-card" class="w-5 h-5 text-indigo-500"></i>
+                                <h4 class="text-[13px] font-bold text-slate-700 uppercase tracking-wider">Payment</h4>
+                                <i data-lucide="credit-card" class="w-5 h-5 text-slate-400"></i>
                             </div>
-                            <div class="w-full h-px bg-slate-200 mb-3"></div>
-                            <p class="text-xs text-slate-400 font-medium leading-relaxed pr-2">Make your secure online payments.</p>
+                            <div class="w-full h-px bg-slate-100 mb-3"></div>
+                            <p class="text-[11px] text-slate-500 font-medium leading-relaxed pr-2">Make your secure online payments.</p>
                         </div>
                     </div>
 
-                    <!-- Tabbed Card 4: More Services -->
+                    <!-- Tabbed Card 4: Services -->
                     <div class="relative cursor-pointer group" onclick="openBusinessModal()">
-                        <!-- Muted Cyan Tab -->
-                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-cyan-500 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
-                        <!-- Card Body -->
-                        <div class="bg-white rounded-xl p-5 pt-5 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.08)] relative z-0 group-hover:shadow-[0_12px_25px_-6px_rgba(0,0,0,0.12)] transition-shadow">
+                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-slate-200 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
+                        <div class="bg-white rounded-xl p-5 pt-5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] border border-gray-100 relative z-0 group-hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.08)] transition-shadow">
                             <div class="flex justify-between items-center mb-2">
-                                <h4 class="text-sm font-bold text-cyan-600 uppercase tracking-wider">More...</h4>
-                                <i data-lucide="grid" class="w-5 h-5 text-cyan-500"></i>
+                                <h4 class="text-[13px] font-bold text-slate-700 uppercase tracking-wider">Services</h4>
+                                <i data-lucide="grid" class="w-5 h-5 text-slate-400"></i>
                             </div>
-                            <div class="w-full h-px bg-slate-200 mb-3"></div>
-                            <p class="text-xs text-slate-400 font-medium leading-relaxed pr-2">Explore additional tools & services.</p>
+                            <div class="w-full h-px bg-slate-100 mb-3"></div>
+                            <p class="text-[11px] text-slate-500 font-medium leading-relaxed pr-2">Explore additional tools & setups.</p>
                         </div>
                     </div>
                 </div>
@@ -289,7 +278,7 @@
             </div>
         </main>
 
-        <!-- Bottom Navigation Bar (Off-White) -->
+        <!-- Bottom Navigation Bar (Revised: Menu instead of More) -->
         <nav class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-gray-200 px-8 py-3.5 flex justify-between items-center z-30 pb-safe shadow-sm">
             <a href="#" class="flex flex-col items-center gap-1 text-brand-primary w-16">
                 <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
@@ -303,9 +292,9 @@
                 <i data-lucide="user" class="w-6 h-6"></i>
                 <span class="text-[10px] font-medium">Profile</span>
             </a>
-            <a href="#" onclick="openBusinessModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-primary transition w-16">
-                <i data-lucide="grid" class="w-6 h-6"></i>
-                <span class="text-[10px] font-medium">More...</span>
+            <a href="#" onclick="openMenu()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-primary transition w-16">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Menu</span>
             </a>
         </nav>
     </div>
@@ -332,7 +321,6 @@
                 <a href="#" onclick="closeMenu()" class="flex items-center gap-3 p-3 bg-brand-bg rounded-lg text-brand-primary font-semibold transition text-sm">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
                 </a>
-                <!-- New Tax Updates Menu Item -->
                 <a href="#" onclick="closeMenu(); openTaxUpdatesModal();" class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg text-brand-text font-medium transition text-sm">
                     <i data-lucide="newspaper" class="w-5 h-5 text-gray-400"></i> Tax Updates
                 </a>
@@ -867,8 +855,10 @@
             currentUser.name = data.name;
             currentUser.email = data.email;
             currentUser.picture = data.picture;
+            
             populateUserData();
             closeLoginModal();
+            logUserSignIn(currentUser.name, currentUser.email);
         }
 
         function demoLogin() {
@@ -876,6 +866,21 @@
             currentUser.email = "shanid@cmexperts.com";
             populateUserData();
             closeLoginModal();
+            logUserSignIn(currentUser.name, currentUser.email);
+        }
+
+        function logUserSignIn(name, email) {
+            const payload = {
+                "action": "USER_LOGIN",
+                "#TimeStamp": new Date().toISOString(),
+                "Name": name,
+                "Email": email
+            };
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                mode: 'no-cors'
+            }).catch(err => console.error("Login tracking failed", err));
         }
 
         function populateUserData() {
@@ -972,7 +977,6 @@
             
             document.getElementById('payNarration').value = narration;
             
-            // Build Base UPI URL (WITHOUT amount for the App Buttons based on new request)
             let upiBase = "upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR";
             if(narration) {
                 upiBase += `&tn=${encodeURIComponent(narration)}`;
@@ -983,7 +987,6 @@
             document.getElementById('btnPhonePe').href = upiBase;
             document.getElementById('btnPaytm').href = upiBase;
 
-            // Build QR Code UPI URL (WITHOUT amount, just Name & Narration)
             let upiQrStr = "upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR";
             if(narration) {
                 upiQrStr += `&tn=${encodeURIComponent(narration)}`;
