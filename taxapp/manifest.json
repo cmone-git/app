@@ -1,21 +1,21 @@
 {
-  "name": "CM Filings - TaxApp",
-  "short_name": "TaxApp",
-  "description": "Income Tax Return Filing Hub",
+  "name": "CM TaxApp Corporate Dashboard",
+  "short_name": "CM TaxApp",
+  "description": "Corporate Tax Filing and Management Dashboard by CM Experts Group.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#003366",
-  "theme_color": "#003366",
   "orientation": "portrait",
+  "background_color": "#0B1120",
+  "theme_color": "#111827",
   "icons": [
     {
-      "src": "assets/logo-fav.png",
+      "src": "assets/logo.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "assets/logo-splash.png",
+      "src": "assets/logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
