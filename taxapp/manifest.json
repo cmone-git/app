@@ -1,7 +1,7 @@
 {
   "name": "CM TaxApp Corporate Dashboard",
   "short_name": "CM TaxApp",
-  "description": "Corporate Tax Filing and Management Dashboard by CM Experts Group.",
+  "description": "Corporate Tax Filing and Management Dashboard by CMFilings.",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
