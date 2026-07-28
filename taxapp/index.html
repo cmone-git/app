@@ -6,7 +6,7 @@
     <title>CM TaxApp | Corporate Dashboard</title>
     <link rel="manifest" href="manifest.json">
     
-    <meta name="theme-color" content="#0B1120">
+    <meta name="theme-color" content="#111827">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
@@ -55,16 +55,17 @@
         /* Larger Corporate Form Inputs */
         .corp-input, .corp-select, .corp-textarea {
             width: 100%; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px;
-            font-size: 15px; color: #0F172A; background: #F8FAFC; transition: all 0.2s ease; outline: none;
+            font-size: 15px; color: #0F172A; background: #FFFFFF; transition: all 0.2s ease; outline: none; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
         .corp-input:focus, .corp-select:focus, .corp-textarea:focus { 
-            border-color: #c80000; box-shadow: 0 0 0 3px rgba(200, 0, 0, 0.1); background: #FFFFFF;
+            border-color: #c80000; box-shadow: 0 0 0 3px rgba(200, 0, 0, 0.1);
         }
+        .corp-input[readonly] { background: #F1F5F9; color: #64748B; cursor: not-allowed; }
         
         .file-upload-wrapper {
-            position: relative; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 16px; text-align: center; background: #F8FAFC; cursor: pointer; transition: all 0.2s;
+            position: relative; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 16px; text-align: center; background: #FFFFFF; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
-        .file-upload-wrapper:hover { border-color: #c80000; background: #F1F5F9; }
+        .file-upload-wrapper:hover { border-color: #c80000; background: #F8FAFC; }
         .file-upload-wrapper input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
         .step-active { color: #c80000; font-weight: 700; border-bottom: 2px solid #c80000; }
@@ -92,7 +93,7 @@
 <body class="font-sans text-brand-text min-h-screen flex flex-col relative pb-24 overflow-x-hidden">
 
     <!-- Splash Screen -->
-    <div id="splash" class="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center transition-opacity duration-500">
+    <div id="splash" class="fixed inset-0 z-[100] bg-[#f8fafc] flex flex-col items-center justify-center transition-opacity duration-500">
         <i data-lucide="briefcase" class="w-16 h-16 text-brand-primary mb-4 animate-pulse"></i>
         <h1 class="text-3xl font-extrabold text-brand-dark tracking-tight">CM TaxApp</h1>
         <p class="text-xs text-brand-muted font-bold mt-2 tracking-widest uppercase">Corporate Portal</p>
@@ -112,16 +113,16 @@
     </div>
 
     <!-- HEADER DUE DATE ALARM MODAL -->
-    <div id="alarmModal" class="fixed inset-0 z-[80] hidden flex-col bg-brand-dark/60 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
+    <div id="alarmModal" class="fixed inset-0 z-[80] hidden flex-col bg-gray-900/60 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
         <div class="bg-white rounded-2xl w-full max-w-[360px] p-8 shadow-2xl relative animate-[slideDown_0.3s_ease-out]">
-            <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center text-brand-primary mx-auto mb-4">
+            <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 mx-auto mb-4">
                 <i data-lucide="bell-ring" class="w-8 h-8 animate-pulse"></i>
             </div>
             <h3 class="text-center font-bold text-xl text-brand-heading mb-3">Important Deadline</h3>
             <p class="text-center text-sm text-gray-600 mb-6 leading-relaxed">
                 The due date to file your Individual & HUF Income Tax Return is <strong class="text-brand-dark">31st July 2026</strong>. Please file early to avoid last-minute penalties.
             </p>
-            <button onclick="closeAlarmModal()" class="w-full bg-brand-primary hover:bg-red-800 text-white py-3.5 rounded-xl font-bold shadow-md transition text-base">
+            <button onclick="closeAlarmModal()" class="w-full bg-brand-primary hover:bg-brand-accent text-white py-3.5 rounded-xl font-bold shadow-md transition text-base">
                 I Understand
             </button>
         </div>
@@ -148,8 +149,8 @@
     <!-- MAIN APP WRAPPER -->
     <div id="mainApp" class="flex flex-col flex-grow">
         
-        <!-- Header -->
-        <header class="flex justify-between items-center px-5 pt-5 pb-3 sticky top-0 z-30 bg-gray-900 shadow-md">
+        <!-- Sticky Header (Deep Grey) -->
+        <header class="flex justify-between items-center px-5 pt-5 pb-3 sticky top-0 z-30 bg-gray-900 shadow-md border-b border-gray-800">
             <button onclick="openMenu()" class="w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center text-white shadow-sm hover:bg-gray-700 transition">
                 <i data-lucide="menu" class="w-5 h-5"></i>
             </button>
@@ -173,68 +174,73 @@
                 <h1 id="dashName" class="text-2xl font-bold text-brand-heading tracking-tight">Guest User</h1>
             </div>
 
-            <!-- Due Date Reminder Card -->
-            <div class="bg-brand-dark rounded-3xl p-6 shadow-corporate relative overflow-hidden text-white cursor-pointer" onclick="openAlarmModal()">
-                <i data-lucide="calculator" class="absolute -right-4 -bottom-4 w-36 h-36 text-white opacity-[0.03]"></i>
+            <!-- Due Date Reminder Card (Deep Grey) -->
+            <div class="bg-gray-800 rounded-3xl p-6 shadow-corporate relative overflow-hidden text-white cursor-pointer" onclick="openAlarmModal()">
+                <i data-lucide="calculator" class="absolute -right-4 -bottom-4 w-36 h-36 text-white opacity-[0.05]"></i>
                 <div class="flex justify-between items-center relative z-10">
                     <div>
-                        <h2 class="font-bold text-base mb-1.5 flex items-center gap-2 text-gray-100">
+                        <h2 class="font-bold text-base mb-1.5 flex items-center gap-2 text-white">
                             ITR Due Date
                             <span class="relative flex h-2.5 w-2.5">
-                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-accent"></span>
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span>
                             </span>
                         </h2>
                         <p class="text-xs text-gray-400 mb-5 font-medium">Assessment Year 2026-27</p>
                         
-                        <div class="inline-block bg-white/5 border border-white/10 px-3.5 py-2 rounded-lg backdrop-blur-sm">
-                            <span class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase">Deadline</span>
+                        <div class="inline-block bg-white/10 border border-white/20 px-3.5 py-2 rounded-lg backdrop-blur-sm">
+                            <span class="block text-[10px] font-bold tracking-widest text-gray-300 uppercase">Deadline</span>
                             <span class="block text-sm font-bold text-white mt-0.5">31 July 2026</span>
                         </div>
                     </div>
                     <div class="relative w-28 h-28 flex items-center justify-center bg-white rounded-full shadow-lg border-2 border-white/10">
                         <svg class="w-full h-full transform -rotate-90 absolute" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="42" fill="none" stroke="#fee2e2" stroke-width="12"></circle>
-                            <circle id="donutProgress" cx="50" cy="50" r="42" fill="none" stroke="#ef4444" stroke-width="12" stroke-dasharray="263.89" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000 ease-out"></circle>
+                            <circle cx="50" cy="50" r="42" fill="none" stroke="#f1f5f9" stroke-width="12"></circle>
+                            <circle id="donutProgress" cx="50" cy="50" r="42" fill="none" stroke="#c80000" stroke-width="12" stroke-dasharray="263.89" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000 ease-out"></circle>
                         </svg>
                         <div class="absolute flex flex-col items-center justify-center mt-1">
-                            <span id="donutDaysLeft" class="text-4xl font-black leading-none text-brand-heading tracking-tight mt-0.5">--</span>
+                            <span id="donutDaysLeft" class="text-4xl font-black leading-none text-[#c80000] tracking-tight mt-0.5">--</span>
                             <span class="text-[10px] font-bold text-gray-500 mt-1 tracking-widest uppercase">Days</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Quick Actions Grid -->
+            <!-- Quick Actions Grid (Muted Colored Cards) -->
             <div>
                 <h3 class="text-base font-bold text-brand-heading mb-4 px-1">Quick Actions</h3>
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-white border border-brand-border rounded-2xl p-5 shadow-sm flex flex-col relative cursor-pointer hover:border-brand-primary transition group" onclick="openItrModal()">
-                        <div class="w-10 h-10 rounded-xl bg-brand-bg flex items-center justify-center text-brand-primary mb-3 transition">
+                    
+                    <!-- Muted Blue -->
+                    <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5 shadow-sm flex flex-col relative cursor-pointer hover:border-blue-300 transition group" onclick="openItrModal()">
+                        <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-blue-600 mb-3 shadow-sm border border-blue-50">
                             <i data-lucide="file-text" class="w-5 h-5"></i>
                         </div>
                         <h4 class="text-sm font-semibold text-brand-heading leading-tight mb-1">File ITR</h4>
                         <p class="text-xs text-brand-muted flex-grow">Submit tax returns</p>
                     </div>
 
-                    <div class="bg-white border border-brand-border rounded-2xl p-5 shadow-sm flex flex-col relative cursor-pointer hover:border-brand-primary transition group" onclick="openUploadModal()">
-                        <div class="w-10 h-10 rounded-xl bg-brand-bg flex items-center justify-center text-brand-primary mb-3 transition">
+                    <!-- Muted Green -->
+                    <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 shadow-sm flex flex-col relative cursor-pointer hover:border-emerald-300 transition group" onclick="openUploadModal()">
+                        <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-emerald-600 mb-3 shadow-sm border border-emerald-50">
                             <i data-lucide="cloud-upload" class="w-5 h-5"></i>
                         </div>
                         <h4 class="text-sm font-semibold text-brand-heading leading-tight mb-1">Upload Docs</h4>
                         <p class="text-xs text-brand-muted flex-grow">Submit pending files</p>
                     </div>
 
-                    <div class="bg-white border border-brand-border rounded-2xl p-5 shadow-sm flex flex-col relative cursor-pointer hover:border-brand-primary transition group" onclick="openPaymentModal()">
-                        <div class="w-10 h-10 rounded-xl bg-brand-bg flex items-center justify-center text-brand-primary mb-3 transition">
+                    <!-- Muted Yellow -->
+                    <div class="bg-yellow-50 border border-yellow-100 rounded-2xl p-5 shadow-sm flex flex-col relative cursor-pointer hover:border-yellow-300 transition group" onclick="openPaymentModal()">
+                        <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-yellow-600 mb-3 shadow-sm border border-yellow-50">
                             <i data-lucide="credit-card" class="w-5 h-5"></i>
                         </div>
                         <h4 class="text-sm font-semibold text-brand-heading leading-tight mb-1">Payments</h4>
                         <p class="text-xs text-brand-muted flex-grow">Make secure payments</p>
                     </div>
 
-                    <div class="bg-white border border-brand-border rounded-2xl p-5 shadow-sm flex flex-col relative cursor-pointer hover:border-brand-primary transition group" onclick="openBusinessModal()">
-                        <div class="w-10 h-10 rounded-xl bg-brand-bg flex items-center justify-center text-brand-primary mb-3 transition">
+                    <!-- Muted Red -->
+                    <div class="bg-rose-50 border border-rose-100 rounded-2xl p-5 shadow-sm flex flex-col relative cursor-pointer hover:border-rose-300 transition group" onclick="openBusinessModal()">
+                        <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-rose-600 mb-3 shadow-sm border border-rose-50">
                             <i data-lucide="building" class="w-5 h-5"></i>
                         </div>
                         <h4 class="text-sm font-semibold text-brand-heading leading-tight mb-1">Business Setup</h4>
@@ -246,7 +252,7 @@
             <!-- Corporate Support Banner -->
             <div class="bg-gray-800 border border-gray-700 rounded-xl p-4 flex items-center justify-between cursor-pointer shadow-sm hover:bg-gray-700 transition mt-2 mb-24" onclick="window.location.href='tel:+919946151111'">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center text-white">
+                    <div class="w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center text-white border border-gray-600">
                         <i data-lucide="headset" class="w-5 h-5"></i>
                     </div>
                     <div>
@@ -258,21 +264,21 @@
             </div>
         </main>
 
-        <!-- Bottom Navigation Bar -->
-        <nav class="fixed bottom-0 left-0 w-full bg-gray-900 border-t border-gray-800 px-8 py-3.5 flex justify-between items-center z-30 pb-safe shadow-lg">
+        <!-- Bottom Navigation Bar (Deep Grey) -->
+        <nav class="fixed bottom-0 left-0 w-full bg-gray-900 border-t border-gray-800 px-8 py-3.5 flex justify-between items-center z-30 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.15)]">
             <a href="#" class="flex flex-col items-center gap-1 text-white w-16">
                 <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
-                <span class="text-[10px] font-semibold">Home</span>
+                <span class="text-[10px] font-bold">Home</span>
             </a>
-            <a href="#" onclick="openBusinessModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition w-16">
+            <a href="#" onclick="openBusinessModal()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition w-16">
                 <i data-lucide="briefcase" class="w-6 h-6"></i>
                 <span class="text-[10px] font-medium">Services</span>
             </a>
-            <a href="#" onclick="openPaymentModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition w-16">
+            <a href="#" onclick="openPaymentModal()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition w-16">
                 <i data-lucide="indian-rupee" class="w-6 h-6"></i>
                 <span class="text-[10px] font-medium">Payments</span>
             </a>
-            <a href="#" onclick="openSettingsModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition w-16">
+            <a href="#" onclick="openSettingsModal()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition w-16">
                 <i data-lucide="user" class="w-6 h-6"></i>
                 <span class="text-[10px] font-medium">Profile</span>
             </a>
@@ -284,7 +290,7 @@
 
     <!-- SIDE NAVIGATION MENU -->
     <div id="sideMenu" class="fixed inset-0 z-50 hidden">
-        <div class="fixed inset-0 bg-brand-dark/40 backdrop-blur-sm transition-opacity" onclick="closeMenu()"></div>
+        <div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" onclick="closeMenu()"></div>
         <div class="fixed inset-y-0 left-0 w-[80%] max-w-sm bg-white shadow-2xl flex flex-col animate-[slideRight_0.2s_ease-out]">
             <div class="px-6 py-8 border-b border-brand-border bg-brand-bg flex justify-between items-start">
                 <div>
@@ -293,7 +299,7 @@
                     <h2 id="navName" class="text-base font-bold text-brand-heading leading-tight">Guest User</h2>
                     <p id="navEmail" class="text-xs font-medium text-brand-muted mt-1">Please Sign In</p>
                 </div>
-                <button onclick="closeMenu()" class="w-8 h-8 rounded-md bg-white border border-brand-border flex items-center justify-center text-gray-500 hover:text-brand-dark transition">
+                <button onclick="closeMenu()" class="w-8 h-8 rounded-md bg-white border border-brand-border flex items-center justify-center text-gray-500 hover:text-gray-900 transition">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -307,12 +313,20 @@
                 <a href="#" onclick="closeMenu(); openPaymentModal();" class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg text-brand-text font-medium transition text-sm">
                     <i data-lucide="indian-rupee" class="w-5 h-5 text-gray-400"></i> Payments
                 </a>
+                
+                <div class="my-2 border-t border-brand-border"></div>
+                <a href="privacy.html" class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg text-brand-text font-medium transition text-sm">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-gray-400"></i> Privacy and Policy
+                </a>
+                <a href="about.html" class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg text-brand-text font-medium transition text-sm">
+                    <i data-lucide="info" class="w-5 h-5 text-gray-400"></i> About App
+                </a>
             </div>
             <div class="p-6 border-t border-brand-border pb-safe flex flex-col gap-2">
                 <button id="navSignInBtn" onclick="openLoginModal()" class="w-full flex items-center justify-center gap-2 text-white font-bold bg-brand-primary py-3.5 rounded-xl shadow-md transition text-sm">
                     <i data-lucide="log-in" class="w-4 h-4"></i> Sign In
                 </button>
-                <button id="navSignOutBtn" onclick="handleLogout()" class="hidden w-full flex items-center justify-center gap-2 text-brand-dark font-semibold border border-brand-border py-3.5 rounded-xl hover:bg-gray-50 transition text-sm">
+                <button id="navSignOutBtn" onclick="handleLogout()" class="hidden w-full flex items-center justify-center gap-2 text-gray-900 font-semibold border border-brand-border py-3.5 rounded-xl hover:bg-gray-50 transition text-sm">
                     <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
                 </button>
             </div>
@@ -323,7 +337,7 @@
     <div id="itrModal" class="fixed inset-0 z-[60] hidden flex-col bg-white">
         <div class="px-5 py-4 border-b border-brand-border flex justify-between items-center bg-white sticky top-0 z-10 shadow-header">
             <h3 class="font-bold text-base text-brand-heading">File ITR</h3>
-            <button onclick="closeItrModal()" class="w-8 h-8 flex items-center justify-center bg-brand-bg border border-brand-border rounded-md text-gray-500 hover:text-brand-dark">
+            <button onclick="closeItrModal()" class="w-8 h-8 flex items-center justify-center bg-brand-bg border border-brand-border rounded-md text-gray-500 hover:text-gray-900">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
@@ -435,14 +449,15 @@
                 
                 <div class="bg-white border border-brand-border rounded-xl p-5 w-full mb-8 shadow-sm border-l-4 border-l-brand-success">
                     <p class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2">Reference Number</p>
-                    <p id="successAppNo" class="font-mono font-black text-brand-dark text-xl tracking-wider"></p>
+                    <p id="successAppNo" class="font-mono font-black text-gray-900 text-xl tracking-wider"></p>
                 </div>
                 
                 <div class="w-full space-y-4">
                     <button onclick="whatsappITR()" class="w-full bg-[#25D366] text-white font-bold py-4 rounded-xl shadow-md flex items-center justify-center gap-2 hover:bg-green-600 transition text-sm">
                         <i data-lucide="message-square" class="w-5 h-5"></i> Fast Processing via WhatsApp
                     </button>
-                    <button onclick="openPaymentModal(); closeItrModal();" class="w-full bg-brand-dark text-white font-bold py-4 rounded-xl shadow-md flex items-center justify-center gap-2 hover:bg-black transition text-sm">
+                    <!-- Trigger Payment Modal from Data Submission Section -->
+                    <button onclick="openPaymentModal(); closeItrModal();" class="w-full bg-brand-primary hover:bg-brand-accent text-white font-bold py-4 rounded-xl shadow-md flex items-center justify-center gap-2 transition text-sm">
                         <i data-lucide="indian-rupee" class="w-5 h-5"></i> Proceed to Payment
                     </button>
                 </div>
@@ -452,8 +467,8 @@
         <div id="itrModalFooter" class="p-6 border-t border-brand-border bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.02)] pb-safe block">
             <div class="flex gap-4 max-w-[600px] mx-auto">
                 <button type="button" id="btnBack" onclick="prevStep()" class="w-1/3 bg-brand-bg border border-brand-border text-brand-heading font-semibold py-3 rounded-xl hidden transition hover:bg-gray-100 text-sm">Back</button>
-                <button type="button" id="btnNext" onclick="nextStep()" class="flex-1 bg-brand-dark text-white font-semibold py-3 rounded-xl shadow-sm transition hover:bg-black text-sm">Next Step</button>
-                <button type="button" id="btnSubmit" onclick="submitItrFinal()" class="flex-1 bg-brand-primary hover:bg-red-800 text-white font-semibold py-3 rounded-xl shadow-sm hidden transition text-sm flex items-center justify-center gap-2">Submit Application</button>
+                <button type="button" id="btnNext" onclick="nextStep()" class="flex-1 bg-brand-primary hover:bg-brand-accent text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">Next Step</button>
+                <button type="button" id="btnSubmit" onclick="submitItrFinal()" class="flex-1 bg-brand-primary hover:bg-brand-accent text-white font-semibold py-3 rounded-xl shadow-sm hidden transition text-sm flex items-center justify-center gap-2">Submit Application</button>
             </div>
         </div>
     </div>
@@ -462,60 +477,83 @@
     <div id="paymentModal" class="fixed inset-0 z-[60] hidden flex-col bg-brand-bg">
         <div class="px-5 py-4 border-b border-brand-border flex justify-between items-center bg-white sticky top-0 z-10 shadow-header">
             <h3 class="font-bold text-base text-brand-heading">Payment Portal</h3>
-            <button onclick="closePaymentModal()" class="w-8 h-8 flex items-center justify-center bg-brand-bg border border-brand-border rounded-md text-gray-500 hover:text-brand-dark"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <button onclick="closePaymentModal()" class="w-8 h-8 flex items-center justify-center bg-brand-bg border border-brand-border rounded-md text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
         <div class="overflow-y-auto no-scrollbar p-5 flex-grow">
             <div class="max-w-[600px] mx-auto space-y-5">
                 
                 <!-- Payment Details Form -->
                 <div class="bg-white p-5 rounded-2xl border border-brand-border shadow-sm space-y-4">
-                    <h4 class="text-sm font-bold text-brand-heading border-b border-brand-border pb-3">Client Details</h4>
+                    <h4 class="text-sm font-bold text-brand-heading border-b border-brand-border pb-3">Payment Details</h4>
                     <div class="grid grid-cols-1 gap-4 pt-1">
+                        <!-- Added Amount Column -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-brand-muted mb-1 font-medium">Amount <span class="text-brand-primary">*</span></label>
+                                <input type="number" id="payAmount" oninput="updatePaymentUI()" class="corp-input font-mono font-bold" placeholder="₹ 0.00" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-brand-muted mb-1 font-medium">App No / Ref</label>
+                                <input type="text" id="payAkn" oninput="updatePaymentUI()" class="corp-input uppercase font-mono text-sm" placeholder="Application No">
+                            </div>
+                        </div>
                         <div>
-                            <input type="text" id="payName" class="corp-input bg-brand-bg text-sm" placeholder="Full Name" required>
+                            <label class="block text-xs text-brand-muted mb-1 font-medium">Client Name</label>
+                            <input type="text" id="payName" oninput="updatePaymentUI()" class="corp-input text-sm" placeholder="Full Name" required>
+                        </div>
+                        <!-- Added Auto Narration -->
+                        <div>
+                            <label class="block text-xs text-brand-muted mb-1 font-medium">Auto Narration</label>
+                            <input type="text" id="payNarration" class="corp-input text-sm font-medium bg-gray-50 text-gray-500" placeholder="Auto-generated narration" readonly>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <input type="text" id="payPan" class="corp-input bg-brand-bg uppercase font-mono text-sm" placeholder="PAN Number" required>
                             <input type="tel" id="payMobile" class="corp-input bg-brand-bg text-sm" placeholder="Mobile No" required>
                         </div>
-                        <div>
-                            <input type="text" id="payAkn" class="corp-input bg-brand-bg uppercase font-mono text-sm" placeholder="Application No (Optional)">
-                        </div>
                     </div>
                 </div>
 
-                <!-- UPI Quick Apps -->
+                <!-- DYNAMIC QR CODE SECTION (No Amount) -->
+                <div class="bg-white p-5 rounded-2xl border border-brand-border shadow-sm flex flex-col items-center text-center">
+                    <h4 class="text-sm font-bold text-brand-heading mb-1">Scan to Pay via Any UPI App</h4>
+                    <p class="text-[11px] text-gray-500 mb-4 font-medium px-2">Amount is not fixed in QR. Please verify narration and enter your amount.</p>
+                    <div class="p-3 bg-white border border-gray-200 rounded-xl shadow-sm mb-4 inline-block relative">
+                        <img id="upiQrCode" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi%3A%2F%2Fpay%3Fpa%3Daccountree%40ybl%26pn%3DAccountree" alt="UPI QR Code" class="w-40 h-40 object-contain">
+                    </div>
+                    <div class="bg-brand-bg rounded-lg border border-brand-border p-3 w-full flex justify-between items-center shadow-sm">
+                        <div class="flex flex-col text-left">
+                            <span class="text-[10px] font-bold text-brand-muted uppercase tracking-wider">UPI ID</span>
+                            <span class="text-xs font-bold text-gray-900 mt-0.5">accountree@ybl</span>
+                        </div>
+                        <button onclick="copyText('accountree@ybl')" class="p-1.5 bg-white rounded border border-gray-200 text-gray-500 hover:text-gray-900 shadow-sm"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+
+                <!-- UPI Quick Apps (Without Amount, Only Narration) -->
                 <div class="bg-white p-5 rounded-2xl border border-brand-border shadow-sm">
                     <h4 class="text-sm font-bold text-brand-heading mb-4">Quick Pay via UPI</h4>
                     <div class="grid grid-cols-3 gap-3">
-                        <a href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-gray-400 transition shadow-sm">
+                        <a id="btnGpay" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-gray-400 transition shadow-sm">
                             <div class="w-8 h-8 rounded-full border-4 border-[#4285F4] border-t-[#EA4335] border-r-[#FBBC05] border-b-[#34A853]"></div>
                             <span class="text-xs font-bold text-gray-700">GPay</span>
                         </a>
-                        <a href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-purple-400 transition shadow-sm">
+                        <a id="btnPhonePe" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-purple-400 transition shadow-sm">
                             <div class="w-8 h-8 rounded bg-[#5f259f] text-white flex items-center justify-center font-bold text-base leading-none">पे</div>
                             <span class="text-xs font-bold text-gray-700">PhonePe</span>
                         </a>
-                        <a href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-blue-400 transition shadow-sm">
+                        <a id="btnPaytm" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-blue-400 transition shadow-sm">
                             <div class="w-auto px-1.5 h-8 rounded bg-[#002970] text-white flex items-center justify-center font-bold text-xs leading-none">Paytm</div>
                             <span class="text-xs font-bold text-gray-700">Paytm</span>
                         </a>
                     </div>
-                    <div class="mt-4 bg-brand-bg rounded-xl border border-brand-border p-3 flex justify-between items-center">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] font-bold text-brand-muted uppercase tracking-wider">UPI ID</span>
-                            <span class="text-sm font-bold text-brand-heading">accountree@ybl</span>
-                        </div>
-                        <button onclick="copyText('accountree@ybl')" class="p-2 bg-white rounded-lg border border-gray-200 text-gray-500 hover:text-brand-primary shadow-sm"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                    </div>
                 </div>
 
-                <!-- Payment Gateway -->
+                <!-- Payment Gateway Razorpay Calculation -->
                 <div class="bg-white p-5 rounded-2xl border border-brand-border shadow-sm text-center">
                     <h4 class="text-sm font-bold text-brand-heading mb-1.5 text-left">Credit / Debit / Netbanking</h4>
                     <p class="text-xs text-gray-500 mb-4 text-left">Standard gateway charges apply to card transactions.</p>
-                    <button class="w-full bg-brand-dark text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-md hover:bg-black transition text-sm">
-                        <i data-lucide="credit-card" class="w-5 h-5"></i> Pay via Gateway 
+                    <button onclick="payViaRazorpayLink()" class="w-full bg-brand-primary hover:bg-brand-accent text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-md transition text-sm">
+                        <i data-lucide="credit-card" class="w-5 h-5"></i> <span id="rzpBtnText">Pay via Razorpay</span> 
                         <span class="bg-white/20 text-white text-[10px] px-2 py-1 rounded ml-1 tracking-wide">+ 2% fee</span>
                     </button>
                 </div>
@@ -524,7 +562,7 @@
                 <div class="bg-white rounded-2xl border border-brand-border shadow-sm overflow-hidden">
                     <button onclick="toggleBankDetails()" class="w-full p-5 flex justify-between items-center bg-white hover:bg-gray-50 transition">
                         <div class="flex items-center gap-3">
-                            <i data-lucide="building-2" class="w-5 h-5 text-brand-primary"></i>
+                            <i data-lucide="building-2" class="w-5 h-5 text-gray-700"></i>
                             <span class="text-sm font-bold text-brand-heading">Direct Bank Transfer</span>
                         </div>
                         <i data-lucide="chevron-down" id="bankArrow" class="w-5 h-5 text-gray-400 transition-transform"></i>
@@ -533,15 +571,15 @@
                         <div class="space-y-3 border-t border-brand-border pt-4">
                             <div class="flex justify-between items-center bg-white border border-brand-border p-3 rounded-xl">
                                 <div><span class="block text-[10px] font-bold text-brand-muted uppercase">Account Name</span><span class="text-xs font-semibold text-brand-heading">Accountree</span></div>
-                                <button class="p-2 bg-brand-bg border border-brand-border rounded-lg text-gray-600 hover:text-brand-primary" onclick="copyText('Accountree')"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                <button class="p-2 bg-brand-bg border border-brand-border rounded-lg text-gray-600 hover:text-gray-900" onclick="copyText('Accountree')"><i data-lucide="copy" class="w-4 h-4"></i></button>
                             </div>
                             <div class="flex justify-between items-center bg-white border border-brand-border p-3 rounded-xl">
                                 <div><span class="block text-[10px] font-bold text-brand-muted uppercase">Account Number</span><span class="text-xs font-semibold text-brand-heading">2538020000013</span></div>
-                                <button class="p-2 bg-brand-bg border border-brand-border rounded-lg text-gray-600 hover:text-brand-primary" onclick="copyText('2538020000013')"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                <button class="p-2 bg-brand-bg border border-brand-border rounded-lg text-gray-600 hover:text-gray-900" onclick="copyText('2538020000013')"><i data-lucide="copy" class="w-4 h-4"></i></button>
                             </div>
                             <div class="flex justify-between items-center bg-white border border-brand-border p-3 rounded-xl">
                                 <div><span class="block text-[10px] font-bold text-brand-muted uppercase">IFSC Code</span><span class="text-xs font-semibold text-brand-heading">FDRL0006407</span></div>
-                                <button class="p-2 bg-brand-bg border border-brand-border rounded-lg text-gray-600 hover:text-brand-primary" onclick="copyText('FDRL0006407')"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                <button class="p-2 bg-brand-bg border border-brand-border rounded-lg text-gray-600 hover:text-gray-900" onclick="copyText('FDRL0006407')"><i data-lucide="copy" class="w-4 h-4"></i></button>
                             </div>
                         </div>
                     </div>
@@ -555,7 +593,7 @@
                         <span class="text-xs font-semibold text-brand-heading block">Select Screenshot</span>
                         <input type="file" id="payProof" accept="image/*,.pdf">
                     </div>
-                    <button id="paySubmitBtn" onclick="submitPaymentForm()" class="w-full bg-brand-primary text-white font-bold py-3.5 rounded-xl shadow-sm text-sm">Submit Payment Info</button>
+                    <button id="paySubmitBtn" onclick="submitPaymentForm()" class="w-full bg-brand-primary hover:bg-brand-accent text-white font-bold py-3.5 rounded-xl shadow-sm text-sm transition">Submit Payment Info</button>
                 </div>
             </div>
         </div>
@@ -566,15 +604,15 @@
         <div class="px-5 pt-8 pb-4 flex gap-3 items-center border-b border-brand-border bg-white shadow-sm">
             <div class="flex-grow relative">
                 <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                <input type="text" id="searchInput" onkeyup="filterSearch()" placeholder="Search services..." class="w-full bg-brand-bg border border-brand-border rounded-xl py-3 pl-10 pr-4 text-sm text-brand-heading outline-none focus:border-brand-primary transition" autofocus>
+                <input type="text" id="searchInput" onkeyup="filterSearch()" placeholder="Search services..." class="w-full bg-brand-bg border border-brand-border rounded-xl py-3 pl-10 pr-4 text-sm text-brand-heading outline-none focus:border-gray-900 transition" autofocus>
             </div>
             <button onclick="closeSearch()" class="text-sm font-semibold text-gray-500 hover:text-brand-dark transition">Cancel</button>
         </div>
         <div class="flex-grow overflow-y-auto p-6 max-w-[600px] mx-auto w-full">
             <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-4">Quick Links</p>
             <div id="searchResultsList" class="space-y-3">
-                <div class="search-item flex items-center p-3 bg-white border border-brand-border rounded-xl cursor-pointer hover:border-brand-primary transition" onclick="closeSearch(); openItrModal();"><i data-lucide="file-text" class="w-5 h-5 text-brand-primary mr-3"></i><span class="text-sm font-medium text-brand-heading search-text">File Income Tax Return (ITR)</span></div>
-                <div class="search-item flex items-center p-3 bg-white border border-brand-border rounded-xl cursor-pointer hover:border-brand-primary transition" onclick="closeSearch(); openPaymentModal();"><i data-lucide="indian-rupee" class="w-5 h-5 text-brand-primary mr-3"></i><span class="text-sm font-medium text-brand-heading search-text">Make a Tax Payment</span></div>
+                <div class="search-item flex items-center p-3 bg-white border border-brand-border rounded-xl cursor-pointer hover:border-gray-900 transition" onclick="closeSearch(); openItrModal();"><i data-lucide="file-text" class="w-5 h-5 text-gray-700 mr-3"></i><span class="text-sm font-medium text-brand-heading search-text">File Income Tax Return (ITR)</span></div>
+                <div class="search-item flex items-center p-3 bg-white border border-brand-border rounded-xl cursor-pointer hover:border-gray-900 transition" onclick="closeSearch(); openPaymentModal();"><i data-lucide="indian-rupee" class="w-5 h-5 text-gray-700 mr-3"></i><span class="text-sm font-medium text-brand-heading search-text">Make a Tax Payment</span></div>
             </div>
         </div>
     </div>
@@ -588,11 +626,11 @@
             <div class="bg-white p-5 rounded-2xl border border-brand-border shadow-sm space-y-4 max-w-[600px] mx-auto">
                 <input type="text" class="corp-input text-sm" placeholder="PAN or Application No" required>
                 <div class="file-upload-wrapper !py-8">
-                    <i data-lucide="upload-cloud" class="w-6 h-6 mx-auto text-brand-primary mb-2"></i>
+                    <i data-lucide="upload-cloud" class="w-6 h-6 mx-auto text-gray-700 mb-2"></i>
                     <span class="text-xs font-semibold block">Tap to select file</span>
                     <input type="file" required>
                 </div>
-                <button onclick="closeUploadModal(); showToast('Document Uploaded!', false, true);" class="w-full bg-brand-dark text-white font-semibold py-3.5 rounded-xl shadow-sm text-sm">Upload</button>
+                <button onclick="closeUploadModal(); showToast('Document Uploaded!', false, true);" class="w-full bg-brand-primary hover:bg-brand-accent transition text-white font-semibold py-3.5 rounded-xl shadow-sm text-sm">Upload</button>
             </div>
         </div>
     </div>
@@ -644,7 +682,7 @@
         <div class="p-6 bg-brand-bg flex-grow">
             <div class="bg-white p-5 rounded-2xl border border-brand-border shadow-sm space-y-4 max-w-[600px] mx-auto">
                 <input type="tel" class="corp-input text-sm" value="+91 99461 51111">
-                <button onclick="closeSettingsModal(); showToast('Settings Saved!', false, false);" class="w-full bg-brand-dark text-white font-semibold py-3.5 rounded-xl shadow-sm text-sm">Save Changes</button>
+                <button onclick="closeSettingsModal(); showToast('Settings Saved!', false, false);" class="w-full bg-brand-primary text-white font-semibold py-3.5 rounded-xl shadow-sm text-sm hover:bg-brand-accent transition">Save Changes</button>
             </div>
         </div>
     </div>
@@ -653,7 +691,7 @@
         lucide.createIcons();
 
         // -------------------------
-        // SCRIPT URL (Replace with your actual published Apps Script URL)
+        // SCRIPT URL 
         // -------------------------
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZg2vw8RUFDQVceBDMFDE-I7vb-BRmIsiHcjvoVs44Z92zOW_sBo44OT__pa1_ivfb/exec';
 
@@ -667,7 +705,6 @@
                     splash.style.opacity = "0";
                     setTimeout(() => splash.remove(), 500);
                 }
-                // Trigger dashboard
                 document.getElementById('mainApp').classList.remove('hidden');
                 document.getElementById('mainApp').classList.add('flex');
                 calculateCountdown();
@@ -753,6 +790,8 @@
             document.getElementById('navSignInBtn').classList.add('hidden');
             document.getElementById('navSignOutBtn').classList.remove('hidden');
             document.getElementById('navSignOutBtn').classList.add('flex');
+
+            updatePaymentUI();
         }
 
         function handleLogout() {
@@ -795,6 +834,61 @@
         
         function openPaymentSuccessModal() { document.getElementById('paymentSuccessModal').classList.remove('hidden'); document.getElementById('paymentSuccessModal').classList.add('flex'); }
         function closePaymentSuccessModal() { document.getElementById('paymentSuccessModal').classList.add('hidden'); document.getElementById('paymentSuccessModal').classList.remove('flex'); }
+
+        // -------------------------
+        // PAYMENT UI Logic & External Links
+        // -------------------------
+        function updatePaymentUI() {
+            let amt = parseFloat(document.getElementById('payAmount').value) || 0;
+            let total = amt + (amt * 0.02); // 2% for Razorpay UI text
+            
+            let btnText = amt > 0 ? `Pay ₹${total.toFixed(2)} via Razorpay` : 'Pay via Razorpay';
+            document.getElementById('rzpBtnText').innerText = btnText;
+            
+            let name = document.getElementById('payName').value || '';
+            let akn = document.getElementById('payAkn').value || '';
+            let narration = '';
+            
+            if (akn && name) narration = `${akn} - ${name}`;
+            else if (name) narration = name;
+            else if (akn) narration = akn;
+            
+            document.getElementById('payNarration').value = narration;
+            
+            // Build Base UPI URL (WITHOUT amount for the App Buttons based on new request)
+            let upiBase = "upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR";
+            if(narration) {
+                upiBase += `&tn=${encodeURIComponent(narration)}`;
+            }
+
+            // Bind to App Buttons
+            document.getElementById('btnGpay').href = upiBase;
+            document.getElementById('btnPhonePe').href = upiBase;
+            document.getElementById('btnPaytm').href = upiBase;
+
+            // Build QR Code UPI URL (WITHOUT amount, just Name & Narration)
+            let upiQrStr = "upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR";
+            if(narration) {
+                upiQrStr += `&tn=${encodeURIComponent(narration)}`;
+            }
+            // Update QR Code Image Source
+            document.getElementById('upiQrCode').src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(upiQrStr);
+        }
+
+        function payViaRazorpayLink() {
+            let amt = parseFloat(document.getElementById('payAmount').value) || 0;
+            let total = amt + (amt * 0.02); // Add 2%
+            let narration = document.getElementById('payNarration').value || '';
+            let url = "https://razorpay.me/@cmtaxexperts";
+            
+            if(total > 0) {
+                url += `?amount=${total.toFixed(2)}`;
+                if(narration) {
+                    url += `&description=${encodeURIComponent(narration)}`;
+                }
+            }
+            window.open(url, '_blank');
+        }
 
         // -------------------------
         // BUSINESS & WHATSAPP
@@ -891,13 +985,17 @@
                 const appNo = `ITR4${yy}${mm}${mins}${ss}`;
                 
                 currentItrAppNo = appNo; 
+                
+                // Pre-fill fields for Payment popup link
                 document.getElementById('payPan').value = document.getElementById('s1_pan').value.toUpperCase();
                 document.getElementById('payMobile').value = document.getElementById('s1_mobile').value;
-                document.getElementById('payAkn').value = appNo; // Pre-fill AKN in payment form
+                document.getElementById('payName').value = document.getElementById('s1_name').value.trim();
+                document.getElementById('payAkn').value = appNo;
+                updatePaymentUI();
 
                 const payload = {
                     "action": "ITR",
-                    "Timestamp": new Date().toISOString(),
+                    "#TimeStamp": new Date().toISOString(),
                     "ApplicationNo": appNo,
                     "Name": document.getElementById('s1_name').value.trim(),
                     "Mobile": document.getElementById('s1_mobile').value,
@@ -953,7 +1051,7 @@
         }
 
         // -------------------------
-        // PAYMENT SUBMISSION (With Naming Convention)
+        // PAYMENT SUBMISSION 
         // -------------------------
         async function submitPaymentForm() {
             const btn = document.getElementById('paySubmitBtn');
