@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tax Updates | CM TaxApp</title>
+    
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+    
+    <meta name="theme-color" content="#E2E8F0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            primary: '#c80000', 
+                            accent: '#dc2626',  
+                            dark: '#0B1120',    
+                            text: '#334155',    
+                            heading: '#0F172A', 
+                            muted: '#64748B',   
+                            bg: '#E2E8F0',      
+                            card: '#FFFFFF',
+                            border: '#E2E8F0',
+                            success: '#10B981',
+                            info: '#2563EB'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: var(--tw-colors-brand-bg); -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="font-sans text-brand-text min-h-screen flex flex-col relative pb-10 overflow-x-hidden">
+
+    <!-- Sticky Header -->
+    <header class="flex items-center px-5 pt-5 pb-3 sticky top-0 z-30 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200">
+        <button onclick="window.history.back()" class="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-700 shadow-sm hover:bg-gray-50 transition mr-4">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+        </button>
+        <h1 class="font-bold text-lg text-brand-heading tracking-tight flex-grow">Tax Updates</h1>
+        <button class="text-sm font-bold text-brand-primary hover:text-brand-accent transition">View All</button>
+    </header>
+
+    <main class="px-5 w-full max-w-[600px] mx-auto space-y-5 pt-6">
+        
+        <!-- Card 1: ITR Due Date -->
+        <div class="bg-white rounded-[24px] p-5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col gap-4 transition-shadow hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.08)]">
+            <div class="flex items-start gap-4">
+                <!-- Icon Block -->
+                <div class="w-[75px] h-[75px] rounded-xl bg-slate-50 border border-slate-100 flex-shrink-0 flex flex-col items-center justify-center relative overflow-hidden">
+                    <i data-lucide="clipboard-list" class="w-8 h-8 text-slate-500 mb-1"></i>
+                    <div class="bg-brand-primary rounded text-[8px] font-bold text-white px-1.5 py-0.5 uppercase tracking-wider">Deadline</div>
+                </div>
+                <!-- Title & Date -->
+                <div class="flex-grow py-1 flex justify-between items-start">
+                    <div class="pr-2">
+                        <h4 class="text-[16px] font-bold text-gray-900 leading-tight">ITR Due Date for Individual</h4>
+                    </div>
+                    <div class="flex flex-col items-center justify-center min-w-[75px]">
+                        <i data-lucide="calendar" class="w-6 h-6 text-brand-primary mb-1"></i>
+                        <span class="text-[11px] font-bold text-brand-primary text-center whitespace-nowrap">Jul 31, 2026</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full h-px bg-gray-100"></div>
+            <p class="text-[13px] text-gray-600 leading-relaxed text-justify">
+                For most individuals and HUFs not requiring a tax audit, the ITR filing deadline for FY 2025–26 (AY 2026–27) is 31 July 2026 for ITR-1 and ITR-2. However, individuals, HUFs, and firms filing ITR-3 or ITR-4 for business or professional income without an audit requirement have a newly extended deadline of 31 August 2026. Missing the 31 July 2026 deadline for standard returns will force you into filing a belated return, which must be submitted by 31 December 2026. Filing a belated return incurs a late fee of up to Rs 5,000 under Section 234F, along with penal interest of 1% per month under Section 234A on any outstanding tax.
+            </p>
+        </div>
+
+        <!-- Card 2: Tax Audit Due Date -->
+        <div class="bg-white rounded-[24px] p-5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col gap-4 transition-shadow hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.08)]">
+            <div class="flex items-start gap-4">
+                <!-- Icon Block -->
+                <div class="w-[75px] h-[75px] rounded-xl bg-slate-50 border border-slate-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                    <i data-lucide="search-check" class="w-9 h-9 text-slate-500"></i>
+                </div>
+                <!-- Title & Date -->
+                <div class="flex-grow py-1 flex justify-between items-start">
+                    <div class="pr-2">
+                        <h4 class="text-[16px] font-bold text-gray-900 leading-tight">Tax Audit Due Date</h4>
+                    </div>
+                    <div class="flex flex-col items-center justify-center min-w-[75px]">
+                        <i data-lucide="calendar" class="w-6 h-6 text-brand-primary mb-1"></i>
+                        <span class="text-[11px] font-bold text-brand-primary text-center whitespace-nowrap">Sep 30, 2026</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full h-px bg-gray-100"></div>
+            <p class="text-[13px] text-gray-600 leading-relaxed text-justify">
+                For businesses and professionals requiring a tax audit for FY 2025-26 (AY 2026-27), the tax audit report (Form 3CA/3CB and 3CD) must be submitted by 30 September 2026. Following the successful upload of the audit report, the corresponding income tax return must then be filed by 31 October 2026. A tax audit under Section 44AB is legally mandatory for businesses whose turnover exceeds Rs. 1 crore (or Rs. 10 crore if cash transactions account for less than 5% of total receipts), and for professionals with gross receipts exceeding Rs. 50 lakh. Failure to furnish the audit report within this deadline attracts a strict penalty of 0.5% of the total turnover or gross receipts, subject to a maximum cap of Rs. 1,50,000 under Section 271B.
+            </p>
+        </div>
+
+        <!-- Card 3: New Key Changes -->
+        <div class="bg-white rounded-[24px] p-5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col gap-4 transition-shadow hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.08)]">
+            <div class="flex items-start gap-4">
+                <!-- Icon Block -->
+                <div class="w-[75px] h-[75px] rounded-xl bg-slate-50 border border-slate-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                    <i data-lucide="layout-template" class="w-9 h-9 text-slate-500"></i>
+                </div>
+                <!-- Title & Date -->
+                <div class="flex-grow py-1 flex justify-between items-start">
+                    <div class="pr-2">
+                        <h4 class="text-[16px] font-bold text-gray-900 leading-tight">New Key Changes</h4>
+                    </div>
+                    <div class="flex flex-col items-center justify-center min-w-[75px]">
+                        <i data-lucide="calendar" class="w-6 h-6 text-brand-primary mb-1"></i>
+                        <span class="text-[11px] font-bold text-brand-primary text-center whitespace-nowrap">AY 2026-27</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full h-px bg-gray-100"></div>
+            <p class="text-[13px] text-gray-600 leading-relaxed text-justify">
+                Several critical compliance changes apply for AY 2026-27. Most importantly, the new income tax regime is now the absolute default tax regime; any returns filed after the standard due date are automatically processed under this new regime, stripping taxpayers of the flexibility to switch back. Taxpayers now have the flexibility to file a revised return or a belated return within 12 months following the close of the tax year, meaning by 31 March 2027 for the 2025-26 tax year. If a taxpayer misses filing completely, an Updated ITR (ITR-U) can be filed up to 48 months from the end of AY 2026–27 (by 31 March 2031), subject to severe additional taxes ranging from 25% to 70% of the tax due. Furthermore, there is a permanent one-month extension (now due 31 August 2026) introduced via the Finance Act 2026 for non-audit business and professional taxpayers utilizing ITR-3 and ITR-4.
+            </p>
+        </div>
+
+        <!-- Card 4: Who Must File ITR -->
+        <div class="bg-white rounded-[24px] p-5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col gap-4 transition-shadow hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.08)]">
+            <div class="flex items-start gap-4">
+                <!-- Icon Block -->
+                <div class="w-[75px] h-[75px] rounded-xl bg-slate-50 border border-slate-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                    <i data-lucide="users" class="w-9 h-9 text-slate-500"></i>
+                </div>
+                <!-- Title & Date -->
+                <div class="flex-grow py-1 flex justify-between items-start">
+                    <div class="pr-2">
+                        <h4 class="text-[16px] font-bold text-gray-900 leading-tight">Who Must File ITR</h4>
+                    </div>
+                    <div class="flex flex-col items-center justify-center min-w-[75px]">
+                        <i data-lucide="calendar" class="w-6 h-6 text-brand-primary mb-1"></i>
+                        <span class="text-[11px] font-bold text-brand-primary text-center whitespace-nowrap">Know More</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full h-px bg-gray-100"></div>
+            <p class="text-[13px] text-gray-600 leading-relaxed text-justify">
+                Filing an Income Tax Return is legally mandatory for any individual whose gross total income exceeds the basic exemption limit before claiming any chapter VI-A deductions. Furthermore, businesses operating under the presumptive taxation scheme (Section 44AD) must file an ITR and undergo a formal tax audit if they opt out of the scheme after having used it previously, or if their declared profit falls below the prescribed percentage while their total income simultaneously exceeds the basic exemption limit. Professionals registered under presumptive taxation (Section 44ADA) must also file and submit to an audit if they declare profit below 50% of gross receipts while their total income surpasses the exemption limit. Registered companies and LLPs are universally required to file an ITR and undergo mandatory statutory audits by 31 October 2026, regardless of their profit status.
+            </p>
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
