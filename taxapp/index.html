@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CM TaxApp | Corporate Dashboard</title>
     
-    <!-- Favicon & App Icons -->
+    <!-- Favicon & App Icons (1x1) -->
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="apple-touch-icon" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
@@ -30,22 +30,12 @@
                     colors: {
                         brand: {
                             primary: '#111827', 
-                            accent: '#000000',  
                             dark: '#0B1120',    
                             text: '#334155',    
                             heading: '#0F172A', 
                             muted: '#64748B',   
-                            bg: '#F8FAFC',      
-                            card: '#FFFFFF',
-                            border: '#E2E8F0',
-                            success: '#10B981',
-                            info: '#2563EB'
+                            bg: '#F8FAFC'      
                         }
-                    },
-                    boxShadow: {
-                        'corporate': '0 10px 30px -10px rgba(11, 17, 32, 0.4)', 
-                        'modal': '0 10px 40px -10px rgba(15, 23, 42, 0.1)',
-                        'header': '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
                     }
                 }
             }
@@ -56,17 +46,17 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        .corp-input, .corp-select, .corp-textarea {
-            width: 100%; border: 1px solid #E2E8F0; border-radius: 8px; padding: 14px 18px;
+        .corp-input, .corp-select {
+            width: 100%; border: 1px solid #E2E8F0; border-radius: 10px; padding: 14px 18px;
             font-size: 16px; color: #0F172A; background: #FFFFFF; transition: all 0.2s ease; outline: none; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
-        .corp-input:focus, .corp-select:focus, .corp-textarea:focus { 
+        .corp-input:focus, .corp-select:focus { 
             border-color: #111827; box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.1);
         }
         .corp-input[readonly] { background: #F1F5F9; color: #64748B; cursor: not-allowed; }
         
         .file-upload-wrapper {
-            position: relative; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 20px; text-align: center; background: #FFFFFF; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            position: relative; border: 1px dashed #CBD5E1; border-radius: 10px; padding: 24px; text-align: center; background: #FFFFFF; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
         .file-upload-wrapper:hover { border-color: #111827; background: #F8FAFC; }
         .file-upload-wrapper input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
@@ -77,15 +67,11 @@
         @keyframes slideRight { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes drawCheck { to { stroke-dashoffset: 0; } }
         @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .animated-check { stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawCheck 0.5s ease forwards; }
-
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 14px 24px; border-radius: 10px; font-weight: 600; font-size: 15px; opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 999999; display: flex; align-items: center; gap: 10px; white-space: nowrap; box-shadow: 0 6px 20px rgba(0,0,0,0.15); color: #FFFFFF; border: none; }
-        .toast.success { background: var(--tw-colors-brand-success); }
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 16px 28px; border-radius: 12px; font-weight: 600; font-size: 16px; opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 999999; display: flex; align-items: center; gap: 12px; white-space: nowrap; box-shadow: 0 6px 24px rgba(0,0,0,0.15); color: #FFFFFF; border: none; }
+        .toast.success { background: #10B981; }
         .toast.error { background: #EF4444; }
-        .toast.default { background: var(--tw-colors-brand-info); }
         .toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
         
         .bank-details-wrapper { transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
@@ -94,87 +80,45 @@
 </head>
 <body class="font-sans text-brand-text min-h-screen flex flex-col relative overflow-x-hidden">
 
-    <!-- Splash Screen -->
+    <!-- Splash Screen (1x3) -->
     <div id="splash" class="fixed inset-0 z-[100] bg-[#f8fafc] flex flex-col items-center justify-center transition-opacity duration-500">
         <img src="assets/name.png" alt="CM TaxApp" class="w-64 h-auto animate-pulse object-contain">
     </div>
 
     <!-- PWA Install Prompt Modal -->
-    <div id="pwaInstallPrompt" class="fixed inset-0 z-[110] hidden flex-col bg-gray-900/80 backdrop-blur-sm justify-end items-center px-4 pb-8 transition-opacity">
+    <div id="pwaInstallPrompt" class="fixed inset-0 z-[110] hidden flex-col bg-gray-900/60 backdrop-blur-sm justify-end items-center px-4 pb-8 transition-opacity">
         <div class="bg-white rounded-3xl w-full max-w-[400px] p-6 shadow-2xl relative flex flex-col items-center animate-[slideDown_0.3s_ease-out]">
             <button onclick="closePWAInstall()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <img src="assets/logo.png" alt="App Icon" class="w-16 h-16 mb-4 rounded-xl shadow-sm border border-gray-100 p-1">
-            <h3 class="text-center font-bold text-xl text-gray-900 mb-2">Install CM TaxApp</h3>
-            <p class="text-center text-base text-gray-500 mb-6">Install our app to your home screen for quick, seamless access to all your corporate tax tools.</p>
-            <div class="flex gap-3 w-full">
-                <button onclick="closePWAInstall()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition text-base">Not Now</button>
-                <button onclick="installPWA()" class="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md transition text-base">Install App</button>
+            <div class="w-16 h-16 bg-gray-900 rounded-xl flex items-center justify-center mb-5 shadow-sm">
+                <!-- App icon (1x1) -->
+                <img src="assets/logo.png" alt="CM TaxApp" class="w-10 h-10 object-contain filter brightness-0 invert">
+            </div>
+            <h3 class="text-center font-bold text-2xl text-gray-900 mb-2">Install CM TaxApp</h3>
+            <p class="text-center text-base text-gray-500 mb-6">Install our app to your home screen for quick, seamless access to your dashboard.</p>
+            <div class="flex gap-4 w-full">
+                <button onclick="closePWAInstall()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-4 rounded-xl transition text-base">Not Now</button>
+                <button onclick="installPWA()" class="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-md transition text-base">Install App</button>
             </div>
         </div>
     </div>
 
-    <!-- Login Modal -->
-    <div id="loginScreen" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-md transition-opacity items-center justify-center px-4 overflow-y-auto pt-10 pb-10">
-        <div class="bg-white rounded-[28px] w-full max-w-[420px] p-7 shadow-2xl relative flex flex-col animate-[zoomIn_0.3s_ease-out] my-auto">
+    <!-- Login Modal (Google ONLY) -->
+    <div id="loginScreen" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/70 backdrop-blur-md transition-opacity items-center justify-center px-5 overflow-y-auto pt-10 pb-10">
+        <div class="bg-white rounded-[32px] w-full max-w-[420px] p-8 shadow-2xl relative flex flex-col items-center animate-[zoomIn_0.3s_ease-out] my-auto">
             <button onclick="closeLoginModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-900 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
             
-            <div class="flex flex-col items-center text-center w-full mb-6">
-                <div class="w-16 h-16 bg-gray-900 rounded-2xl flex items-center justify-center mb-4 shadow-sm">
-                    <img src="assets/logo.png" alt="CM TaxApp" class="w-10 h-10 object-contain filter brightness-0 invert">
-                </div>
-                <h1 class="text-2xl font-black text-gray-900 tracking-tight mb-1">Welcome Back</h1>
-                <p class="text-gray-500 text-base">Sign in to your dashboard securely.</p>
+            <div class="w-20 h-20 bg-gray-900 rounded-2xl flex items-center justify-center mb-6 shadow-md mt-2">
+                <!-- App logo (1x1) -->
+                <img src="assets/logo.png" alt="CM TaxApp" class="w-12 h-12 object-contain filter brightness-0 invert">
             </div>
-
-            <!-- Login Type Tabs -->
-            <div class="flex w-full bg-gray-100 rounded-xl p-1.5 mb-5">
-                <button id="tabEmail" onclick="switchLoginTab('email')" class="flex-1 py-2.5 text-base font-bold bg-white shadow-sm rounded-lg text-gray-900 transition">Email</button>
-                <button id="tabMobile" onclick="switchLoginTab('mobile')" class="flex-1 py-2.5 text-base font-bold text-gray-500 hover:text-gray-900 rounded-lg transition bg-transparent">Mobile OTP</button>
-            </div>
-
-            <!-- Email & Password Form -->
-            <div id="formEmail" class="w-full space-y-4 block">
-                <input type="email" class="corp-input bg-gray-50" placeholder="Email Address">
-                
-                <div class="relative">
-                    <input type="password" id="loginPassword" class="corp-input bg-gray-50 pr-12" placeholder="Password">
-                    <button type="button" onclick="togglePassword('loginPassword', 'eyeIcon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition">
-                        <i id="eyeIcon" data-lucide="eye" class="w-5 h-5"></i>
-                    </button>
-                </div>
-
-                <div class="flex justify-between items-center text-base px-1 py-1">
-                    <label class="flex items-center gap-2 text-gray-600 cursor-pointer select-none">
-                        <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-gray-900 focus:ring-gray-900 cursor-pointer">
-                        <span class="font-medium text-sm">Remember me</span>
-                    </label>
-                    <a href="#" class="text-gray-900 font-bold text-sm hover:underline">Forgot?</a>
-                </div>
-
-                <!-- Triggers Secure Login Popup -->
-                <button type="button" onclick="promptSecureLogin()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-md transition text-base mt-2">Sign In</button>
-            </div>
-
-            <!-- Mobile OTP Form -->
-            <div id="formMobile" class="w-full space-y-4 hidden">
-                <input type="tel" class="corp-input bg-gray-50" placeholder="Mobile Number" maxlength="10">
-                <!-- Triggers Secure Login Popup -->
-                <button id="btnSendOtp" onclick="promptSecureLogin()" type="button" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-md transition text-base">Send OTP</button>
-            </div>
-
-            <!-- Divider -->
-            <div class="w-full flex items-center gap-3 my-5">
-                <div class="h-px bg-gray-200 flex-grow"></div>
-                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Or continue with</span>
-                <div class="h-px bg-gray-200 flex-grow"></div>
-            </div>
+            <h1 class="text-3xl font-black text-gray-900 tracking-tight mb-2">Welcome Back</h1>
+            <p class="text-gray-500 text-base mb-10 text-center leading-relaxed">Sign in to your dashboard securely using your Google account.</p>
 
             <!-- Google Auth Container -->
-            <div id="googleAuthContainer" class="w-full flex justify-center mb-5"></div>
+            <div id="googleAuthContainer" class="w-full flex justify-center mb-8"></div>
 
             <!-- Footer Links -->
-            <div class="w-full flex flex-col items-center justify-center space-y-3 mt-1">
-                <p class="text-sm text-gray-500 font-medium">Don't have an account? <a href="#" class="text-gray-900 font-bold hover:underline">Sign Up details</a></p>
+            <div class="w-full flex flex-col items-center justify-center space-y-4 mt-2">
                 <a href="tel:+919946151111" class="text-sm text-gray-500 font-bold flex items-center justify-center gap-2 hover:text-gray-900 transition">
                     <i data-lucide="headset" class="w-4 h-4"></i> Contact Support
                 </a>
@@ -182,31 +126,33 @@
         </div>
     </div>
 
-    <!-- SECURE LOGIN ALERT MODAL -->
-    <div id="secureLoginModal" class="fixed inset-0 z-[120] hidden flex-col bg-gray-900/60 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
-        <div class="bg-white rounded-3xl w-full max-w-[340px] p-6 shadow-2xl relative flex flex-col items-center animate-[zoomIn_0.2s_ease-out]">
-            <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 mb-4 border border-blue-100">
-                <i data-lucide="shield-alert" class="w-8 h-8"></i>
+    <!-- MY FILINGS / USER DASHBOARD MODAL -->
+    <div id="myFilingsModal" class="fixed inset-0 z-[90] hidden flex-col bg-[#F8FAFC]">
+        <div class="px-5 py-5 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
+            <h3 class="font-bold text-xl text-gray-900">My Filings</h3>
+            <button onclick="closeMyFilingsModal()" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
+        <div class="overflow-y-auto no-scrollbar p-5 flex-grow">
+            <div class="max-w-[600px] mx-auto space-y-4 pt-2" id="myFilingsContainer">
+                <div class="flex flex-col items-center justify-center py-24 text-gray-400">
+                    <i data-lucide="loader-2" class="w-10 h-10 animate-spin mb-4"></i>
+                    <p class="text-base font-semibold">Loading your records...</p>
+                </div>
             </div>
-            <h3 class="text-center font-bold text-xl text-gray-900 mb-2">Secured Access</h3>
-            <p class="text-center text-base text-gray-500 mb-6">For secured access, please try Google Login.</p>
-            <button onclick="closeSecureLoginModal()" class="w-full bg-gray-900 hover:bg-black text-white py-4 rounded-xl font-bold shadow-md transition text-base">
-                Okay
-            </button>
         </div>
     </div>
 
     <!-- HEADER DUE DATE ALARM MODAL -->
     <div id="alarmModal" class="fixed inset-0 z-[80] hidden flex-col bg-gray-900/60 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
-        <div class="bg-white rounded-3xl w-full max-w-[360px] p-8 shadow-2xl relative animate-[slideDown_0.3s_ease-out]">
-            <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-900 mx-auto mb-4 border border-gray-200">
+        <div class="bg-white rounded-3xl w-full max-w-[380px] p-8 shadow-2xl relative animate-[slideDown_0.3s_ease-out]">
+            <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-900 mx-auto mb-5 border border-gray-200">
                 <i data-lucide="bell-ring" class="w-8 h-8 animate-pulse"></i>
             </div>
             <h3 class="text-center font-bold text-2xl text-brand-heading mb-3">Important Deadline</h3>
-            <p class="text-center text-base text-gray-600 mb-6 leading-relaxed">
+            <p class="text-center text-base text-gray-600 mb-8 leading-relaxed">
                 The due date to file your Individual & HUF Income Tax Return is <strong class="text-gray-900">31st July 2026</strong>. Please file early to avoid penalties.
             </p>
-            <button onclick="closeAlarmModal()" class="w-full bg-gray-900 hover:bg-black text-white py-4 rounded-xl font-bold shadow-md transition text-base">
+            <button onclick="closeAlarmModal()" class="w-full bg-gray-900 hover:bg-black text-white py-4 rounded-xl font-bold shadow-md transition text-lg">
                 I Understand
             </button>
         </div>
@@ -214,8 +160,8 @@
 
     <!-- PAYMENT SUCCESS OVERLAY MODAL -->
     <div id="paymentSuccessModal" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
-        <div class="bg-[#1F2937] border border-gray-700 rounded-[28px] w-full max-w-[340px] p-8 shadow-2xl flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
-            <div class="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 mb-5 border-2 border-green-500/50">
+        <div class="bg-[#1F2937] border border-gray-700 rounded-[32px] w-full max-w-[360px] p-8 shadow-2xl flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
+            <div class="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 mb-6 border-2 border-green-500/50">
                 <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <path class="animated-check" d="M20 6L9 17l-5-5"/>
                 </svg>
@@ -224,39 +170,9 @@
             <p class="text-center text-base text-gray-300 mb-8">
                 Your payment document has been submitted securely.
             </p>
-            <button onclick="closePaymentSuccessModal()" class="w-full bg-white text-gray-900 py-4 rounded-2xl font-bold shadow-md hover:bg-gray-100 transition text-base">
+            <button onclick="closePaymentSuccessModal()" class="w-full bg-white text-gray-900 py-4 rounded-2xl font-bold shadow-md hover:bg-gray-100 transition text-lg">
                 Done
             </button>
-        </div>
-    </div>
-
-    <!-- ITR SUBMISSION SUCCESS MODAL -->
-    <div id="itrSuccessModal" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
-        <div class="bg-[#1F2937] border border-gray-700 rounded-[28px] w-full max-w-[340px] p-8 shadow-2xl flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
-            <div class="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 mb-5 border-2 border-green-500/50">
-                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path class="animated-check" d="M20 6L9 17l-5-5"/>
-                </svg>
-            </div>
-            <h3 class="text-center font-bold text-2xl text-white mb-2">Submission Successful</h3>
-            <p class="text-center text-base text-gray-300 mb-6">Your documents have been securely transmitted.</p>
-
-            <div class="bg-gray-900/50 border border-gray-700 rounded-xl p-4 w-full mb-6 text-center shadow-inner">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Reference Number</p>
-                <p id="successAppNo" class="font-mono font-bold text-white text-xl tracking-wider"></p>
-            </div>
-
-            <div class="w-full space-y-3">
-                <button onclick="whatsappITR()" class="w-full bg-[#25D366] text-white font-bold py-4 rounded-xl shadow-md flex items-center justify-center gap-2 hover:bg-green-600 transition text-base">
-                    <i data-lucide="message-square" class="w-5 h-5"></i> Fast Processing
-                </button>
-                <button onclick="openPaymentModal(); closeItrSuccessModal();" class="w-full bg-white text-gray-900 font-bold py-4 rounded-xl shadow-md flex items-center justify-center gap-2 hover:bg-gray-100 transition text-base">
-                    <i data-lucide="indian-rupee" class="w-5 h-5"></i> Proceed to Payment
-                </button>
-                <button onclick="closeItrSuccessModal()" class="w-full bg-transparent text-gray-400 font-bold py-3 rounded-xl hover:text-white transition text-base">
-                    Done
-                </button>
-            </div>
         </div>
     </div>
 
@@ -266,7 +182,8 @@
         <!-- Fixed Sticky Header -->
         <header class="fixed top-0 left-0 w-full z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-200 px-5 pt-6 pb-4 flex justify-between items-center">
             <div class="flex items-center">
-                <img src="assets/name.png" alt="CM TaxApp" class="h-10 object-contain">
+                <!-- Header Logo (1x3) -->
+                <img src="assets/name.png" alt="CM TaxApp" class="h-9 object-contain">
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="openSearch()" class="w-11 h-11 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 shadow-sm hover:bg-gray-100 transition">
@@ -274,47 +191,51 @@
                 </button>
                 <button onclick="openAlarmModal()" class="relative w-11 h-11 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 shadow-sm hover:bg-gray-100 transition">
                     <i data-lucide="bell" class="w-5 h-5"></i>
-                    <span class="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-[#c80000] rounded-full animate-pulse border-2 border-white"></span>
+                    <span class="absolute top-3 right-3 w-2.5 h-2.5 bg-red-600 rounded-full animate-pulse border border-white"></span>
                 </button>
-                <img id="headerAvatar" src="assets/logo.png" class="w-11 h-11 rounded-full border border-gray-200 object-cover cursor-pointer shadow-sm bg-white" onclick="openLoginModal()" alt="Profile">
+                <!-- Profile Avatar Button -->
+                <button id="headerAvatarBtn" onclick="handleProfileClick()" class="w-11 h-11 rounded-full border border-gray-200 shadow-sm bg-white overflow-hidden flex items-center justify-center hover:bg-gray-50 transition">
+                    <i data-lucide="user" class="w-5 h-5 text-gray-500" id="headerAvatarIcon"></i>
+                    <img id="headerAvatarImg" src="" class="w-full h-full object-cover hidden" alt="Profile">
+                </button>
             </div>
         </header>
 
         <!-- Main Content Area -->
-        <main class="px-5 w-full max-w-[600px] mx-auto space-y-8 pt-[100px] pb-28">
+        <main class="px-5 w-full max-w-[600px] mx-auto space-y-8 pt-[100px] pb-32">
             
-            <!-- Welcome Section (Corporate & Larger) -->
+            <!-- Welcome Section (Clean & Corporate) -->
             <div>
-                <div class="flex items-center gap-2 mb-1.5">
+                <div class="flex items-center gap-3 mb-1.5">
                     <span class="text-3xl leading-none">👋</span>
-                    <h1 class="text-2xl font-black text-gray-900 tracking-tight leading-none">Welcome Back</h1>
+                    <h1 class="text-[32px] font-black text-gray-900 tracking-tight leading-none">Welcome Back</h1>
                 </div>
                 <p class="text-base text-gray-500 font-semibold pl-1.5">File your Taxes with Confidence.</p>
             </div>
 
-            <!-- Due Date Reminder Card -->
+            <!-- Due Date Reminder Card (Compact Size) -->
             <div class="bg-gray-900 rounded-[28px] p-6 shadow-lg relative overflow-hidden text-white">
-                <i data-lucide="calculator" class="absolute -right-4 -bottom-4 w-40 h-40 text-white opacity-[0.04]"></i>
+                <i data-lucide="calculator" class="absolute -right-4 -bottom-4 w-40 h-40 text-white opacity-[0.03]"></i>
                 <div class="flex justify-between items-center relative z-10 mb-6">
                     <div>
-                        <h2 class="font-bold text-lg mb-2 flex items-center gap-2 text-white tracking-wide">
+                        <h2 class="font-bold text-xl mb-1.5 flex items-center gap-2 text-white tracking-wide">
                             ITR Due Date
                             <span class="w-2 h-2 rounded-full bg-white inline-block shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
                         </h2>
-                        <p class="text-sm text-gray-400 mb-5 font-medium">Assessment Year 2026-27</p>
+                        <p class="text-sm text-gray-400 mb-4 font-medium">Assessment Year 2026-27</p>
                         
                         <div class="inline-block border border-gray-700 bg-gray-800/50 px-4 py-2 rounded-xl">
-                            <span class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase">Deadline</span>
+                            <span class="block text-[11px] font-bold tracking-widest text-gray-400 uppercase">Deadline</span>
                             <span class="block text-base font-bold text-white mt-0.5">31 July 2026</span>
                         </div>
                     </div>
                     <!-- Circular Graph -->
-                    <div class="relative w-28 h-28 flex items-center justify-center bg-white rounded-full shadow-inner border-[5px] border-gray-800">
+                    <div class="relative w-28 h-28 flex items-center justify-center bg-white rounded-full shadow-inner border-[4px] border-gray-800">
                         <svg class="w-full h-full transform -rotate-90 absolute" viewBox="0 0 100 100">
                             <circle cx="50" cy="50" r="42" fill="none" stroke="#f1f5f9" stroke-width="12"></circle>
                             <circle id="donutProgress" cx="50" cy="50" r="42" fill="none" stroke="#c80000" stroke-width="12" stroke-dasharray="263.89" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000 ease-out"></circle>
                         </svg>
-                        <div class="absolute flex flex-col items-center justify-center">
+                        <div class="absolute flex flex-col items-center justify-center mt-1">
                             <span id="donutDaysLeft" class="text-4xl font-black leading-none text-gray-900 tracking-tight">--</span>
                             <span class="text-[10px] font-bold text-gray-500 mt-1 tracking-widest uppercase">Days</span>
                         </div>
@@ -327,56 +248,57 @@
                 </button>
             </div>
 
-            <!-- Quick Actions Grid -->
+            <!-- Quick Actions Grid (Refined 3D Cards) -->
             <div>
                 <h3 class="text-xl font-bold text-gray-900 mb-5 px-1">Quick Actions</h3>
                 <div class="grid grid-cols-2 gap-5 gap-y-7 pt-2">
                     
                     <div class="relative cursor-pointer group" onclick="openItrModal()">
                         <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-300 rounded-t-lg rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-1"></div>
-                        <div class="bg-white rounded-2xl p-6 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                        <div class="bg-white rounded-2xl p-5 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
                             <div class="flex justify-between items-center mb-3">
-                                <h4 class="text-base font-bold text-slate-700 uppercase tracking-wider">File ITR</h4>
+                                <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wider">File ITR</h4>
                                 <i data-lucide="file-text" class="w-6 h-6 text-slate-400"></i>
                             </div>
                             <div class="w-full h-px bg-slate-100 mb-3"></div>
-                            <p class="text-sm text-slate-500 font-medium leading-relaxed flex-grow">Submit your tax returns securely.</p>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed flex-grow">Submit your tax returns securely.</p>
                         </div>
                     </div>
 
                     <div class="relative cursor-pointer group" onclick="openUploadModal()">
                         <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-blue-200 rounded-t-lg rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-1"></div>
-                        <div class="bg-white rounded-2xl p-6 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                        <div class="bg-white rounded-2xl p-5 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
                             <div class="flex justify-between items-center mb-3">
-                                <h4 class="text-base font-bold text-blue-700 uppercase tracking-wider">Upload</h4>
+                                <h4 class="text-sm font-bold text-blue-700 uppercase tracking-wider">Upload</h4>
                                 <i data-lucide="cloud-upload" class="w-6 h-6 text-blue-400"></i>
                             </div>
                             <div class="w-full h-px bg-slate-100 mb-3"></div>
-                            <p class="text-sm text-slate-500 font-medium leading-relaxed flex-grow">Submit your pending document files.</p>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed flex-grow">Submit your pending document files.</p>
                         </div>
                     </div>
 
                     <div class="relative cursor-pointer group" onclick="openPaymentModal()">
                         <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-indigo-200 rounded-t-lg rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-1"></div>
-                        <div class="bg-white rounded-2xl p-6 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                        <div class="bg-white rounded-2xl p-5 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
                             <div class="flex justify-between items-center mb-3">
-                                <h4 class="text-base font-bold text-indigo-700 uppercase tracking-wider">Payment</h4>
+                                <h4 class="text-sm font-bold text-indigo-700 uppercase tracking-wider">Payment</h4>
                                 <i data-lucide="credit-card" class="w-6 h-6 text-indigo-400"></i>
                             </div>
                             <div class="w-full h-px bg-slate-100 mb-3"></div>
-                            <p class="text-sm text-slate-500 font-medium leading-relaxed flex-grow">Make your secure online payments.</p>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed flex-grow">Make your secure online payments.</p>
                         </div>
                     </div>
 
-                    <div class="relative cursor-pointer group" onclick="openBusinessModal()">
+                    <!-- My Filings Action -->
+                    <div class="relative cursor-pointer group" onclick="handleProfileClick()">
                         <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-teal-200 rounded-t-lg rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-1"></div>
-                        <div class="bg-white rounded-2xl p-6 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                        <div class="bg-white rounded-2xl p-5 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
                             <div class="flex justify-between items-center mb-3">
-                                <h4 class="text-base font-bold text-teal-700 uppercase tracking-wider">Services</h4>
-                                <i data-lucide="grid" class="w-6 h-6 text-teal-400"></i>
+                                <h4 class="text-sm font-bold text-teal-700 uppercase tracking-wider">My Filings</h4>
+                                <i data-lucide="folder-check" class="w-6 h-6 text-teal-400"></i>
                             </div>
                             <div class="w-full h-px bg-slate-100 mb-3"></div>
-                            <p class="text-sm text-slate-500 font-medium leading-relaxed flex-grow">Explore additional tools & setups.</p>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed flex-grow">View your status, AKN & receipts.</p>
                         </div>
                     </div>
                 </div>
@@ -390,49 +312,49 @@
                 </div>
                 
                 <div class="space-y-4">
-                    <a href="taxupdates.html" class="bg-white rounded-[40px] p-4 shadow-sm border border-gray-200 flex items-center justify-between gap-3 hover:shadow-md transition group">
-                        <div class="flex items-center gap-4 overflow-hidden pl-2">
+                    <a href="taxupdates.html" class="bg-white rounded-[32px] p-4 shadow-sm border border-gray-100 flex items-center justify-between gap-4 hover:shadow-md transition group">
+                        <div class="flex items-center gap-4 overflow-hidden pl-1">
                             <div class="w-12 h-12 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
                                 <i data-lucide="clipboard-list" class="w-6 h-6 text-gray-600"></i>
                             </div>
                             <div class="truncate">
                                 <h4 class="text-base font-bold text-gray-900 truncate mb-0.5">ITR Due Date for Individual</h4>
-                                <p class="text-sm text-gray-500 truncate">AY 2026-27 filing deadline details</p>
+                                <p class="text-xs text-gray-500 truncate">AY 2026-27 filing deadline details</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 flex-shrink-0 pr-2">
+                        <div class="flex items-center gap-3 flex-shrink-0 pr-1">
                             <span class="text-xs font-bold text-gray-700 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">Jul 31, 2026</span>
                             <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform"></i>
                         </div>
                     </a>
 
-                    <a href="taxupdates.html" class="bg-white rounded-[40px] p-4 shadow-sm border border-gray-200 flex items-center justify-between gap-3 hover:shadow-md transition group">
-                        <div class="flex items-center gap-4 overflow-hidden pl-2">
+                    <a href="taxupdates.html" class="bg-white rounded-[32px] p-4 shadow-sm border border-gray-100 flex items-center justify-between gap-4 hover:shadow-md transition group">
+                        <div class="flex items-center gap-4 overflow-hidden pl-1">
                             <div class="w-12 h-12 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
                                 <i data-lucide="search-check" class="w-6 h-6 text-gray-600"></i>
                             </div>
                             <div class="truncate">
                                 <h4 class="text-base font-bold text-gray-900 truncate mb-0.5">Tax Audit Due Date</h4>
-                                <p class="text-sm text-gray-500 truncate">Form 3CD report upload schedule</p>
+                                <p class="text-xs text-gray-500 truncate">Form 3CD report upload schedule</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 flex-shrink-0 pr-2">
+                        <div class="flex items-center gap-3 flex-shrink-0 pr-1">
                             <span class="text-xs font-bold text-gray-700 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">Sep 30, 2026</span>
                             <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform"></i>
                         </div>
                     </a>
 
-                    <a href="taxupdates.html" class="bg-white rounded-[40px] p-4 shadow-sm border border-gray-200 flex items-center justify-between gap-3 hover:shadow-md transition group">
-                        <div class="flex items-center gap-4 overflow-hidden pl-2">
+                    <a href="taxupdates.html" class="bg-white rounded-[32px] p-4 shadow-sm border border-gray-100 flex items-center justify-between gap-4 hover:shadow-md transition group">
+                        <div class="flex items-center gap-4 overflow-hidden pl-1">
                             <div class="w-12 h-12 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
                                 <i data-lucide="layout-template" class="w-6 h-6 text-gray-600"></i>
                             </div>
                             <div class="truncate">
                                 <h4 class="text-base font-bold text-gray-900 truncate mb-0.5">New Key Changes</h4>
-                                <p class="text-sm text-gray-500 truncate">Default tax regime & compliance rules</p>
+                                <p class="text-xs text-gray-500 truncate">Default tax regime & compliance rules</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 flex-shrink-0 pr-2">
+                        <div class="flex items-center gap-3 flex-shrink-0 pr-1">
                             <span class="text-xs font-bold text-gray-700 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">AY 2026-27</span>
                             <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform"></i>
                         </div>
@@ -465,10 +387,10 @@
                 <i data-lucide="indian-rupee" class="w-6 h-6"></i>
                 <span class="text-xs font-semibold mt-0.5">Payments</span>
             </a>
-            <!-- Navigates to Login Now -->
-            <a href="#" onclick="openLoginModal()" class="flex flex-col items-center gap-1.5 text-gray-400 hover:text-gray-900 transition w-16">
+            <!-- Dynamic Profile Action -->
+            <a href="#" onclick="handleProfileClick()" class="flex flex-col items-center gap-1.5 text-gray-400 hover:text-gray-900 transition w-16">
                 <i data-lucide="user" class="w-6 h-6"></i>
-                <span class="text-xs font-semibold mt-0.5">Profile</span>
+                <span class="text-xs font-semibold mt-0.5" id="navProfileText">Login</span>
             </a>
             <a href="#" onclick="openMenu()" class="flex flex-col items-center gap-1.5 text-gray-400 hover:text-gray-900 transition w-16">
                 <i data-lucide="menu" class="w-6 h-6"></i>
@@ -483,6 +405,7 @@
         <div class="fixed inset-y-0 left-0 w-[80%] max-w-sm bg-white shadow-2xl flex flex-col animate-[slideRight_0.2s_ease-out]">
             <div class="px-6 py-10 border-b border-gray-100 bg-white flex justify-between items-start">
                 <div>
+                    <!-- App icon (1x1) -->
                     <img id="navAvatar" src="assets/logo.png" class="w-16 h-16 rounded-2xl border border-gray-200 object-contain bg-white p-1 hidden mb-4" alt="Profile">
                     <div id="navInitials" class="w-16 h-16 bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-center text-gray-900 mb-4 shadow-sm font-bold text-2xl">GU</div>
                     <h2 id="navName" class="text-xl font-bold text-gray-900 leading-tight">Guest User</h2>
@@ -565,10 +488,6 @@
                         <div>
                             <label class="block text-sm text-gray-600 mb-2 font-bold">Email <span class="text-red-600">*</span></label>
                             <input type="email" id="s1_email" class="corp-input lowercase" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-2 font-bold">Password (Optional)</label>
-                            <input type="password" id="s1_password" class="corp-input">
                         </div>
                     </div>
                 </div>
@@ -791,66 +710,11 @@
             <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5 max-w-[600px] mx-auto mt-2">
                 <input type="text" class="corp-input text-lg" placeholder="PAN or Application No" required>
                 <div class="file-upload-wrapper !py-12">
-                    <i data-lucide="upload-cloud" class="w-10 h-10 mx-auto text-gray-600 mb-3"></i>
+                    <i data-lucide="upload-cloud" class="w-10 h-10 mx-auto text-gray-500 mb-3"></i>
                     <span class="text-base font-bold block text-gray-700">Tap to select file</span>
                     <input type="file" required>
                 </div>
                 <button onclick="closeUploadModal(); showToast('Document Uploaded!', false, true);" class="w-full bg-gray-900 hover:bg-black transition text-white font-bold py-4 rounded-xl shadow-md text-base mt-2">Upload</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MORE SERVICES (BUSINESS SETUP) MODAL -->
-    <div id="businessModal" class="fixed inset-0 z-[60] hidden flex-col bg-white">
-        <div class="px-5 py-5 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
-            <h3 class="font-bold text-xl text-gray-900">More Services</h3>
-            <button onclick="closeBusinessModal()" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-6 h-6"></i></button>
-        </div>
-        <div class="p-6 bg-brand-bg flex-grow">
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5 max-w-[600px] mx-auto mt-2">
-                <p class="text-sm text-gray-600 mb-4 leading-relaxed font-medium">Provide basic details and connect with our expert team to setup your entity or explore more services.</p>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-2 font-bold">Applicant Name <span class="text-red-600">*</span></label>
-                    <input type="text" id="bizName" class="corp-input uppercase" placeholder="Enter Name" required>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-2 font-bold">Proposed Business Name <span class="text-red-600">*</span></label>
-                    <input type="text" id="bizProposedName" class="corp-input uppercase" placeholder="E.g., CM EXPERTS PVT LTD" required>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-2 font-bold">Entity Type <span class="text-red-600">*</span></label>
-                    <select id="bizType" class="corp-select" required>
-                        <option value="Proprietorship">Sole Proprietorship</option>
-                        <option value="Partnership">Partnership</option>
-                        <option value="LLP">Limited Liability Partnership</option>
-                        <option value="Private Limited">Private Limited Company</option>
-                    </select>
-                </div>
-                
-                <div class="flex gap-4 pt-5 border-t border-gray-100 mt-6">
-                    <button onclick="callAdmin()" class="w-[30%] bg-white border border-gray-200 text-gray-900 font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition shadow-sm text-base">
-                        <i data-lucide="phone" class="w-5 h-5"></i> Call
-                    </button>
-                    <button onclick="whatsappAdminBusiness()" class="w-[70%] bg-[#25D366] hover:bg-green-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition shadow-md text-base">
-                        <i data-lucide="message-circle" class="w-5 h-5"></i> WhatsApp
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="settingsModal" class="fixed inset-0 z-[60] hidden flex-col bg-white">
-        <div class="px-5 py-5 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
-            <h3 class="font-bold text-xl text-gray-900">Settings</h3>
-            <button onclick="closeSettingsModal()" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-6 h-6"></i></button>
-        </div>
-        <div class="p-6 bg-brand-bg flex-grow">
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5 max-w-[600px] mx-auto mt-2">
-                <div>
-                    <label class="block text-sm text-gray-600 mb-2 font-bold">Support Contact</label>
-                    <input type="tel" class="corp-input text-lg" value="+91 99461 51111">
-                </div>
-                <button onclick="closeSettingsModal(); showToast('Settings Saved!', false, false);" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-md text-base transition mt-2">Save Changes</button>
             </div>
         </div>
     </div>
@@ -880,9 +744,7 @@
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the A2HS prompt');
-                    }
+                    if (choiceResult.outcome === 'accepted') { console.log('User accepted the A2HS prompt'); }
                     deferredPrompt = null;
                     closePWAInstall();
                 });
@@ -914,13 +776,7 @@
         // -------------------------
         const GOOGLE_CLIENT_ID = "753272952222-c1pgj8cb8g7vte82sp6kevd3mku17cca.apps.googleusercontent.com"; 
         
-        let currentUser = {
-            name: "Guest User",
-            email: "guest@example.com",
-            picture: "",
-            pan: "",
-            mobile: ""
-        };
+        let currentUser = { name: "Guest User", email: "guest@example.com", picture: "" };
 
         window.onload = function () {
             try {
@@ -935,7 +791,7 @@
                     );
                 }
             } catch (error) {
-                console.warn("Google Sign-In disabled due to Apps Script iframe constraints.");
+                console.warn("Google Sign-In disabled or offline.");
             }
         };
 
@@ -957,193 +813,221 @@
             populateUserData();
             closeLoginModal();
             logUserSignIn(currentUser.name, currentUser.email);
+            showToast("Successfully Logged In", false, true);
         }
 
         function logUserSignIn(name, email) {
-            const payload = {
-                "action": "USER_LOGIN",
-                "#TimeStamp": new Date().toISOString(),
-                "Name": name,
-                "Email": email
-            };
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(payload),
-                mode: 'no-cors'
-            }).catch(err => console.error("Login tracking failed", err));
+            const payload = { "action": "USER_LOGIN", "#TimeStamp": new Date().toISOString(), "Name": name, "Email": email };
+            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), mode: 'no-cors' }).catch(err => console.error(err));
         }
 
         function populateUserData() {
-            document.getElementById('dashName').innerText = currentUser.name;
-            document.getElementById('s1_name').value = currentUser.name;
-            document.getElementById('s1_email').value = currentUser.email;
-            document.getElementById('bizName').value = currentUser.name;
-            document.getElementById('payName').value = currentUser.name;
+            const firstName = currentUser.name.split(' ')[0];
+            if(currentUser.name !== "Guest User") {
+                document.getElementById('dashName').innerText = `, ${firstName}`;
+                document.getElementById('dashName').classList.remove('hidden');
+                document.getElementById('navProfileText').innerText = "Profile";
+            }
+
+            document.getElementById('s1_name').value = currentUser.name !== "Guest User" ? currentUser.name : "";
+            document.getElementById('s1_email').value = currentUser.email !== "guest@example.com" ? currentUser.email : "";
 
             const initials = currentUser.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
             
             if(currentUser.picture) {
-                document.getElementById('headerAvatar').src = currentUser.picture;
-                document.getElementById('headerAvatar').classList.remove('hidden');
+                document.getElementById('headerAvatarIcon').parentElement.classList.add('hidden');
+                document.getElementById('headerAvatarImg').src = currentUser.picture;
+                document.getElementById('headerAvatarImg').classList.remove('hidden');
+                document.getElementById('headerAvatarBtn').onclick = openMyFilingsModal;
+                
                 document.getElementById('navAvatar').src = currentUser.picture;
                 document.getElementById('navAvatar').classList.remove('hidden');
                 document.getElementById('navInitials').classList.add('hidden');
             } else {
                 document.getElementById('navInitials').innerText = initials;
             }
+            
             document.getElementById('navName').innerText = currentUser.name;
             document.getElementById('navEmail').innerText = currentUser.email;
 
             document.getElementById('navSignInBtn').classList.add('hidden');
             document.getElementById('navSignOutBtn').classList.remove('hidden');
             document.getElementById('navSignOutBtn').classList.add('flex');
-
-            updatePaymentUI();
         }
 
         function handleLogout() {
             closeMenu();
             currentUser = { name: "Guest User", email: "guest@example.com", picture: "" };
             
-            document.getElementById('dashName').innerText = currentUser.name;
+            document.getElementById('dashName').innerText = "";
+            document.getElementById('dashName').classList.add('hidden');
+            document.getElementById('navProfileText').innerText = "Login";
+
             document.getElementById('navName').innerText = currentUser.name;
             document.getElementById('navEmail').innerText = currentUser.email;
             document.getElementById('navInitials').innerText = "GU";
             document.getElementById('navInitials').classList.remove('hidden');
             document.getElementById('navAvatar').classList.add('hidden');
-            document.getElementById('headerAvatar').classList.add('hidden');
+            
+            document.getElementById('headerAvatarImg').classList.add('hidden');
+            document.getElementById('headerAvatarIcon').parentElement.classList.remove('hidden');
+            document.getElementById('headerAvatarBtn').onclick = handleProfileClick;
 
             document.getElementById('navSignInBtn').classList.remove('hidden');
             document.getElementById('navSignOutBtn').classList.add('hidden');
             document.getElementById('navSignOutBtn').classList.remove('flex');
+            
+            showToast("Logged out successfully");
         }
 
         // -------------------------
-        // LOGIN MODAL UI LOGIC
+        // DYNAMIC PROFILE ROUTING
         // -------------------------
-        function openLoginModal() {
+        function handleProfileClick() {
             closeMenu();
-            document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('loginScreen').classList.add('flex');
-            setTimeout(() => { document.getElementById('loginScreen').style.opacity = '1'; }, 10);
-        }
-
-        function closeLoginModal() {
-            document.getElementById('loginScreen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('loginScreen').classList.remove('flex');
-            }, 300);
-        }
-
-        function switchLoginTab(tab) {
-            const emailForm = document.getElementById('formEmail');
-            const mobileForm = document.getElementById('formMobile');
-            const tabEmail = document.getElementById('tabEmail');
-            const tabMobile = document.getElementById('tabMobile');
-
-            if(tab === 'email') {
-                emailForm.classList.remove('hidden');
-                emailForm.classList.add('block');
-                mobileForm.classList.add('hidden');
-                mobileForm.classList.remove('block');
-                
-                tabEmail.classList.replace('text-gray-500', 'text-gray-900');
-                tabEmail.classList.replace('bg-transparent', 'bg-white');
-                tabEmail.classList.add('shadow-sm');
-                
-                tabMobile.classList.replace('text-gray-900', 'text-gray-500');
-                tabMobile.classList.replace('bg-white', 'bg-transparent');
-                tabMobile.classList.remove('shadow-sm');
+            if(currentUser.email !== "guest@example.com") {
+                openMyFilingsModal();
             } else {
-                mobileForm.classList.remove('hidden');
-                mobileForm.classList.add('block');
-                emailForm.classList.add('hidden');
-                emailForm.classList.remove('block');
-                
-                tabMobile.classList.replace('text-gray-500', 'text-gray-900');
-                tabMobile.classList.replace('bg-transparent', 'bg-white');
-                tabMobile.classList.add('shadow-sm');
-                
-                tabEmail.classList.replace('text-gray-900', 'text-gray-500');
-                tabEmail.classList.replace('bg-white', 'bg-transparent');
-                tabEmail.classList.remove('shadow-sm');
+                openLoginModal();
             }
         }
 
-        function togglePassword(inputId, iconId) {
-            const input = document.getElementById(inputId);
-            const icon = document.getElementById(iconId);
-            if(input.type === 'password') {
-                input.type = 'text';
-                icon.setAttribute('data-lucide', 'eye-off');
-            } else {
-                input.type = 'password';
-                icon.setAttribute('data-lucide', 'eye');
-            }
+        // -------------------------
+        // MY FILINGS FETCH LOGIC
+        // -------------------------
+        function openMyFilingsModal() {
+            document.getElementById('myFilingsModal').classList.remove('hidden');
+            document.getElementById('myFilingsModal').classList.add('flex');
+            
+            const container = document.getElementById('myFilingsContainer');
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-24 text-gray-400">
+                    <i data-lucide="loader-2" class="w-10 h-10 animate-spin mb-4"></i>
+                    <p class="text-base font-semibold text-gray-600">Loading your records...</p>
+                </div>`;
             lucide.createIcons();
+
+            fetch(`${SCRIPT_URL}?action=GET_USER_DATA&email=${encodeURIComponent(currentUser.email)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.length === 0) {
+                        container.innerHTML = `
+                            <div class="flex flex-col items-center justify-center py-16 text-center">
+                                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                    <i data-lucide="folder-search" class="w-8 h-8 text-gray-400"></i>
+                                </div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">No Filings Found</h4>
+                                <p class="text-base text-gray-500">You haven't filed any returns yet.</p>
+                                <button onclick="closeMyFilingsModal(); openItrModal();" class="mt-6 bg-gray-900 text-white font-bold py-3.5 px-8 rounded-xl text-base">File ITR Now</button>
+                            </div>`;
+                    } else {
+                        container.innerHTML = '';
+                        data.forEach(item => {
+                            const dateStr = new Date(item.Date).toLocaleDateString('en-IN', {day: 'numeric', month:'short', year:'numeric'});
+                            const card = `
+                                <div class="bg-white p-5 rounded-[20px] shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+                                            <i data-lucide="file-check" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-sm font-bold text-gray-900">${item.Type}</h4>
+                                            <p class="text-[11px] text-gray-500 font-mono mt-0.5">${item.AppNo}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right flex flex-col items-end">
+                                        <span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-2 py-1 rounded-md uppercase tracking-widest mb-1">${item.Status}</span>
+                                        <span class="text-[11px] text-gray-400 font-medium">${dateStr}</span>
+                                    </div>
+                                </div>
+                            `;
+                            container.innerHTML += card;
+                        });
+                    }
+                    lucide.createIcons();
+                })
+                .catch(err => {
+                    container.innerHTML = `<p class="text-center text-sm text-red-500 font-bold py-10">Error loading data. Please try again later.</p>`;
+                });
         }
 
-        function showOtpField() {
-            document.getElementById('btnSendOtp').classList.add('hidden');
-            document.getElementById('otpFieldContainer').classList.remove('hidden');
-            document.getElementById('otpFieldContainer').classList.add('block');
-        }
-
-        function promptSecureLogin() {
-            document.getElementById('secureLoginModal').classList.remove('hidden');
-            document.getElementById('secureLoginModal').classList.add('flex');
-        }
-
-        function closeSecureLoginModal() {
-            document.getElementById('secureLoginModal').classList.add('hidden');
-            document.getElementById('secureLoginModal').classList.remove('flex');
+        function closeMyFilingsModal() {
+            document.getElementById('myFilingsModal').classList.add('hidden');
+            document.getElementById('myFilingsModal').classList.remove('flex');
         }
 
         // -------------------------
+        // GENERAL UTILS
+        // -------------------------
+        function openLoginModal() { closeMenu(); document.getElementById('loginScreen').classList.remove('hidden'); document.getElementById('loginScreen').classList.add('flex'); setTimeout(() => { document.getElementById('loginScreen').style.opacity = '1'; }, 10); }
+        function closeLoginModal() { document.getElementById('loginScreen').style.opacity = '0'; setTimeout(() => { document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('loginScreen').classList.remove('flex'); }, 300); }
+        
+        function openMenu() { document.getElementById('sideMenu').classList.remove('hidden'); }
+        function closeMenu() { document.getElementById('sideMenu').classList.add('hidden'); }
+        
+        function showToast(message, isError = false, isSuccessGreen = false) {
+            const toast = document.getElementById('toast');
+            toast.className = 'toast'; 
+            if (isError) { toast.classList.add('error'); toast.innerHTML = `<i data-lucide="alert-circle" class="w-5 h-5"></i> <span>${message}</span>`; } 
+            else if (isSuccessGreen) { toast.classList.add('success'); toast.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5"></i> <span>${message}</span>`; } 
+            else { toast.classList.add('default'); toast.innerHTML = `<i data-lucide="info" class="w-5 h-5 text-white"></i> <span>${message}</span>`; }
+            lucide.createIcons();
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        function copyText(text) { navigator.clipboard.writeText(text).then(() => showToast("Copied to clipboard!", false, false)); }
+
+        function calculateCountdown() {
+            const targetDate = new Date("July 31, 2026 23:59:59").getTime();
+            const now = new Date().getTime(); 
+            let days = Math.floor((targetDate - now) / (1000 * 60 * 60 * 24));
+            days = days > 0 ? days : 0;
+            
+            document.getElementById('donutDaysLeft').innerText = days;
+            const circle = document.getElementById('donutProgress');
+            const totalDaysScale = 30; 
+            const radius = 42; 
+            const circumference = 2 * Math.PI * radius; 
+            const progress = days / totalDaysScale;
+            const safeProgress = Math.max(0, Math.min(1, progress));
+            const offset = circumference - (safeProgress * circumference);
+            setTimeout(() => { circle.style.strokeDashoffset = offset; }, 100);
+        }
+
         // OTHER MODALS
-        // -------------------------
         function openAlarmModal() { document.getElementById('alarmModal').classList.remove('hidden'); document.getElementById('alarmModal').classList.add('flex'); }
         function closeAlarmModal() { document.getElementById('alarmModal').classList.add('hidden'); document.getElementById('alarmModal').classList.remove('flex'); }
-        
         function openPaymentSuccessModal() { document.getElementById('paymentSuccessModal').classList.remove('hidden'); document.getElementById('paymentSuccessModal').classList.add('flex'); }
         function closePaymentSuccessModal() { document.getElementById('paymentSuccessModal').classList.add('hidden'); document.getElementById('paymentSuccessModal').classList.remove('flex'); }
-        
         function closeItrSuccessModal() { document.getElementById('itrSuccessModal').classList.add('hidden'); document.getElementById('itrSuccessModal').classList.remove('flex'); }
+        function openSearch() { document.getElementById('searchModal').classList.remove('hidden'); document.getElementById('searchModal').classList.add('flex'); document.getElementById('searchInput').focus(); }
+        function closeSearch() { document.getElementById('searchModal').classList.add('hidden'); document.getElementById('searchModal').classList.remove('flex'); }
+        function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex'); }
+        function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); }
+        function openUploadModal() { document.getElementById('uploadModal').classList.remove('hidden'); document.getElementById('uploadModal').classList.add('flex'); }
+        function closeUploadModal() { document.getElementById('uploadModal').classList.add('hidden'); document.getElementById('uploadModal').classList.remove('flex'); }
 
-        // -------------------------
-        // PAYMENT UI Logic & External Links
-        // -------------------------
+        // PAYMENT UI & LINKS
         function updatePaymentUI() {
             let amt = parseFloat(document.getElementById('payAmount').value) || 0;
             let total = amt + (amt * 0.02); 
-            
-            let btnText = amt > 0 ? `Pay ₹${total.toFixed(2)} via Razorpay` : 'Pay via Razorpay';
-            document.getElementById('rzpBtnText').innerText = btnText;
+            document.getElementById('rzpBtnText').innerText = amt > 0 ? `Pay ₹${total.toFixed(2)} via Razorpay` : 'Pay via Razorpay';
             
             let name = document.getElementById('payName').value || '';
             let akn = document.getElementById('payAkn').value || '';
-            let narration = '';
-            
-            if (akn && name) narration = `${akn} - ${name}`;
-            else if (name) narration = name;
-            else if (akn) narration = akn;
-            
+            let narration = (akn && name) ? `${akn} - ${name}` : (name || akn || '');
             document.getElementById('payNarration').value = narration;
             
             let upiBase = "upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR";
-            if(narration) {
-                upiBase += `&tn=${encodeURIComponent(narration)}`;
-            }
+            if(narration) upiBase += `&tn=${encodeURIComponent(narration)}`;
 
             document.getElementById('btnGpay').href = upiBase;
             document.getElementById('btnPhonePe').href = upiBase;
             document.getElementById('btnPaytm').href = upiBase;
 
             let upiQrStr = "upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR";
-            if(narration) {
-                upiQrStr += `&tn=${encodeURIComponent(narration)}`;
-            }
+            if(narration) upiQrStr += `&tn=${encodeURIComponent(narration)}`;
             document.getElementById('upiQrCode').src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(upiQrStr);
         }
 
@@ -1152,62 +1036,18 @@
             let total = amt + (amt * 0.02); 
             let narration = document.getElementById('payNarration').value || '';
             let url = "https://razorpay.me/@cmtaxexperts";
-            
             if(total > 0) {
                 url += `?amount=${total.toFixed(2)}`;
-                if(narration) {
-                    url += `&description=${encodeURIComponent(narration)}`;
-                }
+                if(narration) url += `&description=${encodeURIComponent(narration)}`;
             }
             window.open(url, '_blank');
         }
 
-        // -------------------------
-        // BUSINESS & WHATSAPP
-        // -------------------------
-        function callAdmin() { window.location.href = 'tel:+919946151111'; }
-        
-        function whatsappAdminBusiness() {
-            const name = document.getElementById('bizName').value || 'User';
-            const propName = document.getElementById('bizProposedName').value || 'Not specified';
-            const type = document.getElementById('bizType').value || 'Not specified';
-            const text = encodeURIComponent(`Hello TaxApp Admin,\nI am interested in setting up a new business.\n\n*Applicant Name:* ${name}\n*Proposed Name:* ${propName}\n*Entity Type:* ${type}\n\nPlease contact me.`);
-            window.open(`https://wa.me/919946151111?text=${text}`, '_blank');
-            closeBusinessModal();
-        }
-
-        let currentItrAppNo = '';
         function whatsappITR() {
             const text = encodeURIComponent(`Hello, I have successfully submitted my ITR Details.\n\n*Application No:* ${currentItrAppNo}\n\nPlease process this fast 🚀. I can provide further details if required.`);
             window.open(`https://wa.me/919946151111?text=${text}`, '_blank');
         }
 
-        // -------------------------
-        // DONUT COUNTDOWN
-        // -------------------------
-        function calculateCountdown() {
-            const targetDate = new Date("July 31, 2026 23:59:59").getTime();
-            const now = new Date().getTime(); 
-            let days = Math.floor((targetDate - now) / (1000 * 60 * 60 * 24));
-            days = days > 0 ? days : 0;
-            
-            document.getElementById('donutDaysLeft').innerText = days;
-
-            const circle = document.getElementById('donutProgress');
-            const totalDaysScale = 30; 
-            const radius = 42; 
-            const circumference = 2 * Math.PI * radius; 
-            
-            const progress = days / totalDaysScale;
-            const safeProgress = Math.max(0, Math.min(1, progress));
-            const offset = circumference - (safeProgress * circumference);
-            
-            setTimeout(() => { circle.style.strokeDashoffset = offset; }, 100);
-        }
-
-        // -------------------------
-        // FILE UPLOAD HELPERS
-        // -------------------------
         function readFileAsBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1217,28 +1057,48 @@
             });
         }
 
-        // -------------------------
-        // ITR SUBMISSION
-        // -------------------------
+        // ITR FORM
+        let currentStep = 1;
+        function openItrModal() { 
+            document.getElementById('itrForm').classList.remove('hidden'); document.getElementById('itrForm').classList.add('block');
+            document.getElementById('itrModalNav').classList.remove('hidden'); document.getElementById('itrModalNav').classList.add('flex');
+            document.getElementById('itrModalFooter').classList.remove('hidden'); document.getElementById('itrModalFooter').classList.add('block');
+            document.getElementById('itrModal').classList.remove('hidden'); document.getElementById('itrModal').classList.add('flex'); 
+            showStep(1); 
+        }
+        function closeItrModal() { document.getElementById('itrModal').classList.add('hidden'); document.getElementById('itrModal').classList.remove('flex'); }
+        
+        function showStep(step) {
+            document.getElementById('step1').classList.add('hidden'); document.getElementById('step2').classList.add('hidden'); document.getElementById('step3').classList.add('hidden');
+            document.getElementById('step' + step).classList.remove('hidden');
+            for(let i=1; i<=3; i++) {
+                const nav = document.getElementById('navStep'+i);
+                if(i === step) { nav.classList.add('step-active'); nav.classList.remove('step-inactive'); }
+                else { nav.classList.remove('step-active'); nav.classList.add('step-inactive'); }
+            }
+            const btnBack = document.getElementById('btnBack'); const btnNext = document.getElementById('btnNext'); const btnSubmit = document.getElementById('btnSubmit');
+            if (step === 1) { btnBack.classList.add('hidden'); btnNext.classList.remove('hidden'); btnSubmit.classList.add('hidden'); }
+            else if (step === 2) { btnBack.classList.remove('hidden'); btnNext.classList.remove('hidden'); btnSubmit.classList.add('hidden'); }
+            else if (step === 3) { btnBack.classList.remove('hidden'); btnNext.classList.add('hidden'); btnSubmit.classList.remove('hidden'); }
+            currentStep = step;
+        }
+        function nextStep() { showStep(currentStep + 1); }
+        function prevStep() { showStep(currentStep - 1); }
+
         async function submitItrFinal() {
-            const btn = document.getElementById('btnSubmit');
-            const originalText = btn.innerHTML;
-            
+            const btn = document.getElementById('btnSubmit'); const originalText = btn.innerHTML;
             if(!document.getElementById('s1_name').value || !document.getElementById('s1_pan').value || !document.getElementById('s1_email').value || !document.getElementById('s2_fy').value || !document.getElementById('s2_head').value) {
-                showToast("Please complete all mandatory fields (*).", true, false);
-                return;
+                showToast("Please complete all mandatory fields (*).", true, false); return;
             }
 
             try {
                 btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Submitting...`;
-                btn.disabled = true;
-                lucide.createIcons();
+                btn.disabled = true; lucide.createIcons();
 
                 const processFile = async (inputId) => {
                     const fileInput = document.getElementById(inputId);
                     if (fileInput && fileInput.files.length > 0) {
-                        const file = fileInput.files[0];
-                        const base64 = await readFileAsBase64(file);
+                        const file = fileInput.files[0]; const base64 = await readFileAsBase64(file);
                         return { base64: base64, mimeType: file.type, fileName: file.name };
                     }
                     return null;
@@ -1250,12 +1110,7 @@
                 const othersFile = await processFile('s3_others');
 
                 const now = new Date();
-                const yy = String(now.getFullYear()).slice(-2);
-                const mm = String(now.getMonth() + 1).padStart(2, '0');
-                const mins = String(now.getMinutes()).padStart(2, '0');
-                const ss = String(now.getSeconds()).padStart(2, '0');
-                const appNo = `ITR4${yy}${mm}${mins}${ss}`;
-                
+                const appNo = `ITR4${String(now.getFullYear()).slice(-2)}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
                 currentItrAppNo = appNo; 
                 
                 document.getElementById('payPan').value = document.getElementById('s1_pan').value.toUpperCase();
@@ -1265,42 +1120,19 @@
                 updatePaymentUI();
 
                 const payload = {
-                    "action": "ITR",
-                    "#TimeStamp": new Date().toISOString(),
-                    "ApplicationNo": appNo,
-                    "Name": document.getElementById('s1_name').value.trim(),
-                    "Mobile": document.getElementById('s1_mobile').value,
-                    "Email": document.getElementById('s1_email').value.toLowerCase(),
-                    "PAN": document.getElementById('s1_pan').value.toUpperCase(),
-                    "Password(Optional)": document.getElementById('s1_password').value,
-                    "FY": document.getElementById('s2_fy').value,
-                    "HeadofIncome": document.getElementById('s2_head').value,
-                    "BankStatementURL": bankFile,
-                    "Form16/16AURL": form16File,
-                    "P&LStatementURL": pnlFile,
-                    "OthersURL": othersFile,
+                    "action": "ITR", "#TimeStamp": new Date().toISOString(), "ApplicationNo": appNo,
+                    "Name": document.getElementById('s1_name').value.trim(), "Mobile": document.getElementById('s1_mobile').value,
+                    "Email": document.getElementById('s1_email').value.toLowerCase(), "PAN": document.getElementById('s1_pan').value.toUpperCase(),
+                    "Password(Optional)": document.getElementById('s1_password').value, "FY": document.getElementById('s2_fy').value,
+                    "HeadofIncome": document.getElementById('s2_head').value, "BankStatementURL": bankFile,
+                    "Form16/16AURL": form16File, "P&LStatementURL": pnlFile, "OthersURL": othersFile,
                     "NameOfOtherStatement": document.getElementById('s3_other_name').value.trim()
                 };
 
-                if (typeof google !== 'undefined' && google.script && google.script.run) {
-                    google.script.run
-                        .withSuccessHandler(function(res) { handleItrSuccess(appNo); })
-                        .withFailureHandler(function(err) { showToast("Error submitting application.", true, false); resetBtn(btn, originalText); })
-                        .processItrForm(payload);
-                } else {
-                    await fetch(SCRIPT_URL, {
-                        method: 'POST',
-                        body: JSON.stringify(payload),
-                        mode: 'no-cors'
-                    });
-                    handleItrSuccess(appNo);
-                }
+                fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), mode: 'no-cors' })
+                    .then(() => handleItrSuccess(appNo)).catch(() => handleItrSuccess(appNo)); // no-cors always acts as success
 
-            } catch (error) {
-                console.error("Submission Error:", error);
-                showToast("Error submitting application.", true, false);
-                resetBtn(btn, originalText);
-            }
+            } catch (error) { showToast("Error submitting application.", true, false); resetBtn(btn, originalText); }
         }
 
         function handleItrSuccess(appNo) {
@@ -1310,199 +1142,39 @@
             document.getElementById('itrSuccessModal').classList.add('flex');
             document.getElementById('itrForm').reset();
             const btn = document.getElementById('btnSubmit');
-            btn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> Submit Application`;
-            btn.disabled = false;
-            lucide.createIcons();
+            btn.innerHTML = `Submit Application`; btn.disabled = false; lucide.createIcons();
             showToast(`App No: ${appNo} Submitted!`, false, true);
         }
 
-        // -------------------------
-        // PAYMENT SUBMISSION 
-        // -------------------------
         async function submitPaymentForm() {
-            const btn = document.getElementById('paySubmitBtn');
-            const origText = btn.innerHTML;
-            
+            const btn = document.getElementById('paySubmitBtn'); const origText = btn.innerHTML;
             try {
                 btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Uploading...`;
-                btn.disabled = true;
-                lucide.createIcons();
+                btn.disabled = true; lucide.createIcons();
                 
                 const processFile = async (inputId) => {
                     const fileInput = document.getElementById(inputId);
                     if (fileInput && fileInput.files.length > 0) {
-                        const file = fileInput.files[0];
-                        const base64 = await readFileAsBase64(file);
+                        const file = fileInput.files[0]; const base64 = await readFileAsBase64(file);
                         return { base64: base64, mimeType: file.type, fileName: file.name };
                     }
                     return null;
                 };
                 
                 const payProof = await processFile('payProof');
-                if(!payProof) {
-                    showToast("Please select a payment screenshot.", true);
-                    return;
-                }
+                if(!payProof) { showToast("Please select a payment screenshot.", true); return; }
 
-                const payload = {
-                    action: 'PAYMENT',
-                    Name: document.getElementById('payName').value,
-                    PAN: document.getElementById('payPan').value,
-                    Mobile: document.getElementById('payMobile').value,
-                    AKN: document.getElementById('payAkn').value,
-                    PaymentProof: payProof
-                };
-
-                if (typeof google !== 'undefined' && google.script && google.script.run) {
-                    google.script.run
-                        .withSuccessHandler(function(res) { 
-                            closePaymentModal(); 
-                            openPaymentSuccessModal(); 
-                        })
-                        .withFailureHandler(function(err) { 
-                            showToast("Error uploading payment proof.", true); 
-                        })
-                        .processItrForm(payload);
-                } else {
-                    await fetch(SCRIPT_URL, {
-                        method: 'POST',
-                        body: JSON.stringify(payload),
-                        mode: 'no-cors'
-                    });
-                    closePaymentModal();
-                    openPaymentSuccessModal();
-                }
-                
-            } catch(e) {
-                showToast("Error uploading payment proof.", true);
-            } finally {
-                btn.innerHTML = origText;
-                btn.disabled = false;
-                lucide.createIcons();
-            }
+                const payload = { action: 'PAYMENT', Name: document.getElementById('payName').value, PAN: document.getElementById('payPan').value, Mobile: document.getElementById('payMobile').value, AKN: document.getElementById('payAkn').value, PaymentProof: payProof };
+                fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), mode: 'no-cors' })
+                    .then(() => { closePaymentModal(); openPaymentSuccessModal(); }).catch(() => { closePaymentModal(); openPaymentSuccessModal(); });
+            } catch(e) { showToast("Error uploading payment proof.", true); } 
+            finally { btn.innerHTML = origText; btn.disabled = false; lucide.createIcons(); }
         }
 
-        function resetBtn(btn, text) {
-            btn.innerHTML = text;
-            btn.disabled = false;
-            lucide.createIcons();
-        }
-
-        // -------------------------
-        // UI & UTILITIES
-        // -------------------------
-        function showToast(message, isError = false, isSuccessGreen = false) {
-            const toast = document.getElementById('toast');
-            toast.className = 'toast'; 
-            
-            if (isError) {
-                toast.classList.add('error');
-                toast.innerHTML = `<i data-lucide="alert-circle" class="w-5 h-5"></i> <span>${message}</span>`;
-            } else if (isSuccessGreen) {
-                toast.classList.add('success');
-                toast.innerHTML = `
-                    <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                        <path class="animated-check" d="M20 6L9 17l-5-5"/>
-                    </svg>
-                    <span>${message}</span>
-                `;
-            } else {
-                toast.classList.add('default');
-                toast.innerHTML = `<i data-lucide="info" class="w-5 h-5 text-white"></i> <span>${message}</span>`;
-            }
-            
-            lucide.createIcons();
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3500);
-        }
-
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => showToast("Copied to clipboard!", false, false));
-        }
-
-        function toggleBankDetails() {
-            const wrapper = document.getElementById('bankDetailsContent');
-            const arrow = document.getElementById('bankArrow');
-            if (wrapper.classList.contains('expanded')) {
-                wrapper.classList.remove('expanded');
-                arrow.style.transform = 'rotate(0deg)';
-            } else {
-                wrapper.classList.add('expanded');
-                arrow.style.transform = 'rotate(180deg)';
-            }
-        }
-
-        function openMenu() { document.getElementById('sideMenu').classList.remove('hidden'); }
-        function closeMenu() { document.getElementById('sideMenu').classList.add('hidden'); }
-        function openSearch() { document.getElementById('searchModal').classList.remove('hidden'); document.getElementById('searchModal').classList.add('flex'); document.getElementById('searchInput').focus(); }
-        function closeSearch() { document.getElementById('searchModal').classList.add('hidden'); document.getElementById('searchModal').classList.remove('flex'); }
-
-        function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex'); }
-        function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); }
-        
-        function openUploadModal() { document.getElementById('uploadModal').classList.remove('hidden'); document.getElementById('uploadModal').classList.add('flex'); }
-        function closeUploadModal() { document.getElementById('uploadModal').classList.add('hidden'); document.getElementById('uploadModal').classList.remove('flex'); }
-        
-        function openBusinessModal() { document.getElementById('businessModal').classList.remove('hidden'); document.getElementById('businessModal').classList.add('flex'); }
-        function closeBusinessModal() { document.getElementById('businessModal').classList.add('hidden'); document.getElementById('businessModal').classList.remove('flex'); }
-        
-        function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); document.getElementById('settingsModal').classList.add('flex'); }
-        function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); document.getElementById('settingsModal').classList.remove('flex'); }
-        
-        let currentStep = 1;
-        function openItrModal() { 
-            document.getElementById('itrForm').classList.remove('hidden');
-            document.getElementById('itrForm').classList.add('block');
-            
-            document.getElementById('itrModalNav').classList.remove('hidden');
-            document.getElementById('itrModalNav').classList.add('flex');
-            
-            document.getElementById('itrModalFooter').classList.remove('hidden');
-            document.getElementById('itrModalFooter').classList.add('block');
-            
-            document.getElementById('itrModal').classList.remove('hidden'); 
-            document.getElementById('itrModal').classList.add('flex'); 
-            
-            showStep(1); 
-        }
-        function closeItrModal() { document.getElementById('itrModal').classList.add('hidden'); document.getElementById('itrModal').classList.remove('flex'); }
-        
-        function showStep(step) {
-            document.getElementById('step1').classList.add('hidden');
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step3').classList.add('hidden');
-            document.getElementById('step' + step).classList.remove('hidden');
-
-            for(let i=1; i<=3; i++) {
-                const nav = document.getElementById('navStep'+i);
-                if(i === step) { nav.classList.add('step-active'); nav.classList.remove('step-inactive'); }
-                else { nav.classList.remove('step-active'); nav.classList.add('step-inactive'); }
-            }
-            const btnBack = document.getElementById('btnBack');
-            const btnNext = document.getElementById('btnNext');
-            const btnSubmit = document.getElementById('btnSubmit');
-
-            if (step === 1) { btnBack.classList.add('hidden'); btnNext.classList.remove('hidden'); btnSubmit.classList.add('hidden'); }
-            else if (step === 2) { btnBack.classList.remove('hidden'); btnNext.classList.remove('hidden'); btnSubmit.classList.add('hidden'); }
-            else if (step === 3) { btnBack.classList.remove('hidden'); btnNext.classList.add('hidden'); btnSubmit.classList.remove('hidden'); }
-            currentStep = step;
-        }
-        function nextStep() { showStep(currentStep + 1); }
-        function prevStep() { showStep(currentStep - 1); }
     </script>
-
-    <!-- PWA Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(registration => {
-                        console.log('PWA ServiceWorker successfully registered with scope: ', registration.scope);
-                    })
-                    .catch(err => {
-                        console.error('PWA ServiceWorker registration failed: ', err);
-                    });
-            });
+            window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(err => { console.error('PWA fail:', err); }); });
         }
     </script>
 </body>
