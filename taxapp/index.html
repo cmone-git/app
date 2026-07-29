@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CM TaxApp | File Your Taxes With Confident</title>
+    <title>CM TaxApp | Corporate Dashboard</title>
     
     <!-- Favicon & App Icons -->
     <link rel="icon" type="image/png" href="assets/logo.png">
-    <link rel="apple-touch-icon" href="assets/app-logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
     <link rel="manifest" href="manifest.json">
     
     <meta name="theme-color" content="#F8FAFC">
@@ -41,6 +41,11 @@
                             success: '#10B981',
                             info: '#2563EB'
                         }
+                    },
+                    boxShadow: {
+                        'corporate': '0 10px 30px -10px rgba(11, 17, 32, 0.4)', 
+                        'modal': '0 10px 40px -10px rgba(15, 23, 42, 0.1)',
+                        'header': '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
                     }
                 }
             }
@@ -52,8 +57,8 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
         .corp-input, .corp-select, .corp-textarea {
-            width: 100%; border: 1px solid #E2E8F0; border-radius: 10px; padding: 12px 16px;
-            font-size: 15px; color: #0F172A; background: #FFFFFF; transition: all 0.2s ease; outline: none;
+            width: 100%; border: 1px solid #E2E8F0; border-radius: 8px; padding: 14px 18px;
+            font-size: 16px; color: #0F172A; background: #FFFFFF; transition: all 0.2s ease; outline: none; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
         .corp-input:focus, .corp-select:focus, .corp-textarea:focus { 
             border-color: #111827; box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.1);
@@ -61,7 +66,7 @@
         .corp-input[readonly] { background: #F1F5F9; color: #64748B; cursor: not-allowed; }
         
         .file-upload-wrapper {
-            position: relative; border: 1px dashed #CBD5E1; border-radius: 10px; padding: 20px; text-align: center; background: #FFFFFF; cursor: pointer; transition: all 0.2s;
+            position: relative; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 20px; text-align: center; background: #FFFFFF; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
         .file-upload-wrapper:hover { border-color: #111827; background: #F8FAFC; }
         .file-upload-wrapper input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
@@ -77,7 +82,7 @@
 
         .animated-check { stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawCheck 0.5s ease forwards; }
 
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 14px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 999999; display: flex; align-items: center; gap: 10px; white-space: nowrap; box-shadow: 0 6px 20px rgba(0,0,0,0.15); color: #FFFFFF; border: none; }
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 14px 24px; border-radius: 10px; font-weight: 600; font-size: 15px; opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 999999; display: flex; align-items: center; gap: 10px; white-space: nowrap; box-shadow: 0 6px 20px rgba(0,0,0,0.15); color: #FFFFFF; border: none; }
         .toast.success { background: var(--tw-colors-brand-success); }
         .toast.error { background: #EF4444; }
         .toast.default { background: var(--tw-colors-brand-info); }
@@ -91,40 +96,40 @@
 
     <!-- Splash Screen -->
     <div id="splash" class="fixed inset-0 z-[100] bg-[#f8fafc] flex flex-col items-center justify-center transition-opacity duration-500">
-        <img src="assets/name.png" alt="CM TaxApp" class="w-56 h-auto animate-pulse object-contain">
+        <img src="assets/name.png" alt="CM TaxApp" class="w-64 h-auto animate-pulse object-contain">
     </div>
 
     <!-- PWA Install Prompt Modal -->
-    <div id="pwaInstallPrompt" class="fixed inset-0 z-[110] hidden flex-col bg-gray-900/60 backdrop-blur-sm justify-end items-center px-4 pb-8 transition-opacity">
+    <div id="pwaInstallPrompt" class="fixed inset-0 z-[110] hidden flex-col bg-gray-900/80 backdrop-blur-sm justify-end items-center px-4 pb-8 transition-opacity">
         <div class="bg-white rounded-3xl w-full max-w-[400px] p-6 shadow-2xl relative flex flex-col items-center animate-[slideDown_0.3s_ease-out]">
-            <button onclick="closePWAInstall()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
-            <img src="assets/logo.png" alt="App Icon" class="w-16 h-16 mb-4 rounded-2xl shadow-sm border border-gray-100 p-1">
-            <h3 class="text-center font-bold text-xl text-gray-900 mb-1">Install CM TaxApp</h3>
-            <p class="text-center text-sm text-gray-500 mb-6">Install our app to your home screen for quick, seamless access to your dashboard.</p>
+            <button onclick="closePWAInstall()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <img src="assets/logo.png" alt="App Icon" class="w-16 h-16 mb-4 rounded-xl shadow-sm border border-gray-100 p-1">
+            <h3 class="text-center font-bold text-xl text-gray-900 mb-2">Install CM TaxApp</h3>
+            <p class="text-center text-base text-gray-500 mb-6">Install our app to your home screen for quick, seamless access to all your corporate tax tools.</p>
             <div class="flex gap-3 w-full">
-                <button onclick="closePWAInstall()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition text-sm">Not Now</button>
-                <button onclick="installPWA()" class="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md transition text-sm">Install App</button>
+                <button onclick="closePWAInstall()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition text-base">Not Now</button>
+                <button onclick="installPWA()" class="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md transition text-base">Install App</button>
             </div>
         </div>
     </div>
 
     <!-- Login Modal -->
-    <div id="loginScreen" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/70 backdrop-blur-md transition-opacity items-center justify-center px-4 overflow-y-auto pt-10 pb-10">
-        <div class="bg-white rounded-[28px] w-full max-w-[400px] p-7 shadow-2xl relative flex flex-col animate-[zoomIn_0.3s_ease-out] my-auto">
-            <button onclick="closeLoginModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-900 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <div id="loginScreen" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-md transition-opacity items-center justify-center px-4 overflow-y-auto pt-10 pb-10">
+        <div class="bg-white rounded-[28px] w-full max-w-[420px] p-7 shadow-2xl relative flex flex-col animate-[zoomIn_0.3s_ease-out] my-auto">
+            <button onclick="closeLoginModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-900 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
             
             <div class="flex flex-col items-center text-center w-full mb-6">
                 <div class="w-16 h-16 bg-gray-900 rounded-2xl flex items-center justify-center mb-4 shadow-sm">
                     <img src="assets/logo.png" alt="CM TaxApp" class="w-10 h-10 object-contain filter brightness-0 invert">
                 </div>
                 <h1 class="text-2xl font-black text-gray-900 tracking-tight mb-1">Welcome Back</h1>
-                <p class="text-gray-500 text-sm">Sign in to your dashboard securely.</p>
+                <p class="text-gray-500 text-base">Sign in to your dashboard securely.</p>
             </div>
 
             <!-- Login Type Tabs -->
-            <div class="flex w-full bg-gray-100 rounded-xl p-1 mb-5">
-                <button id="tabEmail" onclick="switchLoginTab('email')" class="flex-1 py-2 text-sm font-bold bg-white shadow-sm rounded-lg text-gray-900 transition">Email</button>
-                <button id="tabMobile" onclick="switchLoginTab('mobile')" class="flex-1 py-2 text-sm font-bold text-gray-500 hover:text-gray-900 rounded-lg transition bg-transparent">Mobile OTP</button>
+            <div class="flex w-full bg-gray-100 rounded-xl p-1.5 mb-5">
+                <button id="tabEmail" onclick="switchLoginTab('email')" class="flex-1 py-2.5 text-base font-bold bg-white shadow-sm rounded-lg text-gray-900 transition">Email</button>
+                <button id="tabMobile" onclick="switchLoginTab('mobile')" class="flex-1 py-2.5 text-base font-bold text-gray-500 hover:text-gray-900 rounded-lg transition bg-transparent">Mobile OTP</button>
             </div>
 
             <!-- Email & Password Form -->
@@ -134,31 +139,33 @@
                 <div class="relative">
                     <input type="password" id="loginPassword" class="corp-input bg-gray-50 pr-12" placeholder="Password">
                     <button type="button" onclick="togglePassword('loginPassword', 'eyeIcon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition">
-                        <i id="eyeIcon" data-lucide="eye" class="w-4 h-4"></i>
+                        <i id="eyeIcon" data-lucide="eye" class="w-5 h-5"></i>
                     </button>
                 </div>
 
-                <div class="flex justify-between items-center text-sm px-1 py-1">
+                <div class="flex justify-between items-center text-base px-1 py-1">
                     <label class="flex items-center gap-2 text-gray-600 cursor-pointer select-none">
-                        <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900 cursor-pointer">
-                        <span class="font-medium text-xs">Remember me</span>
+                        <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-gray-900 focus:ring-gray-900 cursor-pointer">
+                        <span class="font-medium text-sm">Remember me</span>
                     </label>
-                    <a href="#" class="text-gray-900 font-bold text-xs hover:underline">Forgot?</a>
+                    <a href="#" class="text-gray-900 font-bold text-sm hover:underline">Forgot?</a>
                 </div>
 
-                <button type="button" onclick="promptSecureLogin()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md transition text-sm mt-1">Sign In</button>
+                <!-- Triggers Secure Login Popup -->
+                <button type="button" onclick="promptSecureLogin()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-md transition text-base mt-2">Sign In</button>
             </div>
 
             <!-- Mobile OTP Form -->
             <div id="formMobile" class="w-full space-y-4 hidden">
                 <input type="tel" class="corp-input bg-gray-50" placeholder="Mobile Number" maxlength="10">
-                <button id="btnSendOtp" onclick="promptSecureLogin()" type="button" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md transition text-sm">Send OTP</button>
+                <!-- Triggers Secure Login Popup -->
+                <button id="btnSendOtp" onclick="promptSecureLogin()" type="button" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-md transition text-base">Send OTP</button>
             </div>
 
             <!-- Divider -->
             <div class="w-full flex items-center gap-3 my-5">
                 <div class="h-px bg-gray-200 flex-grow"></div>
-                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Or continue with</span>
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Or continue with</span>
                 <div class="h-px bg-gray-200 flex-grow"></div>
             </div>
 
@@ -167,9 +174,9 @@
 
             <!-- Footer Links -->
             <div class="w-full flex flex-col items-center justify-center space-y-3 mt-1">
-                <p class="text-xs text-gray-500 font-medium">Don't have an account? <a href="#" class="text-gray-900 font-bold hover:underline">Sign Up details</a></p>
-                <a href="tel:+919946151111" class="text-xs text-gray-500 font-bold flex items-center justify-center gap-1.5 hover:text-gray-900 transition">
-                    <i data-lucide="headset" class="w-3.5 h-3.5"></i> Contact Support
+                <p class="text-sm text-gray-500 font-medium">Don't have an account? <a href="#" class="text-gray-900 font-bold hover:underline">Sign Up details</a></p>
+                <a href="tel:+919946151111" class="text-sm text-gray-500 font-bold flex items-center justify-center gap-2 hover:text-gray-900 transition">
+                    <i data-lucide="headset" class="w-4 h-4"></i> Contact Support
                 </a>
             </div>
         </div>
@@ -177,13 +184,13 @@
 
     <!-- SECURE LOGIN ALERT MODAL -->
     <div id="secureLoginModal" class="fixed inset-0 z-[120] hidden flex-col bg-gray-900/60 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
-        <div class="bg-white rounded-3xl w-full max-w-[320px] p-6 shadow-2xl relative flex flex-col items-center animate-[zoomIn_0.2s_ease-out]">
-            <div class="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 mb-3 border border-blue-100">
-                <i data-lucide="shield-alert" class="w-7 h-7"></i>
+        <div class="bg-white rounded-3xl w-full max-w-[340px] p-6 shadow-2xl relative flex flex-col items-center animate-[zoomIn_0.2s_ease-out]">
+            <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 mb-4 border border-blue-100">
+                <i data-lucide="shield-alert" class="w-8 h-8"></i>
             </div>
-            <h3 class="text-center font-bold text-lg text-gray-900 mb-1.5">Secured Access</h3>
-            <p class="text-center text-sm text-gray-500 mb-5">For secured access, please try Google Login.</p>
-            <button onclick="closeSecureLoginModal()" class="w-full bg-gray-900 hover:bg-black text-white py-3 rounded-xl font-bold shadow-md transition text-sm">
+            <h3 class="text-center font-bold text-xl text-gray-900 mb-2">Secured Access</h3>
+            <p class="text-center text-base text-gray-500 mb-6">For secured access, please try Google Login.</p>
+            <button onclick="closeSecureLoginModal()" class="w-full bg-gray-900 hover:bg-black text-white py-4 rounded-xl font-bold shadow-md transition text-base">
                 Okay
             </button>
         </div>
@@ -191,15 +198,15 @@
 
     <!-- HEADER DUE DATE ALARM MODAL -->
     <div id="alarmModal" class="fixed inset-0 z-[80] hidden flex-col bg-gray-900/60 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
-        <div class="bg-white rounded-3xl w-full max-w-[340px] p-7 shadow-2xl relative animate-[slideDown_0.3s_ease-out]">
-            <div class="w-14 h-14 rounded-full bg-gray-50 flex items-center justify-center text-gray-900 mx-auto mb-4 border border-gray-100">
-                <i data-lucide="bell-ring" class="w-6 h-6 animate-pulse"></i>
+        <div class="bg-white rounded-3xl w-full max-w-[360px] p-8 shadow-2xl relative animate-[slideDown_0.3s_ease-out]">
+            <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-900 mx-auto mb-4 border border-gray-200">
+                <i data-lucide="bell-ring" class="w-8 h-8 animate-pulse"></i>
             </div>
-            <h3 class="text-center font-bold text-xl text-gray-900 mb-2">Important Deadline</h3>
-            <p class="text-center text-sm text-gray-500 mb-6 leading-relaxed">
+            <h3 class="text-center font-bold text-2xl text-brand-heading mb-3">Important Deadline</h3>
+            <p class="text-center text-base text-gray-600 mb-6 leading-relaxed">
                 The due date to file your Individual & HUF Income Tax Return is <strong class="text-gray-900">31st July 2026</strong>. Please file early to avoid penalties.
             </p>
-            <button onclick="closeAlarmModal()" class="w-full bg-gray-900 hover:bg-black text-white py-3.5 rounded-xl font-bold shadow-md transition text-sm">
+            <button onclick="closeAlarmModal()" class="w-full bg-gray-900 hover:bg-black text-white py-4 rounded-xl font-bold shadow-md transition text-base">
                 I Understand
             </button>
         </div>
@@ -207,15 +214,17 @@
 
     <!-- PAYMENT SUCCESS OVERLAY MODAL -->
     <div id="paymentSuccessModal" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
-        <div class="bg-[#1F2937] border border-gray-700 rounded-[28px] w-full max-w-[320px] p-7 shadow-2xl flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
-            <div class="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 mb-4 border-2 border-green-500/50">
-                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <div class="bg-[#1F2937] border border-gray-700 rounded-[28px] w-full max-w-[340px] p-8 shadow-2xl flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
+            <div class="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 mb-5 border-2 border-green-500/50">
+                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <path class="animated-check" d="M20 6L9 17l-5-5"/>
                 </svg>
             </div>
-            <h3 class="text-center font-bold text-xl text-white mb-2">Upload Successful</h3>
-            <p class="text-center text-sm text-gray-400 mb-6">Your payment document has been submitted securely.</p>
-            <button onclick="closePaymentSuccessModal()" class="w-full bg-white text-gray-900 py-3 rounded-xl font-bold shadow-md hover:bg-gray-100 transition text-sm">
+            <h3 class="text-center font-bold text-2xl text-white mb-2">Upload Successful</h3>
+            <p class="text-center text-base text-gray-300 mb-8">
+                Your payment document has been submitted securely.
+            </p>
+            <button onclick="closePaymentSuccessModal()" class="w-full bg-white text-gray-900 py-4 rounded-2xl font-bold shadow-md hover:bg-gray-100 transition text-base">
                 Done
             </button>
         </div>
@@ -223,28 +232,28 @@
 
     <!-- ITR SUBMISSION SUCCESS MODAL -->
     <div id="itrSuccessModal" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
-        <div class="bg-[#1F2937] border border-gray-700 rounded-[28px] w-full max-w-[320px] p-7 shadow-2xl flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
-            <div class="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 mb-4 border-2 border-green-500/50">
-                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <div class="bg-[#1F2937] border border-gray-700 rounded-[28px] w-full max-w-[340px] p-8 shadow-2xl flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
+            <div class="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 mb-5 border-2 border-green-500/50">
+                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <path class="animated-check" d="M20 6L9 17l-5-5"/>
                 </svg>
             </div>
-            <h3 class="text-center font-bold text-xl text-white mb-2">Submission Successful</h3>
-            <p class="text-center text-sm text-gray-400 mb-5">Your documents have been securely transmitted.</p>
+            <h3 class="text-center font-bold text-2xl text-white mb-2">Submission Successful</h3>
+            <p class="text-center text-base text-gray-300 mb-6">Your documents have been securely transmitted.</p>
 
-            <div class="bg-gray-900/50 border border-gray-700 rounded-xl p-3 w-full mb-5 text-center shadow-inner">
-                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Reference Number</p>
-                <p id="successAppNo" class="font-mono font-bold text-white text-base tracking-wider"></p>
+            <div class="bg-gray-900/50 border border-gray-700 rounded-xl p-4 w-full mb-6 text-center shadow-inner">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Reference Number</p>
+                <p id="successAppNo" class="font-mono font-bold text-white text-xl tracking-wider"></p>
             </div>
 
             <div class="w-full space-y-3">
-                <button onclick="whatsappITR()" class="w-full bg-[#25D366] text-white font-bold py-3 rounded-xl shadow-md flex items-center justify-center gap-2 hover:bg-green-600 transition text-sm">
-                    <i data-lucide="message-square" class="w-4 h-4"></i> Fast Processing
+                <button onclick="whatsappITR()" class="w-full bg-[#25D366] text-white font-bold py-4 rounded-xl shadow-md flex items-center justify-center gap-2 hover:bg-green-600 transition text-base">
+                    <i data-lucide="message-square" class="w-5 h-5"></i> Fast Processing
                 </button>
-                <button onclick="openPaymentModal(); closeItrSuccessModal();" class="w-full bg-white text-gray-900 font-bold py-3 rounded-xl shadow-md flex items-center justify-center gap-2 hover:bg-gray-100 transition text-sm">
-                    <i data-lucide="indian-rupee" class="w-4 h-4"></i> Proceed to Payment
+                <button onclick="openPaymentModal(); closeItrSuccessModal();" class="w-full bg-white text-gray-900 font-bold py-4 rounded-xl shadow-md flex items-center justify-center gap-2 hover:bg-gray-100 transition text-base">
+                    <i data-lucide="indian-rupee" class="w-5 h-5"></i> Proceed to Payment
                 </button>
-                <button onclick="closeItrSuccessModal()" class="w-full bg-transparent text-gray-400 font-bold py-2 rounded-xl hover:text-white transition text-sm">
+                <button onclick="closeItrSuccessModal()" class="w-full bg-transparent text-gray-400 font-bold py-3 rounded-xl hover:text-white transition text-base">
                     Done
                 </button>
             </div>
@@ -255,119 +264,119 @@
     <div id="mainApp" class="flex flex-col flex-grow h-screen overflow-y-auto bg-[#F8FAFC]">
         
         <!-- Fixed Sticky Header -->
-        <header class="fixed top-0 left-0 w-full z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-200 px-5 pt-5 pb-3 flex justify-between items-center">
+        <header class="fixed top-0 left-0 w-full z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-200 px-5 pt-6 pb-4 flex justify-between items-center">
             <div class="flex items-center">
-                <img src="assets/name.png" alt="CM TaxApp" class="h-8 object-contain">
+                <img src="assets/name.png" alt="CM TaxApp" class="h-10 object-contain">
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="openSearch()" class="w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 shadow-sm hover:bg-gray-100 transition">
-                    <i data-lucide="search" class="w-4 h-4"></i>
+                <button onclick="openSearch()" class="w-11 h-11 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 shadow-sm hover:bg-gray-100 transition">
+                    <i data-lucide="search" class="w-5 h-5"></i>
                 </button>
-                <button onclick="openAlarmModal()" class="relative w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 shadow-sm hover:bg-gray-100 transition">
-                    <i data-lucide="bell" class="w-4 h-4"></i>
-                    <span class="absolute top-2 right-2 w-2 h-2 bg-[#c80000] rounded-full animate-pulse border border-white"></span>
+                <button onclick="openAlarmModal()" class="relative w-11 h-11 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 shadow-sm hover:bg-gray-100 transition">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-[#c80000] rounded-full animate-pulse border-2 border-white"></span>
                 </button>
-                <img id="headerAvatar" src="assets/logo-app.png" class="w-9 h-9 rounded-full border border-gray-200 object-cover cursor-pointer shadow-sm bg-white" onclick="openLoginModal()" alt="Profile">
+                <img id="headerAvatar" src="assets/logo.png" class="w-11 h-11 rounded-full border border-gray-200 object-cover cursor-pointer shadow-sm bg-white" onclick="openLoginModal()" alt="Profile">
             </div>
         </header>
 
         <!-- Main Content Area -->
-        <main class="px-5 w-full max-w-[600px] mx-auto space-y-6 pt-[88px] pb-24">
+        <main class="px-5 w-full max-w-[600px] mx-auto space-y-8 pt-[100px] pb-28">
             
-            <!-- Welcome Section (Compact & Corporate) -->
+            <!-- Welcome Section (Corporate & Larger) -->
             <div>
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="text-2xl leading-none">👋</span>
+                <div class="flex items-center gap-2 mb-1.5">
+                    <span class="text-3xl leading-none">👋</span>
                     <h1 class="text-2xl font-black text-gray-900 tracking-tight leading-none">Welcome Back</h1>
                 </div>
-                <p class="text-[14px] text-gray-500 font-semibold pl-1">File your Taxes with Confidence.</p>
+                <p class="text-base text-gray-500 font-semibold pl-1.5">File your Taxes with Confidence.</p>
             </div>
 
-            <!-- Due Date Reminder Card (Compact) -->
-            <div class="bg-gray-900 rounded-[24px] p-5 shadow-lg relative overflow-hidden text-white">
-                <i data-lucide="calculator" class="absolute -right-4 -bottom-4 w-32 h-32 text-white opacity-[0.03]"></i>
-                <div class="flex justify-between items-center relative z-10 mb-5">
+            <!-- Due Date Reminder Card -->
+            <div class="bg-gray-900 rounded-[28px] p-6 shadow-lg relative overflow-hidden text-white">
+                <i data-lucide="calculator" class="absolute -right-4 -bottom-4 w-40 h-40 text-white opacity-[0.04]"></i>
+                <div class="flex justify-between items-center relative z-10 mb-6">
                     <div>
-                        <h2 class="font-bold text-base mb-1.5 flex items-center gap-2 text-white tracking-wide">
+                        <h2 class="font-bold text-lg mb-2 flex items-center gap-2 text-white tracking-wide">
                             ITR Due Date
-                            <span class="w-1.5 h-1.5 rounded-full bg-white inline-block shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
+                            <span class="w-2 h-2 rounded-full bg-white inline-block shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
                         </h2>
-                        <p class="text-xs text-gray-400 mb-4 font-medium">Assessment Year 2026-27</p>
+                        <p class="text-sm text-gray-400 mb-5 font-medium">Assessment Year 2026-27</p>
                         
-                        <div class="inline-block border border-gray-700 bg-gray-800/50 px-3 py-1.5 rounded-lg">
-                            <span class="block text-[9px] font-bold tracking-widest text-gray-400 uppercase">Deadline</span>
-                            <span class="block text-sm font-bold text-white mt-0.5">31 July 2026</span>
+                        <div class="inline-block border border-gray-700 bg-gray-800/50 px-4 py-2 rounded-xl">
+                            <span class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase">Deadline</span>
+                            <span class="block text-base font-bold text-white mt-0.5">31 July 2026</span>
                         </div>
                     </div>
                     <!-- Circular Graph -->
-                    <div class="relative w-24 h-24 flex items-center justify-center bg-white rounded-full shadow-inner border-4 border-gray-800">
+                    <div class="relative w-28 h-28 flex items-center justify-center bg-white rounded-full shadow-inner border-[5px] border-gray-800">
                         <svg class="w-full h-full transform -rotate-90 absolute" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="42" fill="none" stroke="#f1f5f9" stroke-width="10"></circle>
-                            <circle id="donutProgress" cx="50" cy="50" r="42" fill="none" stroke="#c80000" stroke-width="10" stroke-dasharray="263.89" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000 ease-out"></circle>
+                            <circle cx="50" cy="50" r="42" fill="none" stroke="#f1f5f9" stroke-width="12"></circle>
+                            <circle id="donutProgress" cx="50" cy="50" r="42" fill="none" stroke="#c80000" stroke-width="12" stroke-dasharray="263.89" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000 ease-out"></circle>
                         </svg>
                         <div class="absolute flex flex-col items-center justify-center">
-                            <span id="donutDaysLeft" class="text-3xl font-black leading-none text-gray-900 tracking-tight">--</span>
-                            <span class="text-[9px] font-bold text-gray-500 mt-1 tracking-widest uppercase">Days</span>
+                            <span id="donutDaysLeft" class="text-4xl font-black leading-none text-gray-900 tracking-tight">--</span>
+                            <span class="text-[10px] font-bold text-gray-500 mt-1 tracking-widest uppercase">Days</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Navigation Button to Form -->
-                <button onclick="openItrModal()" class="w-full bg-white hover:bg-gray-100 text-gray-900 font-bold py-3 rounded-xl shadow-md transition text-sm flex items-center justify-center gap-2">
-                    <i data-lucide="send" class="w-4 h-4"></i> File ITR Now
+                <button onclick="openItrModal()" class="w-full bg-white hover:bg-gray-100 text-gray-900 font-bold py-4 rounded-xl shadow-md transition text-base flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-5 h-5"></i> File ITR Now
                 </button>
             </div>
 
-            <!-- Quick Actions Grid (Refined 3D Cards) -->
+            <!-- Quick Actions Grid -->
             <div>
-                <h3 class="text-base font-bold text-gray-900 mb-4 px-1">Quick Actions</h3>
-                <div class="grid grid-cols-2 gap-4 gap-y-6 pt-1">
+                <h3 class="text-xl font-bold text-gray-900 mb-5 px-1">Quick Actions</h3>
+                <div class="grid grid-cols-2 gap-5 gap-y-7 pt-2">
                     
                     <div class="relative cursor-pointer group" onclick="openItrModal()">
-                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-slate-300 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
-                        <div class="bg-white rounded-2xl p-5 pt-5 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
-                            <div class="flex justify-between items-center mb-2.5">
-                                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">File ITR</h4>
-                                <i data-lucide="file-text" class="w-5 h-5 text-slate-400"></i>
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-300 rounded-t-lg rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-1"></div>
+                        <div class="bg-white rounded-2xl p-6 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="text-base font-bold text-slate-700 uppercase tracking-wider">File ITR</h4>
+                                <i data-lucide="file-text" class="w-6 h-6 text-slate-400"></i>
                             </div>
-                            <div class="w-full h-px bg-slate-100 mb-2.5"></div>
-                            <p class="text-[11px] text-slate-500 font-medium leading-relaxed flex-grow">Submit your tax returns securely.</p>
+                            <div class="w-full h-px bg-slate-100 mb-3"></div>
+                            <p class="text-sm text-slate-500 font-medium leading-relaxed flex-grow">Submit your tax returns securely.</p>
                         </div>
                     </div>
 
                     <div class="relative cursor-pointer group" onclick="openUploadModal()">
-                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-blue-200 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
-                        <div class="bg-white rounded-2xl p-5 pt-5 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
-                            <div class="flex justify-between items-center mb-2.5">
-                                <h4 class="text-xs font-bold text-blue-700 uppercase tracking-wider">Upload</h4>
-                                <i data-lucide="cloud-upload" class="w-5 h-5 text-blue-400"></i>
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-blue-200 rounded-t-lg rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-1"></div>
+                        <div class="bg-white rounded-2xl p-6 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="text-base font-bold text-blue-700 uppercase tracking-wider">Upload</h4>
+                                <i data-lucide="cloud-upload" class="w-6 h-6 text-blue-400"></i>
                             </div>
-                            <div class="w-full h-px bg-slate-100 mb-2.5"></div>
-                            <p class="text-[11px] text-slate-500 font-medium leading-relaxed flex-grow">Submit your pending document files.</p>
+                            <div class="w-full h-px bg-slate-100 mb-3"></div>
+                            <p class="text-sm text-slate-500 font-medium leading-relaxed flex-grow">Submit your pending document files.</p>
                         </div>
                     </div>
 
                     <div class="relative cursor-pointer group" onclick="openPaymentModal()">
-                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-indigo-200 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
-                        <div class="bg-white rounded-2xl p-5 pt-5 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
-                            <div class="flex justify-between items-center mb-2.5">
-                                <h4 class="text-xs font-bold text-indigo-700 uppercase tracking-wider">Payment</h4>
-                                <i data-lucide="credit-card" class="w-5 h-5 text-indigo-400"></i>
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-indigo-200 rounded-t-lg rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-1"></div>
+                        <div class="bg-white rounded-2xl p-6 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="text-base font-bold text-indigo-700 uppercase tracking-wider">Payment</h4>
+                                <i data-lucide="credit-card" class="w-6 h-6 text-indigo-400"></i>
                             </div>
-                            <div class="w-full h-px bg-slate-100 mb-2.5"></div>
-                            <p class="text-[11px] text-slate-500 font-medium leading-relaxed flex-grow">Make your secure online payments.</p>
+                            <div class="w-full h-px bg-slate-100 mb-3"></div>
+                            <p class="text-sm text-slate-500 font-medium leading-relaxed flex-grow">Make your secure online payments.</p>
                         </div>
                     </div>
 
                     <div class="relative cursor-pointer group" onclick="openBusinessModal()">
-                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-teal-200 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
-                        <div class="bg-white rounded-2xl p-5 pt-5 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
-                            <div class="flex justify-between items-center mb-2.5">
-                                <h4 class="text-xs font-bold text-teal-700 uppercase tracking-wider">Services</h4>
-                                <i data-lucide="grid" class="w-5 h-5 text-teal-400"></i>
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-teal-200 rounded-t-lg rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-1"></div>
+                        <div class="bg-white rounded-2xl p-6 pt-6 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="text-base font-bold text-teal-700 uppercase tracking-wider">Services</h4>
+                                <i data-lucide="grid" class="w-6 h-6 text-teal-400"></i>
                             </div>
-                            <div class="w-full h-px bg-slate-100 mb-2.5"></div>
-                            <p class="text-[11px] text-slate-500 font-medium leading-relaxed flex-grow">Explore additional tools & setups.</p>
+                            <div class="w-full h-px bg-slate-100 mb-3"></div>
+                            <p class="text-sm text-slate-500 font-medium leading-relaxed flex-grow">Explore additional tools & setups.</p>
                         </div>
                     </div>
                 </div>
@@ -375,95 +384,95 @@
 
             <!-- Dashboard Tax Updates Section -->
             <div>
-                <div class="flex justify-between items-center mb-3 px-1">
-                    <h3 class="text-base font-bold text-gray-900">Tax Updates</h3>
-                    <a href="taxupdates.html" class="text-[13px] font-bold text-gray-700 hover:text-black transition">View All</a>
+                <div class="flex justify-between items-center mb-5 px-1">
+                    <h3 class="text-xl font-bold text-gray-900">Tax Updates</h3>
+                    <a href="taxupdates.html" class="text-sm font-bold text-gray-700 hover:text-black transition">View All</a>
                 </div>
                 
-                <div class="space-y-3">
-                    <a href="taxupdates.html" class="bg-white rounded-3xl p-3.5 shadow-sm border border-gray-100 flex items-center justify-between gap-3 hover:shadow-md transition group">
-                        <div class="flex items-center gap-3 overflow-hidden pl-1">
-                            <div class="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="clipboard-list" class="w-5 h-5 text-gray-600"></i>
+                <div class="space-y-4">
+                    <a href="taxupdates.html" class="bg-white rounded-[40px] p-4 shadow-sm border border-gray-200 flex items-center justify-between gap-3 hover:shadow-md transition group">
+                        <div class="flex items-center gap-4 overflow-hidden pl-2">
+                            <div class="w-12 h-12 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="clipboard-list" class="w-6 h-6 text-gray-600"></i>
                             </div>
                             <div class="truncate">
-                                <h4 class="text-sm font-bold text-gray-900 truncate mb-0.5">ITR Due Date for Individual</h4>
-                                <p class="text-[11px] text-gray-500 truncate">AY 2026-27 filing deadline details</p>
+                                <h4 class="text-base font-bold text-gray-900 truncate mb-0.5">ITR Due Date for Individual</h4>
+                                <p class="text-sm text-gray-500 truncate">AY 2026-27 filing deadline details</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 flex-shrink-0 pr-1">
-                            <span class="text-[10px] font-bold text-gray-700 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-200">Jul 31, 2026</span>
-                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform"></i>
+                        <div class="flex items-center gap-2 flex-shrink-0 pr-2">
+                            <span class="text-xs font-bold text-gray-700 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">Jul 31, 2026</span>
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform"></i>
                         </div>
                     </a>
 
-                    <a href="taxupdates.html" class="bg-white rounded-3xl p-3.5 shadow-sm border border-gray-100 flex items-center justify-between gap-3 hover:shadow-md transition group">
-                        <div class="flex items-center gap-3 overflow-hidden pl-1">
-                            <div class="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="search-check" class="w-5 h-5 text-gray-600"></i>
+                    <a href="taxupdates.html" class="bg-white rounded-[40px] p-4 shadow-sm border border-gray-200 flex items-center justify-between gap-3 hover:shadow-md transition group">
+                        <div class="flex items-center gap-4 overflow-hidden pl-2">
+                            <div class="w-12 h-12 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="search-check" class="w-6 h-6 text-gray-600"></i>
                             </div>
                             <div class="truncate">
-                                <h4 class="text-sm font-bold text-gray-900 truncate mb-0.5">Tax Audit Due Date</h4>
-                                <p class="text-[11px] text-gray-500 truncate">Form 3CD report upload schedule</p>
+                                <h4 class="text-base font-bold text-gray-900 truncate mb-0.5">Tax Audit Due Date</h4>
+                                <p class="text-sm text-gray-500 truncate">Form 3CD report upload schedule</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 flex-shrink-0 pr-1">
-                            <span class="text-[10px] font-bold text-gray-700 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-200">Sep 30, 2026</span>
-                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform"></i>
+                        <div class="flex items-center gap-2 flex-shrink-0 pr-2">
+                            <span class="text-xs font-bold text-gray-700 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">Sep 30, 2026</span>
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform"></i>
                         </div>
                     </a>
 
-                    <a href="taxupdates.html" class="bg-white rounded-3xl p-3.5 shadow-sm border border-gray-100 flex items-center justify-between gap-3 hover:shadow-md transition group">
-                        <div class="flex items-center gap-3 overflow-hidden pl-1">
-                            <div class="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="layout-template" class="w-5 h-5 text-gray-600"></i>
+                    <a href="taxupdates.html" class="bg-white rounded-[40px] p-4 shadow-sm border border-gray-200 flex items-center justify-between gap-3 hover:shadow-md transition group">
+                        <div class="flex items-center gap-4 overflow-hidden pl-2">
+                            <div class="w-12 h-12 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="layout-template" class="w-6 h-6 text-gray-600"></i>
                             </div>
                             <div class="truncate">
-                                <h4 class="text-sm font-bold text-gray-900 truncate mb-0.5">New Key Changes</h4>
-                                <p class="text-[11px] text-gray-500 truncate">Default tax regime & compliance rules</p>
+                                <h4 class="text-base font-bold text-gray-900 truncate mb-0.5">New Key Changes</h4>
+                                <p class="text-sm text-gray-500 truncate">Default tax regime & compliance rules</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 flex-shrink-0 pr-1">
-                            <span class="text-[10px] font-bold text-gray-700 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-200">AY 2026-27</span>
-                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform"></i>
+                        <div class="flex items-center gap-2 flex-shrink-0 pr-2">
+                            <span class="text-xs font-bold text-gray-700 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">AY 2026-27</span>
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform"></i>
                         </div>
                     </a>
                 </div>
             </div>
 
             <!-- Corporate Support Banner -->
-            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 flex items-center justify-between cursor-pointer shadow-md hover:bg-black transition mt-4" onclick="window.location.href='tel:+919946151111'">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-white border border-gray-700">
-                        <i data-lucide="headset" class="w-5 h-5"></i>
+            <div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 flex items-center justify-between cursor-pointer shadow-lg hover:bg-black transition mt-6" onclick="window.location.href='tel:+919946151111'">
+                <div class="flex items-center gap-5">
+                    <div class="w-14 h-14 rounded-2xl bg-gray-800 flex items-center justify-center text-white border border-gray-700">
+                        <i data-lucide="headset" class="w-6 h-6"></i>
                     </div>
                     <div>
-                        <h4 class="text-sm font-bold text-white">Dedicated Support</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Connect with your advisor</p>
+                        <h4 class="text-lg font-bold text-white">Dedicated Support</h4>
+                        <p class="text-sm text-gray-400 mt-1">Connect with your advisor</p>
                     </div>
                 </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-500"></i>
+                <i data-lucide="chevron-right" class="w-6 h-6 text-gray-500"></i>
             </div>
         </main>
 
         <!-- Fixed Bottom Navigation Bar -->
-        <nav class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-200 px-8 py-3 flex justify-between items-center z-40 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
-            <a href="#" class="flex flex-col items-center gap-1 text-gray-900 w-14">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                <span class="text-[10px] font-bold mt-0.5">Home</span>
+        <nav class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-200 px-8 py-4 flex justify-between items-center z-40 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+            <a href="#" class="flex flex-col items-center gap-1.5 text-gray-900 w-16">
+                <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
+                <span class="text-xs font-bold mt-0.5">Home</span>
             </a>
-            <a href="#" onclick="openPaymentModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-900 transition w-14">
-                <i data-lucide="indian-rupee" class="w-5 h-5"></i>
-                <span class="text-[10px] font-semibold mt-0.5">Payments</span>
+            <a href="#" onclick="openPaymentModal()" class="flex flex-col items-center gap-1.5 text-gray-400 hover:text-gray-900 transition w-16">
+                <i data-lucide="indian-rupee" class="w-6 h-6"></i>
+                <span class="text-xs font-semibold mt-0.5">Payments</span>
             </a>
             <!-- Navigates to Login Now -->
-            <a href="#" onclick="openLoginModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-900 transition w-14">
-                <i data-lucide="user" class="w-5 h-5"></i>
-                <span class="text-[10px] font-semibold mt-0.5">Profile</span>
+            <a href="#" onclick="openLoginModal()" class="flex flex-col items-center gap-1.5 text-gray-400 hover:text-gray-900 transition w-16">
+                <i data-lucide="user" class="w-6 h-6"></i>
+                <span class="text-xs font-semibold mt-0.5">Profile</span>
             </a>
-            <a href="#" onclick="openMenu()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-900 transition w-14">
-                <i data-lucide="menu" class="w-5 h-5"></i>
-                <span class="text-[10px] font-semibold mt-0.5">Menu</span>
+            <a href="#" onclick="openMenu()" class="flex flex-col items-center gap-1.5 text-gray-400 hover:text-gray-900 transition w-16">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+                <span class="text-xs font-semibold mt-0.5">Menu</span>
             </a>
         </nav>
     </div>
@@ -472,45 +481,45 @@
     <div id="sideMenu" class="fixed inset-0 z-50 hidden">
         <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" onclick="closeMenu()"></div>
         <div class="fixed inset-y-0 left-0 w-[80%] max-w-sm bg-white shadow-2xl flex flex-col animate-[slideRight_0.2s_ease-out]">
-            <div class="px-6 py-8 border-b border-gray-100 bg-white flex justify-between items-start">
+            <div class="px-6 py-10 border-b border-gray-100 bg-white flex justify-between items-start">
                 <div>
-                    <img id="navAvatar" src="assets/logo.png" class="w-12 h-12 rounded-xl border border-gray-200 object-contain bg-white p-1 hidden mb-3" alt="Profile">
-                    <div id="navInitials" class="w-12 h-12 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-center text-gray-900 mb-3 shadow-sm font-bold text-lg">GU</div>
-                    <h2 id="navName" class="text-base font-bold text-gray-900 leading-tight">Guest User</h2>
-                    <p id="navEmail" class="text-xs font-medium text-gray-500 mt-1">Please Sign In</p>
+                    <img id="navAvatar" src="assets/logo.png" class="w-16 h-16 rounded-2xl border border-gray-200 object-contain bg-white p-1 hidden mb-4" alt="Profile">
+                    <div id="navInitials" class="w-16 h-16 bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-center text-gray-900 mb-4 shadow-sm font-bold text-2xl">GU</div>
+                    <h2 id="navName" class="text-xl font-bold text-gray-900 leading-tight">Guest User</h2>
+                    <p id="navEmail" class="text-sm font-medium text-gray-500 mt-1.5">Please Sign In</p>
                 </div>
-                <button onclick="closeMenu()" class="w-8 h-8 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-900 transition shadow-sm">
-                    <i data-lucide="x" class="w-4 h-4"></i>
+                <button onclick="closeMenu()" class="w-10 h-10 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-900 transition shadow-sm">
+                    <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
-            <div class="flex-grow overflow-y-auto p-4 space-y-1.5">
-                <a href="#" onclick="closeMenu()" class="flex items-center gap-3 p-3.5 bg-gray-50 rounded-xl text-gray-900 font-bold transition text-sm">
-                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+            <div class="flex-grow overflow-y-auto p-5 space-y-2">
+                <a href="#" onclick="closeMenu()" class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl text-gray-900 font-bold transition text-base">
+                    <i data-lucide="layout-dashboard" class="w-6 h-6"></i> Dashboard
                 </a>
-                <a href="taxupdates.html" class="flex items-center gap-3 p-3.5 hover:bg-gray-50 rounded-xl text-gray-700 font-semibold transition text-sm">
-                    <i data-lucide="newspaper" class="w-5 h-5 text-gray-400"></i> Tax Updates
+                <a href="taxupdates.html" class="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl text-gray-700 font-semibold transition text-base">
+                    <i data-lucide="newspaper" class="w-6 h-6 text-gray-400"></i> Tax Updates
                 </a>
-                <a href="#" onclick="closeMenu(); openItrModal();" class="flex items-center gap-3 p-3.5 hover:bg-gray-50 rounded-xl text-gray-700 font-semibold transition text-sm">
-                    <i data-lucide="file-text" class="w-5 h-5 text-gray-400"></i> File ITR Return
+                <a href="#" onclick="closeMenu(); openItrModal();" class="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl text-gray-700 font-semibold transition text-base">
+                    <i data-lucide="file-text" class="w-6 h-6 text-gray-400"></i> File ITR Return
                 </a>
-                <a href="#" onclick="closeMenu(); openPaymentModal();" class="flex items-center gap-3 p-3.5 hover:bg-gray-50 rounded-xl text-gray-700 font-semibold transition text-sm">
-                    <i data-lucide="indian-rupee" class="w-5 h-5 text-gray-400"></i> Payments
+                <a href="#" onclick="closeMenu(); openPaymentModal();" class="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl text-gray-700 font-semibold transition text-base">
+                    <i data-lucide="indian-rupee" class="w-6 h-6 text-gray-400"></i> Payments
                 </a>
                 
-                <div class="my-2 border-t border-gray-100"></div>
-                <a href="privacy.html" class="flex items-center gap-3 p-3.5 hover:bg-gray-50 rounded-xl text-gray-700 font-semibold transition text-sm">
-                    <i data-lucide="shield-check" class="w-5 h-5 text-gray-400"></i> Privacy and Policy
+                <div class="my-3 border-t border-gray-100"></div>
+                <a href="privacy.html" class="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl text-gray-700 font-semibold transition text-base">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-gray-400"></i> Privacy and Policy
                 </a>
-                <a href="about.html" class="flex items-center gap-3 p-3.5 hover:bg-gray-50 rounded-xl text-gray-700 font-semibold transition text-sm">
-                    <i data-lucide="info" class="w-5 h-5 text-gray-400"></i> About App
+                <a href="about.html" class="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl text-gray-700 font-semibold transition text-base">
+                    <i data-lucide="info" class="w-6 h-6 text-gray-400"></i> About App
                 </a>
             </div>
-            <div class="p-5 border-t border-gray-100 pb-safe flex flex-col gap-3">
-                <button id="navSignInBtn" onclick="openLoginModal()" class="w-full flex items-center justify-center gap-2 text-white font-bold bg-gray-900 py-3.5 rounded-xl shadow-md transition text-sm hover:bg-black">
-                    <i data-lucide="log-in" class="w-4 h-4"></i> Sign In
+            <div class="p-6 border-t border-gray-100 pb-safe flex flex-col gap-3">
+                <button id="navSignInBtn" onclick="openLoginModal()" class="w-full flex items-center justify-center gap-2 text-white font-bold bg-gray-900 py-4 rounded-xl shadow-md transition text-base hover:bg-black">
+                    <i data-lucide="log-in" class="w-5 h-5"></i> Sign In
                 </button>
-                <button id="navSignOutBtn" onclick="handleLogout()" class="hidden w-full flex items-center justify-center gap-2 text-gray-900 font-bold border border-gray-200 bg-white py-3.5 rounded-xl hover:bg-gray-50 shadow-sm transition text-sm">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
+                <button id="navSignOutBtn" onclick="handleLogout()" class="hidden w-full flex items-center justify-center gap-2 text-gray-900 font-bold border border-gray-200 bg-white py-4 rounded-xl hover:bg-gray-50 shadow-sm transition text-base">
+                    <i data-lucide="log-out" class="w-5 h-5"></i> Sign Out
                 </button>
             </div>
         </div>
@@ -518,57 +527,57 @@
 
     <!-- 1. ITR FORM MODAL -->
     <div id="itrModal" class="fixed inset-0 z-[60] hidden flex-col bg-white">
-        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white sticky top-0 z-10 shadow-sm">
-            <h3 class="font-bold text-lg text-gray-900">File ITR</h3>
-            <button onclick="closeItrModal()" class="w-9 h-9 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900">
-                <i data-lucide="x" class="w-5 h-5"></i>
+        <div class="px-5 py-5 border-b border-gray-200 flex justify-between items-center bg-white sticky top-0 z-10 shadow-sm">
+            <h3 class="font-bold text-xl text-gray-900">File ITR</h3>
+            <button onclick="closeItrModal()" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900">
+                <i data-lucide="x" class="w-6 h-6"></i>
             </button>
         </div>
 
-        <div id="itrModalNav" class="px-5 pt-4 bg-white flex justify-between text-center border-b border-gray-200 pb-0 shadow-sm z-10">
-            <div id="navStep1" class="w-1/3 pb-3 step-active text-sm transition-all duration-300">1. Personal</div>
-            <div id="navStep2" class="w-1/3 pb-3 step-inactive text-sm transition-all duration-300">2. Income</div>
-            <div id="navStep3" class="w-1/3 pb-3 step-inactive text-sm transition-all duration-300">3. Documents</div>
+        <div id="itrModalNav" class="px-5 pt-5 bg-white flex justify-between text-center border-b border-gray-200 pb-0 shadow-sm z-10">
+            <div id="navStep1" class="w-1/3 pb-4 step-active text-base transition-all duration-300">1. Personal</div>
+            <div id="navStep2" class="w-1/3 pb-4 step-inactive text-base transition-all duration-300">2. Income</div>
+            <div id="navStep3" class="w-1/3 pb-4 step-inactive text-base transition-all duration-300">3. Documents</div>
         </div>
 
         <div class="overflow-y-auto no-scrollbar p-5 bg-[#F8FAFC] flex-grow">
             <form id="itrForm" class="h-full max-w-[600px] mx-auto block pt-1">
                 <!-- STEP 1 -->
                 <div id="step1" class="block animate-[fadeIn_0.3s_ease-out]">
-                    <div class="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm space-y-4">
-                        <div class="mb-1 border-b border-gray-50 pb-3">
-                            <h4 class="text-base font-bold text-gray-900">Personal Details</h4>
+                    <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5">
+                        <div class="mb-2 border-b border-gray-50 pb-4">
+                            <h4 class="text-lg font-bold text-gray-900">Personal Details</h4>
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-600 mb-1.5 font-bold">Full Name <span class="text-red-600">*</span></label>
+                            <label class="block text-sm text-gray-600 mb-2 font-bold">Full Name <span class="text-red-600">*</span></label>
                             <input type="text" id="s1_name" class="corp-input uppercase" required>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-sm text-gray-600 mb-1.5 font-bold">Mobile</label>
+                                <label class="block text-sm text-gray-600 mb-2 font-bold">Mobile</label>
                                 <input type="tel" id="s1_mobile" maxlength="10" class="corp-input">
                             </div>
                             <div>
-                                <label class="block text-sm text-gray-600 mb-1.5 font-bold">PAN <span class="text-red-600">*</span></label>
+                                <label class="block text-sm text-gray-600 mb-2 font-bold">PAN <span class="text-red-600">*</span></label>
                                 <input type="text" id="s1_pan" maxlength="10" class="corp-input uppercase font-mono" required>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-600 mb-1.5 font-bold">Email <span class="text-red-600">*</span></label>
+                            <label class="block text-sm text-gray-600 mb-2 font-bold">Email <span class="text-red-600">*</span></label>
                             <input type="email" id="s1_email" class="corp-input lowercase" required>
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-600 mb-1.5 font-bold">Password (Optional)</label>
+                            <label class="block text-sm text-gray-600 mb-2 font-bold">Password (Optional)</label>
                             <input type="password" id="s1_password" class="corp-input">
                         </div>
                     </div>
                 </div>
                 <!-- STEP 2 -->
                 <div id="step2" class="hidden animate-[fadeIn_0.3s_ease-out]">
-                    <div class="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm space-y-4">
-                        <h4 class="text-base font-bold text-gray-900 mb-1 border-b border-gray-50 pb-3">Income Details</h4>
+                    <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5">
+                        <h4 class="text-lg font-bold text-gray-900 mb-2 border-b border-gray-50 pb-4">Income Details</h4>
                         <div>
-                            <label class="block text-sm text-gray-600 mb-1.5 font-bold">Financial Year <span class="text-red-600">*</span></label>
+                            <label class="block text-sm text-gray-600 mb-2 font-bold">Financial Year <span class="text-red-600">*</span></label>
                             <select id="s2_fy" class="corp-select" required>
                                 <option value="" disabled selected>Select FY</option>
                                 <option value="2025-26">2025-26</option>
@@ -576,7 +585,7 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-600 mb-1.5 font-bold">Primary Source <span class="text-red-600">*</span></label>
+                            <label class="block text-sm text-gray-600 mb-2 font-bold">Primary Source <span class="text-red-600">*</span></label>
                             <select id="s2_head" class="corp-select" required>
                                 <option value="" disabled selected>Select Source</option>
                                 <option value="Salary">Salary</option>
@@ -589,32 +598,32 @@
                 </div>
                 <!-- STEP 3 -->
                 <div id="step3" class="hidden animate-[fadeIn_0.3s_ease-out]">
-                    <div class="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm space-y-4">
-                        <h4 class="text-base font-bold text-gray-900 mb-1 border-b border-gray-50 pb-3">Upload Files</h4>
-                        <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5">
+                        <h4 class="text-lg font-bold text-gray-900 mb-2 border-b border-gray-50 pb-4">Upload Files</h4>
+                        <div class="grid grid-cols-2 gap-5">
                             <div class="file-upload-wrapper">
-                                <i data-lucide="file-text" class="w-6 h-6 mx-auto text-gray-400 mb-2"></i>
-                                <span class="text-sm font-bold text-gray-700 block">Bank Stmt</span>
+                                <i data-lucide="file-text" class="w-7 h-7 mx-auto text-gray-400 mb-3"></i>
+                                <span class="text-base font-bold text-gray-700 block">Bank Stmt</span>
                                 <input type="file" id="s3_bank" accept=".pdf,image/*">
                             </div>
                             <div class="file-upload-wrapper">
-                                <i data-lucide="file-badge" class="w-6 h-6 mx-auto text-gray-400 mb-2"></i>
-                                <span class="text-sm font-bold text-gray-700 block">Form 16/16A</span>
+                                <i data-lucide="file-badge" class="w-7 h-7 mx-auto text-gray-400 mb-3"></i>
+                                <span class="text-base font-bold text-gray-700 block">Form 16/16A</span>
                                 <input type="file" id="s3_form16" accept=".pdf,image/*">
                             </div>
                             <div class="file-upload-wrapper">
-                                <i data-lucide="bar-chart" class="w-6 h-6 mx-auto text-gray-400 mb-2"></i>
-                                <span class="text-sm font-bold text-gray-700 block">P&L Stmt</span>
+                                <i data-lucide="bar-chart" class="w-7 h-7 mx-auto text-gray-400 mb-3"></i>
+                                <span class="text-base font-bold text-gray-700 block">P&L Stmt</span>
                                 <input type="file" id="s3_pnl" accept=".pdf,image/*">
                             </div>
                             <div class="file-upload-wrapper">
-                                <i data-lucide="folder-plus" class="w-6 h-6 mx-auto text-gray-400 mb-2"></i>
-                                <span class="text-sm font-bold text-gray-700 block">Others</span>
+                                <i data-lucide="folder-plus" class="w-7 h-7 mx-auto text-gray-400 mb-3"></i>
+                                <span class="text-base font-bold text-gray-700 block">Others</span>
                                 <input type="file" id="s3_others" accept=".pdf,image/*">
                             </div>
                         </div>
-                        <div class="pt-2">
-                            <label class="block text-sm text-gray-600 mb-1.5 font-bold">Name of Other Statement</label>
+                        <div class="pt-3">
+                            <label class="block text-sm text-gray-600 mb-2 font-bold">Name of Other Statement</label>
                             <input type="text" id="s3_other_name" class="corp-input" placeholder="e.g., Capital Gains Report">
                         </div>
                     </div>
@@ -622,134 +631,134 @@
             </form>
         </div>
 
-        <div id="itrModalFooter" class="p-5 border-t border-gray-200 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.02)] pb-safe block">
-            <div class="flex gap-3 max-w-[600px] mx-auto">
-                <button type="button" id="btnBack" onclick="prevStep()" class="w-1/3 bg-white border border-gray-200 text-gray-900 font-bold py-3.5 rounded-xl hidden transition shadow-sm hover:bg-gray-50 text-sm">Back</button>
-                <button type="button" id="btnNext" onclick="nextStep()" class="flex-1 bg-gray-900 text-white font-bold py-3.5 rounded-xl shadow-md transition hover:bg-black text-sm">Next Step</button>
-                <button type="button" id="btnSubmit" onclick="submitItrFinal()" class="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md hidden transition text-sm flex items-center justify-center gap-2">Submit Application</button>
+        <div id="itrModalFooter" class="p-6 border-t border-gray-200 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.02)] pb-safe block">
+            <div class="flex gap-4 max-w-[600px] mx-auto">
+                <button type="button" id="btnBack" onclick="prevStep()" class="w-1/3 bg-white border border-gray-200 text-gray-900 font-bold py-4 rounded-xl hidden transition shadow-sm hover:bg-gray-50 text-base">Back</button>
+                <button type="button" id="btnNext" onclick="nextStep()" class="flex-1 bg-gray-900 text-white font-bold py-4 rounded-xl shadow-md transition hover:bg-black text-base">Next Step</button>
+                <button type="button" id="btnSubmit" onclick="submitItrFinal()" class="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-md hidden transition text-base flex items-center justify-center gap-2">Submit Application</button>
             </div>
         </div>
     </div>
 
     <!-- 2. PAYMENT MODAL -->
     <div id="paymentModal" class="fixed inset-0 z-[60] hidden flex-col bg-brand-bg">
-        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white sticky top-0 z-10 shadow-sm">
-            <h3 class="font-bold text-lg text-gray-900">Payment Portal</h3>
-            <button onclick="closePaymentModal()" class="w-9 h-9 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="px-5 py-5 border-b border-gray-200 flex justify-between items-center bg-white sticky top-0 z-10 shadow-sm">
+            <h3 class="font-bold text-xl text-gray-900">Payment Portal</h3>
+            <button onclick="closePaymentModal()" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-6 h-6"></i></button>
         </div>
         <div class="overflow-y-auto no-scrollbar p-5 flex-grow bg-[#F8FAFC]">
-            <div class="max-w-[600px] mx-auto space-y-5 pt-1">
+            <div class="max-w-[600px] mx-auto space-y-6 pt-1">
                 
                 <!-- Payment Details Form -->
-                <div class="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm space-y-4">
-                    <h4 class="text-base font-bold text-gray-900 border-b border-gray-50 pb-3">Payment Details</h4>
-                    <div class="grid grid-cols-1 gap-4 pt-1">
-                        <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5">
+                    <h4 class="text-lg font-bold text-gray-900 border-b border-gray-50 pb-4">Payment Details</h4>
+                    <div class="grid grid-cols-1 gap-5 pt-1">
+                        <div class="grid grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-sm text-gray-600 mb-1.5 font-bold">Amount <span class="text-red-600">*</span></label>
-                                <input type="number" id="payAmount" oninput="updatePaymentUI()" class="corp-input font-mono font-bold text-lg" placeholder="₹ 0" required>
+                                <label class="block text-sm text-gray-600 mb-2 font-bold">Amount <span class="text-red-600">*</span></label>
+                                <input type="number" id="payAmount" oninput="updatePaymentUI()" class="corp-input font-mono font-bold text-xl" placeholder="₹ 0" required>
                             </div>
                             <div>
-                                <label class="block text-sm text-gray-600 mb-1.5 font-bold">App No / Ref</label>
-                                <input type="text" id="payAkn" oninput="updatePaymentUI()" class="corp-input uppercase font-mono text-sm" placeholder="APPLICATION">
+                                <label class="block text-sm text-gray-600 mb-2 font-bold">App No / Ref</label>
+                                <input type="text" id="payAkn" oninput="updatePaymentUI()" class="corp-input uppercase font-mono" placeholder="APPLICATION">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-600 mb-1.5 font-bold">Client Name</label>
-                            <input type="text" id="payName" oninput="updatePaymentUI()" class="corp-input text-sm" placeholder="Full Name" required>
+                            <label class="block text-sm text-gray-600 mb-2 font-bold">Client Name</label>
+                            <input type="text" id="payName" oninput="updatePaymentUI()" class="corp-input" placeholder="Full Name" required>
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-600 mb-1.5 font-bold">Auto Narration</label>
-                            <input type="text" id="payNarration" class="corp-input text-sm font-medium bg-gray-50 text-gray-500" placeholder="Auto-generated narration" readonly>
+                            <label class="block text-sm text-gray-600 mb-2 font-bold">Auto Narration</label>
+                            <input type="text" id="payNarration" class="corp-input font-medium bg-gray-50 text-gray-500" placeholder="Auto-generated narration" readonly>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <input type="text" id="payPan" class="corp-input uppercase font-mono text-sm" placeholder="PAN NUMBER" required>
-                            <input type="tel" id="payMobile" class="corp-input text-sm" placeholder="Mobile No" required>
+                        <div class="grid grid-cols-2 gap-5">
+                            <input type="text" id="payPan" class="corp-input uppercase font-mono" placeholder="PAN NUMBER" required>
+                            <input type="tel" id="payMobile" class="corp-input" placeholder="Mobile No" required>
                         </div>
                     </div>
                 </div>
 
                 <!-- DYNAMIC QR CODE SECTION -->
-                <div class="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm flex flex-col items-center text-center">
-                    <h4 class="text-base font-bold text-gray-900 mb-1">Scan to Pay via Any UPI App</h4>
-                    <p class="text-[11px] text-gray-500 mb-4 font-medium px-2">Amount is not fixed in QR. Please verify narration and enter your amount.</p>
-                    <div class="p-3 bg-white border border-gray-200 rounded-2xl shadow-sm mb-4 inline-block relative">
-                        <img id="upiQrCode" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi%3A%2F%2Fpay%3Fpa%3Daccountree%40ybl%26pn%3DAccountree" alt="UPI QR Code" class="w-40 h-40 object-contain">
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col items-center text-center">
+                    <h4 class="text-lg font-bold text-gray-900 mb-2">Scan to Pay via Any UPI App</h4>
+                    <p class="text-sm text-gray-500 mb-5 font-medium px-2">Amount is not fixed in QR. Please verify narration and enter your amount.</p>
+                    <div class="p-4 bg-white border border-gray-200 rounded-2xl shadow-sm mb-5 inline-block relative">
+                        <img id="upiQrCode" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi%3A%2F%2Fpay%3Fpa%3Daccountree%40ybl%26pn%3DAccountree" alt="UPI QR Code" class="w-48 h-48 object-contain">
                     </div>
-                    <div class="bg-gray-50 rounded-xl border border-gray-200 p-3.5 w-full flex justify-between items-center shadow-sm">
+                    <div class="bg-gray-50 rounded-xl border border-gray-200 p-4 w-full flex justify-between items-center shadow-sm">
                         <div class="flex flex-col text-left">
-                            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">UPI ID</span>
-                            <span class="text-xs font-bold text-gray-900 mt-0.5">accountree@ybl</span>
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">UPI ID</span>
+                            <span class="text-sm font-bold text-gray-900 mt-1">accountree@ybl</span>
                         </div>
-                        <button onclick="copyText('accountree@ybl')" class="p-2 bg-white rounded-lg border border-gray-200 text-gray-600 hover:text-gray-900 shadow-sm"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                        <button onclick="copyText('accountree@ybl')" class="p-2.5 bg-white rounded-lg border border-gray-200 text-gray-600 hover:text-gray-900 shadow-sm"><i data-lucide="copy" class="w-5 h-5"></i></button>
                     </div>
                 </div>
 
                 <!-- UPI Quick Apps -->
-                <div class="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm">
-                    <h4 class="text-base font-bold text-gray-900 mb-4">Quick Pay via UPI</h4>
-                    <div class="grid grid-cols-3 gap-3">
-                        <a id="btnGpay" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-gray-400 transition shadow-sm">
-                            <div class="w-8 h-8 rounded-full border-4 border-[#4285F4] border-t-[#EA4335] border-r-[#FBBC05] border-b-[#34A853]"></div>
-                            <span class="text-xs font-bold text-gray-700">GPay</span>
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                    <h4 class="text-lg font-bold text-gray-900 mb-5">Quick Pay via UPI</h4>
+                    <div class="grid grid-cols-3 gap-5">
+                        <a id="btnGpay" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-2xl py-5 flex flex-col items-center justify-center gap-3 hover:border-gray-400 transition shadow-sm">
+                            <div class="w-10 h-10 rounded-full border-[5px] border-[#4285F4] border-t-[#EA4335] border-r-[#FBBC05] border-b-[#34A853]"></div>
+                            <span class="text-sm font-bold text-gray-700">GPay</span>
                         </a>
-                        <a id="btnPhonePe" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-purple-400 transition shadow-sm">
-                            <div class="w-8 h-8 rounded-lg bg-[#5f259f] text-white flex items-center justify-center font-bold text-lg leading-none">पे</div>
-                            <span class="text-xs font-bold text-gray-700">PhonePe</span>
+                        <a id="btnPhonePe" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-2xl py-5 flex flex-col items-center justify-center gap-3 hover:border-purple-400 transition shadow-sm">
+                            <div class="w-10 h-10 rounded-lg bg-[#5f259f] text-white flex items-center justify-center font-bold text-xl leading-none">पे</div>
+                            <span class="text-sm font-bold text-gray-700">PhonePe</span>
                         </a>
-                        <a id="btnPaytm" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-blue-400 transition shadow-sm">
-                            <div class="w-auto px-1.5 h-8 rounded-lg bg-[#002970] text-white flex items-center justify-center font-bold text-[11px] leading-none">Paytm</div>
-                            <span class="text-xs font-bold text-gray-700">Paytm</span>
+                        <a id="btnPaytm" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-2xl py-5 flex flex-col items-center justify-center gap-3 hover:border-blue-400 transition shadow-sm">
+                            <div class="w-auto px-2 h-10 rounded-lg bg-[#002970] text-white flex items-center justify-center font-bold text-sm leading-none">Paytm</div>
+                            <span class="text-sm font-bold text-gray-700">Paytm</span>
                         </a>
                     </div>
                 </div>
 
                 <!-- Payment Gateway Razorpay Calculation -->
-                <div class="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm text-center">
-                    <h4 class="text-base font-bold text-gray-900 mb-1 text-left">Credit / Debit / Netbanking</h4>
-                    <p class="text-[11px] text-gray-500 mb-4 text-left">Standard gateway charges apply to card transactions.</p>
-                    <button onclick="payViaRazorpayLink()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-md transition text-sm">
-                        <i data-lucide="credit-card" class="w-4 h-4"></i> <span id="rzpBtnText">Pay via Razorpay</span> 
-                        <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded ml-1 tracking-wide">+ 2% fee</span>
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm text-center">
+                    <h4 class="text-lg font-bold text-gray-900 mb-2 text-left">Credit / Debit / Netbanking</h4>
+                    <p class="text-sm text-gray-500 mb-6 text-left">Standard gateway charges apply to card transactions.</p>
+                    <button onclick="payViaRazorpayLink()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-md transition text-base">
+                        <i data-lucide="credit-card" class="w-5 h-5"></i> <span id="rzpBtnText">Pay via Razorpay</span> 
+                        <span class="bg-white/20 text-white text-xs px-2.5 py-1 rounded ml-1 tracking-wide">+ 2% fee</span>
                     </button>
                 </div>
 
                 <!-- Bank Details Accordion -->
-                <div class="bg-white rounded-[24px] border border-gray-100 shadow-sm overflow-hidden">
-                    <button onclick="toggleBankDetails()" class="w-full p-5 flex justify-between items-center bg-white hover:bg-gray-50 transition">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="building-2" class="w-5 h-5 text-gray-700"></i>
-                            <span class="text-sm font-bold text-gray-900">Direct Bank Transfer</span>
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+                    <button onclick="toggleBankDetails()" class="w-full p-6 flex justify-between items-center bg-white hover:bg-gray-50 transition">
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="building-2" class="w-6 h-6 text-gray-700"></i>
+                            <span class="text-lg font-bold text-gray-900">Direct Bank Transfer</span>
                         </div>
-                        <i data-lucide="chevron-down" id="bankArrow" class="w-5 h-5 text-gray-400 transition-transform"></i>
+                        <i data-lucide="chevron-down" id="bankArrow" class="w-6 h-6 text-gray-400 transition-transform"></i>
                     </button>
-                    <div id="bankDetailsContent" class="bank-details-wrapper bg-gray-50 px-5 pb-5">
-                        <div class="space-y-3 border-t border-gray-200 pt-4">
-                            <div class="flex justify-between items-center bg-white border border-gray-200 p-3.5 rounded-xl shadow-sm">
-                                <div><span class="block text-[10px] font-bold text-gray-500 uppercase">Account Name</span><span class="text-xs font-bold text-gray-900 mt-0.5">Accountree</span></div>
-                                <button class="p-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 hover:text-gray-900 shadow-sm" onclick="copyText('Accountree')"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                    <div id="bankDetailsContent" class="bank-details-wrapper bg-gray-50 px-6 pb-6">
+                        <div class="space-y-4 border-t border-gray-200 pt-5">
+                            <div class="flex justify-between items-center bg-white border border-gray-200 p-4 rounded-2xl shadow-sm">
+                                <div><span class="block text-xs font-bold text-gray-500 uppercase">Account Name</span><span class="text-sm font-bold text-gray-900 mt-1">Accountree</span></div>
+                                <button class="p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-600 hover:text-gray-900 shadow-sm" onclick="copyText('Accountree')"><i data-lucide="copy" class="w-5 h-5"></i></button>
                             </div>
-                            <div class="flex justify-between items-center bg-white border border-gray-200 p-3.5 rounded-xl shadow-sm">
-                                <div><span class="block text-[10px] font-bold text-gray-500 uppercase">Account Number</span><span class="text-xs font-bold text-gray-900 mt-0.5">2538020000013</span></div>
-                                <button class="p-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 hover:text-gray-900 shadow-sm" onclick="copyText('2538020000013')"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                            <div class="flex justify-between items-center bg-white border border-gray-200 p-4 rounded-2xl shadow-sm">
+                                <div><span class="block text-xs font-bold text-gray-500 uppercase">Account Number</span><span class="text-sm font-bold text-gray-900 mt-1">2538020000013</span></div>
+                                <button class="p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-600 hover:text-gray-900 shadow-sm" onclick="copyText('2538020000013')"><i data-lucide="copy" class="w-5 h-5"></i></button>
                             </div>
-                            <div class="flex justify-between items-center bg-white border border-gray-200 p-3.5 rounded-xl shadow-sm">
-                                <div><span class="block text-[10px] font-bold text-gray-500 uppercase">IFSC Code</span><span class="text-xs font-bold text-gray-900 mt-0.5">FDRL0006407</span></div>
-                                <button class="p-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 hover:text-gray-900 shadow-sm" onclick="copyText('FDRL0006407')"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                            <div class="flex justify-between items-center bg-white border border-gray-200 p-4 rounded-2xl shadow-sm">
+                                <div><span class="block text-xs font-bold text-gray-500 uppercase">IFSC Code</span><span class="text-sm font-bold text-gray-900 mt-1">FDRL0006407</span></div>
+                                <button class="p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-600 hover:text-gray-900 shadow-sm" onclick="copyText('FDRL0006407')"><i data-lucide="copy" class="w-5 h-5"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Upload Payment Proof -->
-                <div class="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm">
-                    <h4 class="text-sm font-bold text-gray-900 mb-3">Upload Payment Receipt</h4>
-                    <div class="file-upload-wrapper !py-5 mb-4">
-                        <i data-lucide="image" class="w-5 h-5 mx-auto text-gray-400 mb-2"></i>
-                        <span class="text-xs font-bold text-gray-700 block">Select Screenshot</span>
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                    <h4 class="text-lg font-bold text-gray-900 mb-4">Upload Payment Receipt</h4>
+                    <div class="file-upload-wrapper !py-8 mb-5">
+                        <i data-lucide="image" class="w-8 h-8 mx-auto text-gray-400 mb-3"></i>
+                        <span class="text-base font-bold text-gray-700 block">Select Screenshot</span>
                         <input type="file" id="payProof" accept="image/*,.pdf">
                     </div>
-                    <button id="paySubmitBtn" onclick="submitPaymentForm()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md text-sm transition">Submit Payment Info</button>
+                    <button id="paySubmitBtn" onclick="submitPaymentForm()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-md text-base transition">Submit Payment Info</button>
                 </div>
             </div>
         </div>
@@ -757,59 +766,59 @@
 
     <!-- OTHER MODALS -->
     <div id="searchModal" class="fixed inset-0 z-[70] hidden bg-white/95 backdrop-blur-md animate-[fadeIn_0.2s_ease-out] flex-col">
-        <div class="px-5 pt-8 pb-4 flex gap-3 items-center border-b border-gray-200 bg-white shadow-sm">
+        <div class="px-5 pt-8 pb-5 flex gap-4 items-center border-b border-gray-200 bg-white shadow-sm">
             <div class="flex-grow relative">
-                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                <input type="text" id="searchInput" onkeyup="filterSearch()" placeholder="Search services..." class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm text-gray-900 outline-none focus:border-gray-900 transition shadow-sm" autofocus>
+                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                <input type="text" id="searchInput" onkeyup="filterSearch()" placeholder="Search services..." class="w-full bg-gray-50 border border-gray-200 rounded-xl py-4 pl-12 pr-4 text-base text-gray-900 outline-none focus:border-gray-900 transition shadow-sm" autofocus>
             </div>
-            <button onclick="closeSearch()" class="text-sm font-bold text-gray-600 hover:text-gray-900 transition">Cancel</button>
+            <button onclick="closeSearch()" class="text-base font-bold text-gray-600 hover:text-gray-900 transition">Cancel</button>
         </div>
-        <div class="flex-grow overflow-y-auto p-5 max-w-[600px] mx-auto w-full">
-            <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">Quick Links</p>
-            <div id="searchResultsList" class="space-y-3">
-                <div class="search-item flex items-center p-3.5 bg-white border border-gray-200 shadow-sm rounded-xl cursor-pointer hover:border-gray-900 transition" onclick="closeSearch(); openItrModal();"><i data-lucide="file-text" class="w-5 h-5 text-gray-700 mr-3"></i><span class="text-sm font-bold text-gray-900 search-text">File Income Tax Return (ITR)</span></div>
-                <div class="search-item flex items-center p-3.5 bg-white border border-gray-200 shadow-sm rounded-xl cursor-pointer hover:border-gray-900 transition" onclick="closeSearch(); openPaymentModal();"><i data-lucide="indian-rupee" class="w-5 h-5 text-gray-700 mr-3"></i><span class="text-sm font-bold text-gray-900 search-text">Make a Tax Payment</span></div>
+        <div class="flex-grow overflow-y-auto p-6 max-w-[600px] mx-auto w-full">
+            <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-5">Quick Links</p>
+            <div id="searchResultsList" class="space-y-4">
+                <div class="search-item flex items-center p-4 bg-white border border-gray-200 shadow-sm rounded-2xl cursor-pointer hover:border-gray-900 transition" onclick="closeSearch(); openItrModal();"><i data-lucide="file-text" class="w-6 h-6 text-gray-700 mr-4"></i><span class="text-base font-bold text-gray-900 search-text">File Income Tax Return (ITR)</span></div>
+                <div class="search-item flex items-center p-4 bg-white border border-gray-200 shadow-sm rounded-2xl cursor-pointer hover:border-gray-900 transition" onclick="closeSearch(); openPaymentModal();"><i data-lucide="indian-rupee" class="w-6 h-6 text-gray-700 mr-4"></i><span class="text-base font-bold text-gray-900 search-text">Make a Tax Payment</span></div>
             </div>
         </div>
     </div>
 
     <div id="uploadModal" class="fixed inset-0 z-[60] hidden flex-col bg-white">
-        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
-            <h3 class="font-bold text-lg text-gray-900">Upload Document</h3>
-            <button onclick="closeUploadModal()" class="w-9 h-9 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="px-5 py-5 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
+            <h3 class="font-bold text-xl text-gray-900">Upload Document</h3>
+            <button onclick="closeUploadModal()" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-6 h-6"></i></button>
         </div>
-        <div class="p-5 bg-brand-bg flex-grow">
-            <div class="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm space-y-4 max-w-[600px] mx-auto pt-5">
-                <input type="text" class="corp-input" placeholder="PAN or Application No" required>
-                <div class="file-upload-wrapper !py-8">
-                    <i data-lucide="upload-cloud" class="w-7 h-7 mx-auto text-gray-500 mb-2"></i>
-                    <span class="text-sm font-bold block text-gray-700">Tap to select file</span>
+        <div class="p-6 bg-brand-bg flex-grow">
+            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5 max-w-[600px] mx-auto mt-2">
+                <input type="text" class="corp-input text-lg" placeholder="PAN or Application No" required>
+                <div class="file-upload-wrapper !py-12">
+                    <i data-lucide="upload-cloud" class="w-10 h-10 mx-auto text-gray-600 mb-3"></i>
+                    <span class="text-base font-bold block text-gray-700">Tap to select file</span>
                     <input type="file" required>
                 </div>
-                <button onclick="closeUploadModal(); showToast('Document Uploaded!', false, true);" class="w-full bg-gray-900 hover:bg-black transition text-white font-bold py-3.5 rounded-xl shadow-md text-sm">Upload</button>
+                <button onclick="closeUploadModal(); showToast('Document Uploaded!', false, true);" class="w-full bg-gray-900 hover:bg-black transition text-white font-bold py-4 rounded-xl shadow-md text-base mt-2">Upload</button>
             </div>
         </div>
     </div>
 
     <!-- MORE SERVICES (BUSINESS SETUP) MODAL -->
     <div id="businessModal" class="fixed inset-0 z-[60] hidden flex-col bg-white">
-        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
-            <h3 class="font-bold text-lg text-gray-900">More Services</h3>
-            <button onclick="closeBusinessModal()" class="w-9 h-9 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="px-5 py-5 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
+            <h3 class="font-bold text-xl text-gray-900">More Services</h3>
+            <button onclick="closeBusinessModal()" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-6 h-6"></i></button>
         </div>
-        <div class="p-5 bg-brand-bg flex-grow">
-            <div class="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm space-y-4 max-w-[600px] mx-auto pt-5">
-                <p class="text-xs text-gray-500 mb-2 leading-relaxed font-medium">Provide basic details and connect with our expert team to setup your entity or explore more services.</p>
+        <div class="p-6 bg-brand-bg flex-grow">
+            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5 max-w-[600px] mx-auto mt-2">
+                <p class="text-sm text-gray-600 mb-4 leading-relaxed font-medium">Provide basic details and connect with our expert team to setup your entity or explore more services.</p>
                 <div>
-                    <label class="block text-sm text-gray-600 mb-1.5 font-bold">Applicant Name <span class="text-red-600">*</span></label>
+                    <label class="block text-sm text-gray-600 mb-2 font-bold">Applicant Name <span class="text-red-600">*</span></label>
                     <input type="text" id="bizName" class="corp-input uppercase" placeholder="Enter Name" required>
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-600 mb-1.5 font-bold">Proposed Business Name <span class="text-red-600">*</span></label>
+                    <label class="block text-sm text-gray-600 mb-2 font-bold">Proposed Business Name <span class="text-red-600">*</span></label>
                     <input type="text" id="bizProposedName" class="corp-input uppercase" placeholder="E.g., CM EXPERTS PVT LTD" required>
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-600 mb-1.5 font-bold">Entity Type <span class="text-red-600">*</span></label>
+                    <label class="block text-sm text-gray-600 mb-2 font-bold">Entity Type <span class="text-red-600">*</span></label>
                     <select id="bizType" class="corp-select" required>
                         <option value="Proprietorship">Sole Proprietorship</option>
                         <option value="Partnership">Partnership</option>
@@ -818,12 +827,12 @@
                     </select>
                 </div>
                 
-                <div class="flex gap-3 pt-3 border-t border-gray-100 mt-4">
-                    <button onclick="callAdmin()" class="w-[30%] bg-white border border-gray-200 text-gray-900 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition shadow-sm text-sm">
-                        <i data-lucide="phone" class="w-4 h-4"></i> Call
+                <div class="flex gap-4 pt-5 border-t border-gray-100 mt-6">
+                    <button onclick="callAdmin()" class="w-[30%] bg-white border border-gray-200 text-gray-900 font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition shadow-sm text-base">
+                        <i data-lucide="phone" class="w-5 h-5"></i> Call
                     </button>
-                    <button onclick="whatsappAdminBusiness()" class="w-[70%] bg-[#25D366] hover:bg-green-600 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition shadow-md text-sm">
-                        <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                    <button onclick="whatsappAdminBusiness()" class="w-[70%] bg-[#25D366] hover:bg-green-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition shadow-md text-base">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i> WhatsApp
                     </button>
                 </div>
             </div>
@@ -831,17 +840,17 @@
     </div>
 
     <div id="settingsModal" class="fixed inset-0 z-[60] hidden flex-col bg-white">
-        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
-            <h3 class="font-bold text-lg text-gray-900">Settings</h3>
-            <button onclick="closeSettingsModal()" class="w-9 h-9 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="px-5 py-5 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
+            <h3 class="font-bold text-xl text-gray-900">Settings</h3>
+            <button onclick="closeSettingsModal()" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-6 h-6"></i></button>
         </div>
-        <div class="p-5 bg-brand-bg flex-grow">
-            <div class="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm space-y-4 max-w-[600px] mx-auto pt-5">
+        <div class="p-6 bg-brand-bg flex-grow">
+            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5 max-w-[600px] mx-auto mt-2">
                 <div>
-                    <label class="block text-sm text-gray-600 mb-1.5 font-bold">Support Contact</label>
-                    <input type="tel" class="corp-input" value="+91 99461 51111">
+                    <label class="block text-sm text-gray-600 mb-2 font-bold">Support Contact</label>
+                    <input type="tel" class="corp-input text-lg" value="+91 99461 51111">
                 </div>
-                <button onclick="closeSettingsModal(); showToast('Settings Saved!', false, false);" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md text-sm transition mt-2">Save Changes</button>
+                <button onclick="closeSettingsModal(); showToast('Settings Saved!', false, false);" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-md text-base transition mt-2">Save Changes</button>
             </div>
         </div>
     </div>
@@ -861,7 +870,6 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            // Delay to not bombard immediately
             setTimeout(() => {
                 document.getElementById('pwaInstallPrompt').classList.remove('hidden');
                 document.getElementById('pwaInstallPrompt').classList.add('flex');
