@@ -2,471 +2,1238 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CM TaxHub</title>
-    <!-- PWA Manifest & Icons -->
-    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CM TaxApp | Corporate Dashboard</title>
+    
+    <!-- Favicon & App Icons (1x1) -->
     <link rel="icon" type="image/png" href="assets/logo.png">
-    <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
+    <link rel="apple-touch-icon" href="assets/logo.png">
+    <link rel="manifest" href="manifest.json">
+    
+    <meta name="theme-color" content="#FFFFFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Identity Services for Login -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            primary: '#111827', 
+                            dark: '#0B1120',    
+                            text: '#334155',    
+                            heading: '#0F172A', 
+                            muted: '#64748B',   
+                            bg: '#F8FAFC'      
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* CSS Variables for Theming */
-        :root {
-            --primary-blue: #003366;
-            --accent-yellow: #FFD700;
-            --danger-red: #EF4444;
-            --dark-grey-blue: #374151; /* Dark grey blue for text and individual donut */
-            
-            /* Light Theme */
-            --bg-main: #F4F6F8;
-            --card-bg: #FFFFFF;
-            --text-dark: #111827;
-            --text-muted: #6B7280;
-            --border-color: rgba(0,0,0,0.06);
-            --shadow-color: rgba(0,0,0,0.04);
-            --nav-bg: #FFFFFF;
-            --icon-bg-light: #F3F4F6;
-            --donut-track: #E5E7EB;
-            
-            /* Icon Specific Colors (Light) */
-            --icon-blue-bg: #EBF3FC; --icon-blue-text: #2563EB;
-            --icon-green-bg: #F0FDF4; --icon-green-text: #16A34A;
-            --icon-yellow-bg: #FFFBEB; --icon-yellow-text: #D97706;
-            --icon-purple-bg: #F5F3FF; --icon-purple-text: #7C3AED;
+        body { font-family: 'Inter', sans-serif; background-color: var(--tw-colors-brand-bg); -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .corp-input, .corp-select {
+            width: 100%; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px;
+            font-size: 15px; color: #0F172A; background: #FFFFFF; transition: all 0.2s ease; outline: none; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
-
-        /* Dark Theme Override */
-        body.dark-mode {
-            --bg-main: #121212;
-            --card-bg: #1E1E1E;
-            --text-dark: #F3F4F6;
-            --text-muted: #9CA3AF;
-            --border-color: rgba(255,255,255,0.08);
-            --shadow-color: rgba(0,0,0,0.3);
-            --nav-bg: #1E1E1E;
-            --icon-bg-light: #2D2D2D;
-            --donut-track: #374151;
-            
-            --icon-blue-bg: rgba(37, 99, 235, 0.2); --icon-blue-text: #60A5FA;
-            --icon-green-bg: rgba(22, 163, 74, 0.2); --icon-green-text: #4ADE80;
-            --icon-yellow-bg: rgba(217, 119, 6, 0.2); --icon-yellow-text: #FBBF24;
-            --icon-purple-bg: rgba(124, 58, 237, 0.2); --icon-purple-text: #A78BFA;
+        .corp-input:focus, .corp-select:focus { 
+            border-color: #111827; box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.1);
         }
+        .corp-input[readonly] { background: #F1F5F9; color: #64748B; cursor: not-allowed; }
+        
+        .file-upload-wrapper {
+            position: relative; border: 1px dashed #CBD5E1; border-radius: 8px; padding: 20px; text-align: center; background: #FFFFFF; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .file-upload-wrapper:hover { border-color: #111827; background: #F8FAFC; }
+        .file-upload-wrapper input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        
-        body { background-color: var(--bg-main); color: var(--text-dark); padding-bottom: 85px; transition: background-color 0.3s, color 0.3s; }
+        .step-active { color: #111827; font-weight: 700; border-bottom: 2px solid #111827; }
+        .step-inactive { color: #94A3B8; font-weight: 500; border-bottom: 2px solid transparent; }
 
-        .container { max-width: 500px; margin: 0 auto; padding: 0 16px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* App Header */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--bg-main); position: sticky; top: 0; z-index: 50; transition: background-color 0.3s; }
-        .logo-area { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.2rem; color: var(--primary-blue); }
-        .logo-area img { height: 36px; width: auto; }
+        .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 14px 24px; border-radius: 12px; font-weight: 600; font-size: 15px; opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 999999; display: flex; align-items: center; gap: 10px; white-space: nowrap; box-shadow: 0 6px 24px rgba(0,0,0,0.15); color: #FFFFFF; border: none; }
+        .toast.success { background: #10B981; }
+        .toast.error { background: #EF4444; }
+        .toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
         
-        .header-actions { display: flex; align-items: center; gap: 10px; }
-        .header-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-dark); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px var(--shadow-color); transition: 0.2s; }
-        .header-btn:active { transform: scale(0.95); }
-        .header-btn i { width: 20px; height: 20px; }
-        
-        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--icon-bg-light); display: flex; align-items: center; justify-content: center; color: var(--text-muted); border: 1px solid var(--border-color); }
-        .user-avatar i { width: 22px; height: 22px; }
-
-        /* Search Bar (Hidden by default) */
-        .search-container { background: var(--card-bg); padding: 10px 20px; display: none; border-bottom: 1px solid var(--border-color); box-shadow: 0 4px 12px var(--shadow-color); position: sticky; top: 72px; z-index: 49; }
-        .search-container.active { display: block; animation: slideDown 0.2s ease-out; }
-        .search-box { display: flex; align-items: center; background: var(--bg-main); border-radius: 12px; padding: 8px 12px; border: 1px solid var(--border-color); }
-        .search-box i { color: var(--text-muted); margin-right: 8px; width: 18px; }
-        .search-box input { border: none; background: transparent; width: 100%; outline: none; font-size: 0.95rem; color: var(--text-dark); }
-        
-        @keyframes slideDown { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        /* Welcome Section */
-        .welcome-section { padding: 12px 0 24px 0; }
-        .welcome-section h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-        .welcome-section p { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
-
-        /* Due Date Full Width Card */
-        .due-card { background: var(--card-bg); border-radius: 24px; padding: 22px; border: 1px solid var(--border-color); box-shadow: 0 4px 24px var(--shadow-color); margin-bottom: 28px; transition: 0.3s; }
-        .badge { display: inline-block; background: #FEF3C7; color: #B45309; font-size: 0.75rem; font-weight: 800; padding: 6px 12px; border-radius: 8px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .due-warning { font-size: 0.95rem; color: var(--text-muted); font-weight: 500; line-height: 1.4; margin-bottom: 20px; }
-        
-        /* Inner 2 Due Dates in a Row */
-        .due-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-        
-        .due-small-card { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; padding: 18px 12px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        
-        .donut-container { position: relative; width: 64px; height: 64px; margin-bottom: 12px; }
-        .donut-chart { width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        /* Individual: Dark Grey Blue, Audit: Red */
-        .donut-chart.dark-blue { background: conic-gradient(var(--dark-grey-blue) 0% 15%, var(--donut-track) 15% 100%); }
-        .donut-chart.red { background: conic-gradient(var(--danger-red) 0% 75%, var(--donut-track) 75% 100%); }
-        
-        .donut-inner { width: 48px; height: 48px; background: var(--bg-main); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .donut-inner .num { font-size: 1.1rem; font-weight: 800; color: var(--text-dark); line-height: 1.1; }
-        .donut-inner .label { font-size: 0.55rem; font-weight: 700; color: var(--text-muted); }
-
-        .due-small-card h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
-        .due-small-card span { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
-
-        /* Small width 1 File Now Button */
-        .btn-file-now { display: flex; align-items: center; justify-content: center; width: max-content; padding: 14px 40px; margin: 0 auto; background: var(--dark-grey-blue); color: #FFFFFF; font-size: 1rem; font-weight: 700; border-radius: 14px; text-decoration: none; border: none; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(55, 65, 81, 0.3); }
-        .btn-file-now:active { transform: scale(0.96); }
-
-        /* Section Titles */
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; text-transform: uppercase; }
-        .section-header h3 { font-size: 0.9rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; }
-
-        /* Services Grid */
-        .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
-        .service-card { background: var(--card-bg); border-radius: 20px; padding: 20px 18px; text-decoration: none; display: flex; flex-direction: column; border: 1px solid var(--border-color); box-shadow: 0 4px 16px var(--shadow-color); color: var(--text-dark); transition: transform 0.1s, background-color 0.3s; }
-        .service-card:active { transform: scale(0.97); }
-        
-        .service-card .icon-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-        .service-card .main-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-        .service-card .main-icon i { width: 22px; height: 22px; }
-        .icon-blue { background: var(--icon-blue-bg); color: var(--icon-blue-text); }
-        .icon-green { background: var(--icon-green-bg); color: var(--icon-green-text); }
-        .icon-yellow { background: var(--icon-yellow-bg); color: var(--icon-yellow-text); }
-        .icon-purple { background: var(--icon-purple-bg); color: var(--icon-purple-text); }
-        
-        .service-card .corner-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--icon-bg-light); display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
-        .service-card .corner-icon i { width: 14px; height: 14px; }
-
-        .service-card h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; line-height: 1.25; }
-        .service-card p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        
-        .service-card .card-btn { background: var(--icon-bg-light); color: var(--text-dark); font-size: 0.8rem; font-weight: 700; text-align: center; padding: 10px; border-radius: 12px; margin-top: auto; }
-
-        /* Full Width Bottom Navigation (Height Adjusted) */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 8px 0 12px 0; z-index: 100; box-shadow: 0 -4px 20px rgba(0,0,0,0.03); transition: background-color 0.3s; }
-        
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; cursor: pointer; flex: 1; }
-        /* Light grey icon background - height reduced */
-        .nav-icon-bg { width: 36px; height: 36px; background: var(--icon-bg-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--dark-grey-blue); transition: 0.2s; }
-        .nav-icon-bg i { width: 20px; height: 20px; }
-        /* Dark grey blue text */
-        .nav-item span { font-size: 0.75rem; font-weight: 700; color: var(--dark-grey-blue); }
-        
-        .nav-item:active .nav-icon-bg { transform: scale(0.9); }
-        
-        /* Active State - Matches dark grey blue text */
-        .nav-item.active .nav-icon-bg { border: 2px solid var(--dark-grey-blue); }
-
-        /* Hamburger Sidebar Menu */
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 200; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(2px); }
-        .sidebar-overlay.open { opacity: 1; visibility: visible; }
-        
-        .sidebar { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: var(--card-bg); z-index: 201; box-shadow: -4px 0 24px rgba(0,0,0,0.15); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
-        .sidebar.open { right: 0; }
-        
-        .sidebar-header { padding: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
-        .sidebar-header h2 { font-size: 1.3rem; color: var(--primary-blue); display: flex; align-items: center; gap: 12px; }
-        .close-btn { background: var(--icon-bg-light); border: none; color: var(--text-dark); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        
-        .sidebar-links { padding: 24px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
-        .sidebar-link { display: flex; align-items: center; gap: 16px; padding: 14px 18px; border-radius: 12px; text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 1.05rem; transition: background 0.2s; }
-        .sidebar-link:hover { background: var(--bg-main); }
-        .sidebar-link i { color: var(--primary-blue); width: 22px; height: 22px; }
-
-        /* Minimal Styled Sidebar CTA */
-        .sidebar-cta { padding: 24px; border-top: 1px solid var(--border-color); background: var(--card-bg); }
-        .sidebar-cta p { font-size: 1rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 600; }
-        
-        .cta-btn { display: flex; align-items: center; width: 100%; padding: 10px 14px; border-radius: 14px; text-decoration: none; font-weight: 600; font-size: 1rem; margin-bottom: 12px; color: var(--text-dark); transition: background 0.2s; }
-        .cta-btn:active { background: var(--icon-bg-light); transform: scale(0.98); }
-        
-        .cta-icon-bg { background: var(--icon-bg-light); width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 16px; border: 1px solid var(--border-color); }
-        .cta-icon-bg i { width: 22px; height: 22px; color: var(--text-dark); }
-
-/* Splash Screen */
-#splash-screen{
-    position:fixed;
-    inset:0;
-    background:#FAF9F6; /* Off white */
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:99999;
-    transition:opacity .4s ease, visibility .4s ease;
-}
-
-##splash-screen img{
-    width:min(260px,75vw);
-    aspect-ratio:3/1;
-    object-fit:contain;
-    animation:logoFade 1.2s ease;
-}
-#splash-screen.hide{
-    opacity:0;
-    visibility:hidden;
-    pointer-events:none;
-}
+        .bank-details-wrapper { transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
+        .bank-details-wrapper.expanded { max-height: 400px; opacity: 1; }
     </style>
 </head>
-<body>
-<div id="splash-screen">
-    <img src="name.png" alt="CM TaxHub">
-</div>
+<body class="font-sans text-brand-text min-h-screen flex flex-col relative overflow-x-hidden">
 
-    <!-- Header Section -->
-    <header>
-        <div class="logo-area">
-            <img src="assets/name.png" alt="" onerror="this.src='https://via.placeholder.com/40x40/003366/FFD700?text=CM'">
-            CM TaxHub
-        </div>
-        <div class="header-actions">
-            <!-- Search Working Icon -->
-            <button class="header-btn" id="searchToggleBtn">
-                <i data-lucide="search"></i>
-            </button>
-            <!-- Theme Toggle Icon -->
-            <button class="header-btn" id="themeToggle">
-                <i data-lucide="moon" id="themeIcon"></i>
-            </button>
-            <!-- User Avatar -->
-            <div class="user-avatar">
-                <i data-lucide="user"></i>
+    <!-- Splash Screen (1x3) -->
+    <div id="splash" class="fixed inset-0 z-[200] bg-[#f8fafc] flex flex-col items-center justify-center transition-opacity duration-500">
+        <img src="assets/name.png" alt="CM TaxApp" class="w-64 h-auto animate-pulse object-contain">
+    </div>
+
+    <!-- PWA Install Prompt Modal -->
+    <div id="pwaInstallPrompt" class="fixed inset-0 z-[110] hidden flex-col bg-gray-900/60 backdrop-blur-sm justify-end items-center px-4 pb-8 transition-opacity">
+        <div class="bg-white rounded-3xl w-full max-w-[400px] p-6 shadow-2xl relative flex flex-col items-center animate-[slideDown_0.3s_ease-out]">
+            <button onclick="closePWAInstall()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="w-14 h-14 bg-gray-900 rounded-xl flex items-center justify-center mb-4 shadow-sm">
+                <!-- App icon (1x1) -->
+                <img src="assets/logo.png" alt="CM TaxApp" class="w-8 h-8 object-contain filter brightness-0 invert">
             </div>
+            <h3 class="text-center font-bold text-xl text-gray-900 mb-2">Install CM TaxApp</h3>
+            <p class="text-center text-sm text-gray-500 mb-6">Install our app to your home screen for quick, seamless access to your dashboard.</p>
+            <div class="flex gap-4 w-full">
+                <button onclick="closePWAInstall()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition text-sm">Not Now</button>
+                <button onclick="installPWA()" class="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md transition text-sm">Install App</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fixed Sticky Header (Reduced Height to 60px) -->
+    <header class="fixed top-0 left-0 w-full z-[80] bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-200 h-[60px] px-5 flex justify-between items-center">
+        <div class="flex items-center">
+            <!-- Header Logo (1x3) -->
+            <img src="assets/name.png" alt="CM TaxApp" class="h-8 object-contain cursor-pointer" onclick="goHome()">
+        </div>
+        <div class="flex items-center gap-2.5">
+            <button onclick="openSearch()" class="w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 shadow-sm hover:bg-gray-100 transition">
+                <i data-lucide="search" class="w-4 h-4"></i>
+            </button>
+            <button onclick="openAlarmModal()" class="relative w-9 h-9 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600 shadow-sm hover:bg-gray-100 transition">
+                <i data-lucide="bell" class="w-4 h-4"></i>
+                <span class="absolute top-2 right-2 w-2 h-2 bg-[#c80000] rounded-full animate-pulse border border-white"></span>
+            </button>
+            <button id="headerAvatarBtn" onclick="handleProfileClick()" class="w-9 h-9 rounded-full border border-gray-200 shadow-sm bg-white overflow-hidden flex items-center justify-center hover:bg-gray-50 transition">
+                <i data-lucide="user" class="w-4 h-4 text-gray-500" id="headerAvatarIcon"></i>
+                <img id="headerAvatarImg" src="" class="w-full h-full object-cover hidden" alt="Profile">
+            </button>
         </div>
     </header>
 
-    <!-- Hidden Search Bar Overlay -->
-    <div class="search-container" id="searchContainer">
-        <div class="search-box">
-            <i data-lucide="search"></i>
-            <input type="text" placeholder="Search forms, services, or updates..." autoFocus>
-        </div>
-    </div>
-
-    <main class="container">
-        
-        <!-- Welcome Message -->
-        <div class="welcome-section">
-            <h1>Welcome back to <br>CM TaxHub! 👋</h1>
-            <p>Manage your filings & compliance easily.</p>
-        </div>
-
-        <!-- Full Width Due Date Card -->
-        <div class="due-card">
-            <div class="badge">Urgent Action</div>
-            <p class="due-warning">File your income tax return before due date and avoid late fee and interest.</p>
+    <!-- MAIN APP WRAPPER (Scrollable Content Area) -->
+    <div id="mainApp" class="flex flex-col flex-grow h-screen overflow-y-auto bg-[#F8FAFC]">
+        <main class="px-5 w-full max-w-[600px] mx-auto space-y-7 pt-[80px] pb-[85px]">
             
-            <div class="due-row">
-                <!-- Due Date 1: Individuals (Dark Grey Blue Donut) -->
-                <div class="due-small-card">
-                    <div class="donut-container">
-                        <div class="donut-chart dark-blue">
-                            <div class="donut-inner">
-                                <span class="num">14</span>
-                                <span class="label">DAYS</span>
-                            </div>
+            <!-- Welcome Section -->
+            <div>
+                <div class="flex items-center gap-2 mb-1.5">
+                    <span class="text-3xl leading-none">👋</span>
+                    <h1 class="text-3xl font-black text-gray-900 tracking-tight leading-none">Welcome Back</h1>
+                </div>
+                <p class="text-sm text-gray-500 font-semibold pl-1.5">File your Taxes with Confidence.</p>
+            </div>
+
+            <!-- Due Date Reminder Card -->
+            <div class="bg-gray-900 rounded-[28px] p-6 shadow-lg relative overflow-hidden text-white">
+                <i data-lucide="calculator" class="absolute -right-4 -bottom-4 w-40 h-40 text-white opacity-[0.03]"></i>
+                <div class="flex justify-between items-center relative z-10 mb-6">
+                    <div>
+                        <h2 class="font-bold text-lg mb-1.5 flex items-center gap-2 text-white tracking-wide">
+                            ITR Due Date
+                            <span class="w-2 h-2 rounded-full bg-white inline-block shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
+                        </h2>
+                        <p class="text-[13px] text-gray-400 mb-4 font-medium">Assessment Year 2026-27</p>
+                        
+                        <div class="inline-block border border-gray-700 bg-gray-800/50 px-3 py-1.5 rounded-xl">
+                            <span class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase">Deadline</span>
+                            <span class="block text-sm font-bold text-white mt-0.5">31 July 2026</span>
                         </div>
                     </div>
-                    <h4>For Individual</h4>
-                    <span>July 31, 2026</span>
+                    <!-- Circular Graph -->
+                    <div class="relative w-24 h-24 flex items-center justify-center bg-white rounded-full shadow-inner border-[4px] border-gray-800">
+                        <svg class="w-full h-full transform -rotate-90 absolute" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="42" fill="none" stroke="#f1f5f9" stroke-width="12"></circle>
+                            <circle id="donutProgress" cx="50" cy="50" r="42" fill="none" stroke="#c80000" stroke-width="12" stroke-dasharray="263.89" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000 ease-out"></circle>
+                        </svg>
+                        <div class="absolute flex flex-col items-center justify-center mt-1">
+                            <span id="donutDaysLeft" class="text-3xl font-black leading-none text-gray-900 tracking-tight">--</span>
+                            <span class="text-[9px] font-bold text-gray-500 mt-1 tracking-widest uppercase">Days</span>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Due Date 2: Audit Cases (Red Donut) -->
-                <div class="due-small-card">
-                    <div class="donut-container">
-                        <div class="donut-chart red">
-                            <div class="donut-inner">
-                                <span class="num">75</span>
-                                <span class="label">DAYS</span>
+                <!-- Navigation Button to Form -->
+                <button onclick="openItrModal()" class="w-full bg-white hover:bg-gray-100 text-gray-900 font-bold py-3.5 rounded-xl shadow-md transition text-sm flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i> File ITR Now
+                </button>
+            </div>
+
+            <!-- Quick Actions Grid -->
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-4 px-1">Quick Tools</h3>
+                <div class="grid grid-cols-2 gap-4 gap-y-6 pt-1">
+                    
+                    <div class="relative cursor-pointer group" onclick="openItrModal()">
+                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-14 h-3.5 bg-slate-300 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
+                        <div class="bg-white rounded-2xl p-5 pt-5 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                            <div class="flex justify-between items-center mb-2.5">
+                                <h4 class="text-[13px] font-bold text-slate-700 uppercase tracking-wider">Income Tax Return</h4>
                             </div>
+                            <div class="w-full h-px bg-slate-100 mb-2.5"></div>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed flex-grow">Submit your tax returns securely.</p>
                         </div>
                     </div>
-                    <h4>For Audit Cases</h4>
-                    <span>Sep 30, 2026</span>
+
+                    <div class="relative cursor-pointer group" onclick="openUploadModal()">
+                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-14 h-3.5 bg-blue-200 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
+                        <div class="bg-white rounded-2xl p-5 pt-5 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                            <div class="flex justify-between items-center mb-2.5">
+                                <h4 class="text-[13px] font-bold text-blue-700 uppercase tracking-wider">Upload</h4>
+                                <i data-lucide="cloud-upload" class="w-5 h-5 text-blue-400"></i>
+                            </div>
+                            <div class="w-full h-px bg-slate-100 mb-2.5"></div>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed flex-grow">Submit your pending document files.</p>
+                        </div>
+                    </div>
+
+                    <div class="relative cursor-pointer group" onclick="openPaymentModal()">
+                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-14 h-3.5 bg-indigo-200 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
+                        <div class="bg-white rounded-2xl p-5 pt-5 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                            <div class="flex justify-between items-center mb-2.5">
+                                <h4 class="text-[13px] font-bold text-indigo-700 uppercase tracking-wider">Payment</h4>
+                                <i data-lucide="credit-card" class="w-5 h-5 text-indigo-400"></i>
+                            </div>
+                            <div class="w-full h-px bg-slate-100 mb-2.5"></div>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed flex-grow">Make your secure online payments.</p>
+                        </div>
+                    </div>
+
+                    <div class="relative cursor-pointer group" onclick="handleProfileClick()">
+                        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-14 h-3.5 bg-teal-200 rounded-t-md rounded-b-sm z-10 shadow-sm transition-transform group-hover:-translate-y-0.5"></div>
+                        <div class="bg-white rounded-2xl p-5 pt-5 shadow-[0_8px_20px_rgba(0,0,0,0.06)] border border-gray-100 relative z-0 group-hover:shadow-[0_12px_25px_rgba(0,0,0,0.12)] transition-shadow h-full flex flex-col">
+                            <div class="flex justify-between items-center mb-2.5">
+                                <h4 class="text-[13px] font-bold text-teal-700 uppercase tracking-wider">My Filings</h4>
+                                <i data-lucide="folder-check" class="w-5 h-5 text-teal-400"></i>
+                            </div>
+                            <div class="w-full h-px bg-slate-100 mb-2.5"></div>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed flex-grow">View your status, AKN & receipts.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <!-- Single Small Width File Now Button -->
-            <a href="form.html" class="btn-file-now">File Return Now</a>
-        </div>
 
-        <!-- Quick Services Grid -->
-        <div class="section-header">
-            <h3>Quick Services</h3>
-        </div>
-        
-        <div class="services-grid">
-            <a href="form.html" class="service-card">
-                <div class="icon-row">
-                    <div class="main-icon icon-blue"><i data-lucide="file-text"></i></div>
-                    <div class="corner-icon"><i data-lucide="arrow-up-right"></i></div>
+            <!-- Dashboard Tax Updates Section -->
+            <div>
+                <div class="flex justify-between items-center mb-4 px-1">
+                    <h3 class="text-xl font-bold text-gray-900">Tax Updates</h3>
+                    <a href="taxupdates.html" class="text-sm font-bold text-gray-700 hover:text-black transition">View All</a>
                 </div>
-                <h4>Income Tax<br>Filing</h4>
-                <p>Submit your returns accurately and securely.</p>
-                <div class="card-btn">File Now</div>
-            </a>
-            
-            <a href="upload.html" class="service-card">
-                <div class="icon-row">
-                    <div class="main-icon icon-green"><i data-lucide="upload-cloud"></i></div>
-                    <div class="corner-icon"><i data-lucide="arrow-up-right"></i></div>
+                
+                <div class="space-y-3">
+                    <a href="taxupdates.html" class="bg-white rounded-[24px] p-3.5 shadow-sm border border-gray-100 flex items-center justify-between gap-3 hover:shadow-md transition group">
+                        <div class="flex items-center gap-3 overflow-hidden pl-1">
+                            <div class="w-11 h-11 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="clipboard-list" class="w-5 h-5 text-gray-600"></i>
+                            </div>
+                            <div class="truncate">
+                                <h4 class="text-sm font-bold text-gray-900 truncate mb-0.5">ITR Due Date for Individual</h4>
+                                <p class="text-xs text-gray-500 truncate">AY 2026-27 filing deadline details</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0 pr-1">
+                            <span class="text-[10px] font-bold text-gray-700 bg-gray-50 px-2.5 py-1 rounded-md border border-gray-200">Jul 31, 2026</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform"></i>
+                        </div>
+                    </a>
+
+                    <a href="taxupdates.html" class="bg-white rounded-[24px] p-3.5 shadow-sm border border-gray-100 flex items-center justify-between gap-3 hover:shadow-md transition group">
+                        <div class="flex items-center gap-3 overflow-hidden pl-1">
+                            <div class="w-11 h-11 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="search-check" class="w-5 h-5 text-gray-600"></i>
+                            </div>
+                            <div class="truncate">
+                                <h4 class="text-sm font-bold text-gray-900 truncate mb-0.5">Tax Audit Due Date</h4>
+                                <p class="text-xs text-gray-500 truncate">Form 3CD report upload schedule</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0 pr-1">
+                            <span class="text-[10px] font-bold text-gray-700 bg-gray-50 px-2.5 py-1 rounded-md border border-gray-200">Sep 30, 2026</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform"></i>
+                        </div>
+                    </a>
+
+                    <a href="taxupdates.html" class="bg-white rounded-[24px] p-3.5 shadow-sm border border-gray-100 flex items-center justify-between gap-3 hover:shadow-md transition group">
+                        <div class="flex items-center gap-3 overflow-hidden pl-1">
+                            <div class="w-11 h-11 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="layout-template" class="w-5 h-5 text-gray-600"></i>
+                            </div>
+                            <div class="truncate">
+                                <h4 class="text-sm font-bold text-gray-900 truncate mb-0.5">New Key Changes</h4>
+                                <p class="text-xs text-gray-500 truncate">Default tax regime & compliance rules</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0 pr-1">
+                            <span class="text-[10px] font-bold text-gray-700 bg-gray-50 px-2.5 py-1 rounded-md border border-gray-200">AY 2026-27</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform"></i>
+                        </div>
+                    </a>
                 </div>
-                <h4>Upload<br>Statement</h4>
-                <p>Attach Form 16, bank statements, and more.</p>
-                <div class="card-btn">Upload</div>
-            </a>
+            </div>
 
-            <a href="pay.html" class="service-card">
-                <div class="icon-row">
-                    <div class="main-icon icon-yellow"><i data-lucide="credit-card"></i></div>
-                    <div class="corner-icon"><i data-lucide="arrow-up-right"></i></div>
+            <!-- Corporate Support Banner -->
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 flex items-center justify-between cursor-pointer shadow-md hover:bg-black transition mt-4" onclick="window.location.href='tel:+919946151111'">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800 flex items-center justify-center text-white border border-gray-700">
+                        <i data-lucide="headset" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-base font-bold text-white">Dedicated Support</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Connect with your advisor</p>
+                    </div>
                 </div>
-                <h4>Secure<br>Payment</h4>
-                <p>Clear advance tax or penalty dues instantly.</p>
-                <div class="card-btn">Pay Now</div>
-            </a>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-500"></i>
+            </div>
+        </main>
+    </div>
 
-            <a href="news.html" class="service-card">
-                <div class="icon-row">
-                    <div class="main-icon icon-purple"><i data-lucide="bell-ring"></i></div>
-                    <div class="corner-icon"><i data-lucide="arrow-up-right"></i></div>
-                </div>
-                <h4>Tax<br>Updates</h4>
-                <p>Stay informed on the latest IT slabs and news.</p>
-                <div class="card-btn">Learn more</div>
-            </a>
-        </div>
-
-    </main>
-
-    <!-- Standard Bottom Navigation Dock -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active">
-            <div class="nav-icon-bg"><i data-lucide="home"></i></div>
-            <span>Home</span>
+    <!-- Fixed Full-Length Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 w-full z-[80] bg-white/95 backdrop-blur-md border-t border-gray-200 px-6 h-[60px] flex justify-between items-center pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+        <a href="#" onclick="goHome()" class="flex flex-col items-center gap-1 text-gray-900 w-14">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold mt-0.5">Home</span>
         </a>
-        <a href="services.html" class="nav-item">
-            <div class="nav-icon-bg"><i data-lucide="layout-grid"></i></div>
-            <span>Services</span>
+        <a href="#" onclick="openPaymentModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-900 transition w-14">
+            <i data-lucide="indian-rupee" class="w-5 h-5"></i>
+            <span class="text-[10px] font-semibold mt-0.5">Payments</span>
         </a>
-        <a href="https://wa.me/919946151111" class="nav-item">
-            <div class="nav-icon-bg"><i data-lucide="message-square"></i></div>
-            <span>Chat</span>
+        <a href="#" onclick="handleProfileClick()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-900 transition w-14">
+            <i data-lucide="user" class="w-5 h-5"></i>
+            <span class="text-[10px] font-semibold mt-0.5" id="navProfileText">Login</span>
         </a>
-        <div class="nav-item" id="menuToggle">
-            <div class="nav-icon-bg"><i data-lucide="menu"></i></div>
-            <span>Menu</span>
-        </div>
+        <a href="#" onclick="openMenu()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-900 transition w-14">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+            <span class="text-[10px] font-semibold mt-0.5">Menu</span>
+        </a>
     </nav>
 
-    <!-- Sidebar & Overlay -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h2>
-                <img src="assets/logo.png" alt="logo" style="height: 28px;" onerror="this.style.display='none'"> 
-                Menu
-            </h2>
-            <button class="close-btn" id="closeSidebar"><i data-lucide="x"></i></button>
+    <!-- ALL PAGE MODALS (Fit seamlessly between Header and Bottom Nav) -->
+    
+    <!-- MY FILINGS / USER DASHBOARD MODAL -->
+    <div id="myFilingsModal" class="page-modal fixed top-[60px] bottom-[60px] left-0 w-full z-[50] hidden flex-col bg-[#F8FAFC]">
+        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
+            <h3 class="font-bold text-lg text-gray-900">My Filings</h3>
+            <button onclick="goHome()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
-        
-        <div class="sidebar-links">
-            <a href="services.html" class="sidebar-link"><i data-lucide="grid"></i> All Services</a>
-            <a href="form-itr.html" class="sidebar-link"><i data-lucide="file-text"></i> File ITR</a>
-            <a href="about.html" class="sidebar-link"><i data-lucide="info"></i> About App</a>
-            <a href="privacy.html" class="sidebar-link"><i data-lucide="shield-check"></i> Privacy & Policy</a>
-        </div>
-
-        <!-- Minimal Styled Sidebar CTA -->
-        <div class="sidebar-cta">
-            <p>Need Expert Assistance?</p>
-            <a href="https://wa.me/919946151111" class="cta-btn">
-                <div class="cta-icon-bg"><i data-lucide="message-circle"></i></div>
-                WhatsApp Support
-            </a>
-            <a href="tel:9946151111" class="cta-btn">
-                <div class="cta-icon-bg"><i data-lucide="phone-call"></i></div>
-            </a>
-            <a href="mailto:support@cmfilings.com" class="cta-btn">
-                <div class="cta-icon-bg"><i data-lucide="mail"></i></div>
-            </a>
+        <div class="overflow-y-auto no-scrollbar p-5 flex-grow">
+            <div class="max-w-[600px] mx-auto space-y-4 pt-2" id="myFilingsContainer">
+                <div class="flex flex-col items-center justify-center py-20 text-gray-400">
+                    <i data-lucide="loader-2" class="w-8 h-8 animate-spin mb-4"></i>
+                    <p class="text-sm font-semibold">Loading your records...</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- SIDE NAVIGATION MENU -->
+    <div id="sideMenu" class="page-modal fixed top-[60px] bottom-[60px] left-0 w-full z-[50] hidden">
+        <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" onclick="goHome()"></div>
+        <div class="absolute inset-y-0 left-0 w-[80%] max-w-sm bg-white shadow-2xl flex flex-col animate-[slideRight_0.2s_ease-out]">
+            <div class="px-6 py-8 border-b border-gray-100 bg-white flex justify-between items-start">
+                <div>
+                    <img id="navAvatar" src="assets/logo.png" class="w-14 h-14 rounded-2xl border border-gray-200 object-contain bg-white p-1 hidden mb-3" alt="Profile">
+                    <div id="navInitials" class="w-14 h-14 bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-center text-gray-900 mb-3 shadow-sm font-bold text-xl">GU</div>
+                    <h2 id="navName" class="text-lg font-bold text-gray-900 leading-tight">Guest User</h2>
+                    <p id="navEmail" class="text-xs font-medium text-gray-500 mt-1">Please Sign In</p>
+                </div>
+                <button onclick="goHome()" class="w-8 h-8 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-900 transition shadow-sm">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="flex-grow overflow-y-auto p-4 space-y-1.5">
+                <a href="#" onclick="goHome()" class="flex items-center gap-3 p-3.5 bg-gray-50 rounded-xl text-gray-900 font-bold transition text-sm">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </a>
+                <a href="taxupdates.html" class="flex items-center gap-3 p-3.5 hover:bg-gray-50 rounded-xl text-gray-700 font-semibold transition text-sm">
+                    <i data-lucide="newspaper" class="w-5 h-5 text-gray-400"></i> Tax Updates
+                </a>
+                <a href="#" onclick="openItrModal();" class="flex items-center gap-3 p-3.5 hover:bg-gray-50 rounded-xl text-gray-700 font-semibold transition text-sm">
+                    <i data-lucide="file-text" class="w-5 h-5 text-gray-400"></i> File ITR Return
+                </a>
+                <a href="#" onclick="openPaymentModal();" class="flex items-center gap-3 p-3.5 hover:bg-gray-50 rounded-xl text-gray-700 font-semibold transition text-sm">
+                    <i data-lucide="indian-rupee" class="w-5 h-5 text-gray-400"></i> Payments
+                </a>
+                
+                <div class="my-2 border-t border-gray-100"></div>
+                <a href="privacy.html" class="flex items-center gap-3 p-3.5 hover:bg-gray-50 rounded-xl text-gray-700 font-semibold transition text-sm">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-gray-400"></i> Privacy and Policy
+                </a>
+                <a href="about.html" class="flex items-center gap-3 p-3.5 hover:bg-gray-50 rounded-xl text-gray-700 font-semibold transition text-sm">
+                    <i data-lucide="info" class="w-5 h-5 text-gray-400"></i> About App
+                </a>
+            </div>
+            <div class="p-5 border-t border-gray-100 flex flex-col gap-2">
+                <button id="navSignInBtn" onclick="openLoginModal()" class="w-full flex items-center justify-center gap-2 text-white font-bold bg-gray-900 py-3.5 rounded-xl shadow-md transition text-sm hover:bg-black">
+                    <i data-lucide="log-in" class="w-4 h-4"></i> Sign In
+                </button>
+                <button id="navSignOutBtn" onclick="handleLogout()" class="hidden w-full flex items-center justify-center gap-2 text-gray-900 font-bold border border-gray-200 bg-white py-3.5 rounded-xl hover:bg-gray-50 shadow-sm transition text-sm">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. ITR FORM MODAL -->
+    <div id="itrModal" class="page-modal fixed top-[60px] bottom-[60px] left-0 w-full z-[50] hidden flex-col bg-white">
+        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
+            <h3 class="font-bold text-lg text-gray-900">File ITR</h3>
+            <button onclick="goHome()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <div id="itrModalNav" class="px-5 pt-4 bg-white flex justify-between text-center border-b border-gray-200 pb-0 shadow-sm">
+            <div id="navStep1" class="w-1/3 pb-3 step-active text-sm transition-all duration-300">1. Personal</div>
+            <div id="navStep2" class="w-1/3 pb-3 step-inactive text-sm transition-all duration-300">2. Income</div>
+            <div id="navStep3" class="w-1/3 pb-3 step-inactive text-sm transition-all duration-300">3. Documents</div>
+        </div>
+
+        <div class="overflow-y-auto no-scrollbar p-5 bg-[#F8FAFC] flex-grow">
+            <form id="itrForm" class="h-full max-w-[600px] mx-auto block pt-1">
+                <!-- STEP 1 -->
+                <div id="step1" class="block animate-[fadeIn_0.3s_ease-out]">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+                        <div class="mb-1 border-b border-gray-50 pb-3">
+                            <h4 class="text-base font-bold text-gray-900">Personal Details</h4>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1 font-bold">Full Name <span class="text-red-600">*</span></label>
+                            <input type="text" id="s1_name" class="corp-input uppercase" required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1 font-bold">Mobile</label>
+                                <input type="tel" id="s1_mobile" maxlength="10" class="corp-input">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1 font-bold">PAN <span class="text-red-600">*</span></label>
+                                <input type="text" id="s1_pan" maxlength="10" class="corp-input uppercase font-mono" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1 font-bold">Email <span class="text-red-600">*</span></label>
+                            <input type="email" id="s1_email" class="corp-input lowercase" required>
+                        </div>
+                    </div>
+                </div>
+                <!-- STEP 2 -->
+                <div id="step2" class="hidden animate-[fadeIn_0.3s_ease-out]">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+                        <h4 class="text-base font-bold text-gray-900 mb-1 border-b border-gray-50 pb-3">Income Details</h4>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1 font-bold">Financial Year <span class="text-red-600">*</span></label>
+                            <select id="s2_fy" class="corp-select" required>
+                                <option value="" disabled selected>Select FY</option>
+                                <option value="2025-26">2025-26</option>
+                                <option value="2024-25">2024-25</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1 font-bold">Primary Source <span class="text-red-600">*</span></label>
+                            <select id="s2_head" class="corp-select" required>
+                                <option value="" disabled selected>Select Source</option>
+                                <option value="Salary">Salary</option>
+                                <option value="Business">Business / Profession</option>
+                                <option value="CapitalGains">Capital Gains</option>
+                                <option value="HouseProperty">House Property</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- STEP 3 -->
+                <div id="step3" class="hidden animate-[fadeIn_0.3s_ease-out]">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+                        <h4 class="text-base font-bold text-gray-900 mb-1 border-b border-gray-50 pb-3">Upload Files</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="file-upload-wrapper">
+                                <i data-lucide="file-text" class="w-6 h-6 mx-auto text-gray-400 mb-2"></i>
+                                <span class="text-sm font-bold text-gray-700 block">Bank Stmt</span>
+                                <input type="file" id="s3_bank" accept=".pdf,image/*">
+                            </div>
+                            <div class="file-upload-wrapper">
+                                <i data-lucide="file-badge" class="w-6 h-6 mx-auto text-gray-400 mb-2"></i>
+                                <span class="text-sm font-bold text-gray-700 block">Form 16/16A</span>
+                                <input type="file" id="s3_form16" accept=".pdf,image/*">
+                            </div>
+                            <div class="file-upload-wrapper">
+                                <i data-lucide="bar-chart" class="w-6 h-6 mx-auto text-gray-400 mb-2"></i>
+                                <span class="text-sm font-bold text-gray-700 block">P&L Stmt</span>
+                                <input type="file" id="s3_pnl" accept=".pdf,image/*">
+                            </div>
+                            <div class="file-upload-wrapper">
+                                <i data-lucide="folder-plus" class="w-6 h-6 mx-auto text-gray-400 mb-2"></i>
+                                <span class="text-sm font-bold text-gray-700 block">Others</span>
+                                <input type="file" id="s3_others" accept=".pdf,image/*">
+                            </div>
+                        </div>
+                        <div class="pt-2">
+                            <label class="block text-sm text-gray-600 mb-1 font-bold">Name of Other Statement</label>
+                            <input type="text" id="s3_other_name" class="corp-input" placeholder="e.g., Capital Gains Report">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div id="itrModalFooter" class="p-5 border-t border-gray-200 bg-white shadow-sm">
+            <div class="flex gap-3 max-w-[600px] mx-auto">
+                <button type="button" id="btnBack" onclick="prevStep()" class="w-1/3 bg-white border border-gray-200 text-gray-900 font-bold py-3.5 rounded-xl hidden transition shadow-sm hover:bg-gray-50 text-sm">Back</button>
+                <button type="button" id="btnNext" onclick="nextStep()" class="flex-1 bg-gray-900 text-white font-bold py-3.5 rounded-xl shadow-md transition hover:bg-black text-sm">Next Step</button>
+                <button type="button" id="btnSubmit" onclick="submitItrFinal()" class="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md hidden transition text-sm flex items-center justify-center gap-2">Submit Application</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. PAYMENT MODAL -->
+    <div id="paymentModal" class="page-modal fixed top-[60px] bottom-[60px] left-0 w-full z-[50] hidden flex-col bg-[#F8FAFC]">
+        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
+            <h3 class="font-bold text-lg text-gray-900">Payment Portal</h3>
+            <button onclick="goHome()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div class="overflow-y-auto no-scrollbar p-5 flex-grow">
+            <div class="max-w-[600px] mx-auto space-y-5 pt-1">
+                
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+                    <h4 class="text-base font-bold text-gray-900 border-b border-gray-50 pb-3">Payment Details</h4>
+                    <div class="grid grid-cols-1 gap-4 pt-1">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1.5 font-bold">Amount <span class="text-red-600">*</span></label>
+                                <input type="number" id="payAmount" oninput="updatePaymentUI()" class="corp-input font-mono font-bold text-lg" placeholder="₹ 0" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1.5 font-bold">App No / Ref</label>
+                                <input type="text" id="payAkn" oninput="updatePaymentUI()" class="corp-input uppercase font-mono text-sm" placeholder="APPLICATION">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1.5 font-bold">Client Name</label>
+                            <input type="text" id="payName" oninput="updatePaymentUI()" class="corp-input text-sm" placeholder="Full Name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1.5 font-bold">Auto Narration</label>
+                            <input type="text" id="payNarration" class="corp-input text-sm font-medium bg-gray-50 text-gray-500" placeholder="Auto-generated narration" readonly>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" id="payPan" class="corp-input uppercase font-mono text-sm" placeholder="PAN NUMBER" required>
+                            <input type="tel" id="payMobile" class="corp-input text-sm" placeholder="Mobile No" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center">
+                    <h4 class="text-base font-bold text-gray-900 mb-1">Scan to Pay via Any UPI App</h4>
+                    <p class="text-xs text-gray-500 mb-4 font-medium px-2">Amount is not fixed in QR. Please verify narration and enter your amount.</p>
+                    <div class="p-3 bg-white border border-gray-200 rounded-xl shadow-sm mb-4 inline-block relative">
+                        <img id="upiQrCode" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi%3A%2F%2Fpay%3Fpa%3Daccountree%40ybl%26pn%3DAccountree" alt="UPI QR Code" class="w-40 h-40 object-contain">
+                    </div>
+                    <div class="bg-gray-50 rounded-lg border border-gray-200 p-3 w-full flex justify-between items-center shadow-sm">
+                        <div class="flex flex-col text-left">
+                            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">UPI ID</span>
+                            <span class="text-sm font-bold text-gray-900 mt-0.5">accountree@ybl</span>
+                        </div>
+                        <button onclick="copyText('accountree@ybl')" class="p-2 bg-white rounded-md border border-gray-200 text-gray-600 hover:text-gray-900 shadow-sm"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                    <h4 class="text-base font-bold text-gray-900 mb-4">Quick Pay via UPI</h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <a id="btnGpay" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-gray-400 transition shadow-sm">
+                            <div class="w-8 h-8 rounded-full border-[4px] border-[#4285F4] border-t-[#EA4335] border-r-[#FBBC05] border-b-[#34A853]"></div>
+                            <span class="text-xs font-bold text-gray-700">GPay</span>
+                        </a>
+                        <a id="btnPhonePe" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-purple-400 transition shadow-sm">
+                            <div class="w-8 h-8 rounded-lg bg-[#5f259f] text-white flex items-center justify-center font-bold text-lg leading-none">पे</div>
+                            <span class="text-xs font-bold text-gray-700">PhonePe</span>
+                        </a>
+                        <a id="btnPaytm" href="upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR" class="bg-white border border-gray-200 rounded-xl py-4 flex flex-col items-center justify-center gap-2 hover:border-blue-400 transition shadow-sm">
+                            <div class="w-auto px-1.5 h-8 rounded-lg bg-[#002970] text-white flex items-center justify-center font-bold text-xs leading-none">Paytm</div>
+                            <span class="text-xs font-bold text-gray-700">Paytm</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm text-center">
+                    <h4 class="text-base font-bold text-gray-900 mb-1.5 text-left">Credit / Debit / Netbanking</h4>
+                    <p class="text-xs text-gray-500 mb-4 text-left">Standard gateway charges apply to card transactions.</p>
+                    <button onclick="payViaRazorpayLink()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-md transition text-sm">
+                        <i data-lucide="credit-card" class="w-4 h-4"></i> <span id="rzpBtnText">Pay via Razorpay</span> 
+                        <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded ml-1 tracking-wide">+ 2% fee</span>
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <button onclick="toggleBankDetails()" class="w-full p-5 flex justify-between items-center bg-white hover:bg-gray-50 transition">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="building-2" class="w-5 h-5 text-gray-700"></i>
+                            <span class="text-base font-bold text-gray-900">Direct Bank Transfer</span>
+                        </div>
+                        <i data-lucide="chevron-down" id="bankArrow" class="w-5 h-5 text-gray-400 transition-transform"></i>
+                    </button>
+                    <div id="bankDetailsContent" class="bank-details-wrapper bg-gray-50 px-5 pb-5">
+                        <div class="space-y-3 border-t border-gray-200 pt-4">
+                            <div class="flex justify-between items-center bg-white border border-gray-200 p-3.5 rounded-xl shadow-sm">
+                                <div><span class="block text-[10px] font-bold text-gray-500 uppercase">Account Name</span><span class="text-xs font-bold text-gray-900 mt-0.5">Accountree</span></div>
+                                <button class="p-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 hover:text-gray-900 shadow-sm" onclick="copyText('Accountree')"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                            </div>
+                            <div class="flex justify-between items-center bg-white border border-gray-200 p-3.5 rounded-xl shadow-sm">
+                                <div><span class="block text-[10px] font-bold text-gray-500 uppercase">Account Number</span><span class="text-xs font-bold text-gray-900 mt-0.5">2538020000013</span></div>
+                                <button class="p-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 hover:text-gray-900 shadow-sm" onclick="copyText('2538020000013')"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                            </div>
+                            <div class="flex justify-between items-center bg-white border border-gray-200 p-3.5 rounded-xl shadow-sm">
+                                <div><span class="block text-[10px] font-bold text-gray-500 uppercase">IFSC Code</span><span class="text-xs font-bold text-gray-900 mt-0.5">FDRL0006407</span></div>
+                                <button class="p-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 hover:text-gray-900 shadow-sm" onclick="copyText('FDRL0006407')"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                    <h4 class="text-base font-bold text-gray-900 mb-3">Upload Payment Receipt</h4>
+                    <div class="file-upload-wrapper !py-6 mb-4">
+                        <i data-lucide="image" class="w-6 h-6 mx-auto text-gray-400 mb-2"></i>
+                        <span class="text-sm font-bold text-gray-700 block">Select Screenshot</span>
+                        <input type="file" id="payProof" accept="image/*,.pdf">
+                    </div>
+                    <button id="paySubmitBtn" onclick="submitPaymentForm()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md text-sm transition">Generate Payment Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH MODAL -->
+    <div id="searchModal" class="page-modal fixed top-[60px] bottom-[60px] left-0 w-full z-[50] hidden flex-col bg-[#F8FAFC]">
+        <div class="px-5 py-4 flex gap-4 items-center border-b border-gray-200 bg-white shadow-sm">
+            <div class="flex-grow relative">
+                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                <input type="text" id="searchInput" onkeyup="filterSearch()" placeholder="Search services..." class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm text-gray-900 outline-none focus:border-gray-900 transition shadow-sm" autofocus>
+            </div>
+            <button onclick="goHome()" class="text-sm font-bold text-gray-600 hover:text-gray-900 transition">Cancel</button>
+        </div>
+        <div class="flex-grow overflow-y-auto p-5 max-w-[600px] mx-auto w-full">
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Quick Links</p>
+            <div id="searchResultsList" class="space-y-3">
+                <div class="search-item flex items-center p-3.5 bg-white border border-gray-200 shadow-sm rounded-xl cursor-pointer hover:border-gray-900 transition" onclick="openItrModal();"><i data-lucide="file-text" class="w-5 h-5 text-gray-700 mr-3"></i><span class="text-sm font-bold text-gray-900 search-text">File Income Tax Return (ITR)</span></div>
+                <div class="search-item flex items-center p-3.5 bg-white border border-gray-200 shadow-sm rounded-xl cursor-pointer hover:border-gray-900 transition" onclick="openPaymentModal();"><i data-lucide="indian-rupee" class="w-5 h-5 text-gray-700 mr-3"></i><span class="text-sm font-bold text-gray-900 search-text">Make a Tax Payment</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPLOAD MODAL -->
+    <div id="uploadModal" class="page-modal fixed top-[60px] bottom-[60px] left-0 w-full z-[50] hidden flex-col bg-[#F8FAFC]">
+        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
+            <h3 class="font-bold text-lg text-gray-900">Upload Document</h3>
+            <button onclick="goHome()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div class="p-5 bg-brand-bg flex-grow">
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4 max-w-[600px] mx-auto pt-4">
+                <input type="text" class="corp-input text-sm" placeholder="PAN or Application No" required>
+                <div class="file-upload-wrapper !py-10">
+                    <i data-lucide="upload-cloud" class="w-8 h-8 mx-auto text-gray-500 mb-2"></i>
+                    <span class="text-sm font-bold block text-gray-700">Tap to select file</span>
+                    <input type="file" required>
+                </div>
+                <button onclick="goHome(); showToast('Document Uploaded!', false, true);" class="w-full bg-gray-900 hover:bg-black transition text-white font-bold py-3.5 rounded-xl shadow-md text-sm mt-1">Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MORE SERVICES (BUSINESS SETUP) MODAL -->
+    <div id="businessModal" class="page-modal fixed top-[60px] bottom-[60px] left-0 w-full z-[50] hidden flex-col bg-[#F8FAFC]">
+        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
+            <h3 class="font-bold text-lg text-gray-900">More Services</h3>
+            <button onclick="goHome()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div class="p-5 bg-brand-bg flex-grow">
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4 max-w-[600px] mx-auto pt-4">
+                <p class="text-xs text-gray-600 mb-3 leading-relaxed font-medium">Provide basic details and connect with our expert team to setup your entity or explore more services.</p>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1.5 font-bold">Applicant Name <span class="text-red-600">*</span></label>
+                    <input type="text" id="bizName" class="corp-input uppercase text-sm" placeholder="Enter Name" required>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1.5 font-bold">Proposed Business Name <span class="text-red-600">*</span></label>
+                    <input type="text" id="bizProposedName" class="corp-input uppercase text-sm" placeholder="E.g., CM EXPERTS PVT LTD" required>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1.5 font-bold">Entity Type <span class="text-red-600">*</span></label>
+                    <select id="bizType" class="corp-select text-sm" required>
+                        <option value="Proprietorship">Sole Proprietorship</option>
+                        <option value="Partnership">Partnership</option>
+                        <option value="LLP">Limited Liability Partnership</option>
+                        <option value="Private Limited">Private Limited Company</option>
+                    </select>
+                </div>
+                
+                <div class="flex gap-3 pt-3 border-t border-gray-100 mt-4">
+                    <button onclick="callAdmin()" class="w-[30%] bg-white border border-gray-200 text-gray-900 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition shadow-sm text-sm">
+                        <i data-lucide="phone" class="w-4 h-4"></i> Call
+                    </button>
+                    <button onclick="whatsappAdminBusiness()" class="w-[70%] bg-[#25D366] hover:bg-green-600 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition shadow-md text-sm">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settingsModal" class="page-modal fixed top-[60px] bottom-[60px] left-0 w-full z-[50] hidden flex-col bg-[#F8FAFC]">
+        <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-white shadow-sm">
+            <h3 class="font-bold text-lg text-gray-900">Settings</h3>
+            <button onclick="goHome()" class="w-8 h-8 flex items-center justify-center bg-white border border-gray-200 shadow-sm rounded-lg text-gray-500 hover:text-gray-900"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div class="p-5 bg-brand-bg flex-grow">
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4 max-w-[600px] mx-auto pt-4">
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1.5 font-bold">Support Contact</label>
+                    <input type="tel" class="corp-input text-sm" value="+91 99461 51111">
+                </div>
+                <button onclick="goHome(); showToast('Settings Saved!', false, false);" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md text-sm transition mt-1">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- OVERLAYS: LOGIN, SECURE ALERT, ALERTS -->
+    
+    <!-- Login Modal (Google ONLY) -->
+    <div id="loginScreen" class="fixed inset-0 z-[120] hidden flex-col bg-gray-900/70 backdrop-blur-md transition-opacity items-center justify-center px-5 overflow-y-auto pt-10 pb-10">
+        <div class="bg-white rounded-[32px] w-full max-w-[420px] p-8 shadow-2xl relative flex flex-col items-center animate-[zoomIn_0.3s_ease-out] my-auto">
+            <button onclick="closeLoginModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-900 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+            
+            <div class="w-20 h-20 bg-gray-900 rounded-2xl flex items-center justify-center mb-6 shadow-md mt-2">
+                <img src="assets/logo.png" alt="CM TaxApp" class="w-12 h-12 object-contain filter brightness-0 invert">
+            </div>
+            <h1 class="text-3xl font-black text-gray-900 tracking-tight mb-2">Welcome Back</h1>
+            <p class="text-gray-500 text-base mb-10 text-center leading-relaxed">Sign in to your dashboard securely using your Google account.</p>
+
+            <div id="googleAuthContainer" class="w-full flex justify-center mb-8"></div>
+
+            <p class="text-xs text-gray-400 text-center mt-2 px-4">By continuing, you agree to our <a href="privacy.html" class="underline hover:text-gray-700">Privacy Policy</a>.</p>
+        </div>
+    </div>
+
+    <!-- PAYMENT INITIATED SUCCESS MODAL (TRN GENERATED) -->
+    <div id="paymentSuccessModal" class="fixed inset-0 z-[100] hidden flex-col bg-gray-900/80 backdrop-blur-sm justify-center items-center px-5 transition-opacity">
+        <div class="bg-[#1F2937] border border-gray-700 rounded-[32px] w-full max-w-[360px] p-8 shadow-2xl flex flex-col items-center animate-[zoomIn_0.3s_ease-out]">
+            <div class="w-20 h-20 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 mb-6 border-2 border-blue-500/50">
+                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path class="animated-check" d="M20 6L9 17l-5-5"/>
+                </svg>
+            </div>
+            <h3 class="text-center font-bold text-2xl text-white mb-2">Payment Initiated</h3>
+            <p class="text-center text-base text-gray-300 mb-6">Your payment request has been securely generated.</p>
+
+            <div class="bg-gray-900/50 border border-gray-700 rounded-xl p-4 w-full mb-6 text-center shadow-inner">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Transaction Number</p>
+                <p id="successPtrnNo" class="font-mono font-bold text-white text-xl tracking-wider"></p>
+            </div>
+
+            <button onclick="closePaymentSuccessModal()" class="w-full bg-white text-gray-900 py-3.5 rounded-2xl font-bold shadow-md hover:bg-gray-100 transition text-base">
+                Done
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN SCRIPTS -->
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Search Bar Toggle
-        const searchToggleBtn = document.getElementById('searchToggleBtn');
-        const searchContainer = document.getElementById('searchContainer');
-        searchToggleBtn.addEventListener('click', () => {
-            searchContainer.classList.toggle('active');
-            if(searchContainer.classList.contains('active')) {
-                searchContainer.querySelector('input').focus();
-            }
+        // -------------------------
+        // SCRIPT URL 
+        // -------------------------
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZg2vw8RUFDQVceBDMFDE-I7vb-BRmIsiHcjvoVs44Z92zOW_sBo44OT__pa1_ivfb/exec';
+
+        // -------------------------
+        // PWA LOGIC
+        // -------------------------
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => {
+                document.getElementById('pwaInstallPrompt').classList.remove('hidden');
+                document.getElementById('pwaInstallPrompt').classList.add('flex');
+            }, 2000);
         });
 
-        // Theme Toggle Logic
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    deferredPrompt = null;
+                    closePWAInstall();
+                });
+            }
+        }
+        function closePWAInstall() {
+            document.getElementById('pwaInstallPrompt').classList.add('hidden');
+            document.getElementById('pwaInstallPrompt').classList.remove('flex');
+        }
+
+        // -------------------------
+        // SPLASH SCREEN REMOVAL
+        // -------------------------
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash');
+                if (splash) {
+                    splash.style.opacity = "0";
+                    setTimeout(() => splash.remove(), 500);
+                }
+                calculateCountdown();
+            }, 1000);
+        });
+
+        // -------------------------
+        // APP ROUTER (Single Page App)
+        // -------------------------
+        function goHome() {
+            // Close all modals that have the page-modal class
+            document.querySelectorAll('.page-modal').forEach(m => {
+                m.classList.add('hidden');
+                m.classList.remove('flex');
+            });
+            // Also close menu if open
+            closeMenu();
+        }
+
+        // -------------------------
+        // GOOGLE LOGIN & STATE
+        // -------------------------
+        const GOOGLE_CLIENT_ID = "753272952222-c1pgj8cb8g7vte82sp6kevd3mku17cca.apps.googleusercontent.com"; 
         
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-            themeIcon.setAttribute('data-lucide', 'sun');
+        let currentUser = { name: "Guest User", email: "guest@example.com", picture: "" };
+
+        window.onload = function () {
+            try {
+                if(typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+                    google.accounts.id.initialize({
+                        client_id: GOOGLE_CLIENT_ID,
+                        callback: handleCredentialResponse,
+                        cancel_on_tap_outside: false
+                    });
+                    google.accounts.id.renderButton(
+                        document.getElementById("googleAuthContainer"),
+                        { theme: "outline", size: "large", width: 280, text: "continue_with" }
+                    );
+                }
+            } catch (error) {
+                console.warn("Google Sign-In disabled due to local environment constraints.");
+            }
+        };
+
+        function parseJwt (token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
         }
 
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
+        function handleCredentialResponse(response) {
+            const data = parseJwt(response.credential);
+            currentUser.name = data.name;
+            currentUser.email = data.email;
+            currentUser.picture = data.picture;
             
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            themeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-            lucide.createIcons(); 
-        });
+            populateUserData();
+            closeLoginModal();
+            logUserSignIn(currentUser.name, currentUser.email);
+            showToast("Successfully Logged In", false, true);
+        }
 
-        // Sidebar Navigation Logic
-        const menuToggle = document.getElementById('menuToggle');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebarOverlay');
+        function logUserSignIn(name, email) {
+            const payload = { "action": "USER_LOGIN", "#TimeStamp": new Date().toISOString(), "Name": name, "Email": email };
+            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), mode: 'no-cors' }).catch(err => console.error(err));
+        }
 
-        function toggleMenu() {
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('open');
+        function populateUserData() {
+            if(currentUser.name !== "Guest User") {
+                document.getElementById('dashName').innerText = `, ${currentUser.name.split(' ')[0]}`;
+                document.getElementById('dashName').classList.remove('hidden');
+                document.getElementById('navProfileText').innerText = "Profile";
+            }
+
+            document.getElementById('s1_name').value = currentUser.name !== "Guest User" ? currentUser.name : "";
+            document.getElementById('s1_email').value = currentUser.email !== "guest@example.com" ? currentUser.email : "";
+
+            const initials = currentUser.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
             
-            if (sidebar.classList.contains('open')) {
-                document.body.style.overflow = 'hidden';
+            if(currentUser.picture) {
+                document.getElementById('headerAvatarIcon').parentElement.classList.add('hidden');
+                document.getElementById('headerAvatarImg').src = currentUser.picture;
+                document.getElementById('headerAvatarImg').classList.remove('hidden');
+                document.getElementById('headerAvatarBtn').onclick = openMyFilingsModal;
+                
+                document.getElementById('navAvatar').src = currentUser.picture;
+                document.getElementById('navAvatar').classList.remove('hidden');
+                document.getElementById('navInitials').classList.add('hidden');
             } else {
-                document.body.style.overflow = '';
+                document.getElementById('navInitials').innerText = initials;
+            }
+            
+            document.getElementById('navName').innerText = currentUser.name;
+            document.getElementById('navEmail').innerText = currentUser.email;
+
+            document.getElementById('navSignInBtn').classList.add('hidden');
+            document.getElementById('navSignOutBtn').classList.remove('hidden');
+            document.getElementById('navSignOutBtn').classList.add('flex');
+        }
+
+        function handleLogout() {
+            closeMenu();
+            currentUser = { name: "Guest User", email: "guest@example.com", picture: "" };
+            
+            document.getElementById('dashName').innerText = "";
+            document.getElementById('dashName').classList.add('hidden');
+            document.getElementById('navProfileText').innerText = "Login";
+
+            document.getElementById('navName').innerText = currentUser.name;
+            document.getElementById('navEmail').innerText = currentUser.email;
+            document.getElementById('navInitials').innerText = "GU";
+            document.getElementById('navInitials').classList.remove('hidden');
+            document.getElementById('navAvatar').classList.add('hidden');
+            
+            document.getElementById('headerAvatarImg').classList.add('hidden');
+            document.getElementById('headerAvatarIcon').parentElement.classList.remove('hidden');
+            document.getElementById('headerAvatarBtn').onclick = handleProfileClick;
+
+            document.getElementById('navSignInBtn').classList.remove('hidden');
+            document.getElementById('navSignOutBtn').classList.add('hidden');
+            document.getElementById('navSignOutBtn').classList.remove('flex');
+            
+            showToast("Logged out successfully");
+            goHome();
+        }
+
+        // DYNAMIC PROFILE
+        function handleProfileClick() {
+            goHome();
+            if(currentUser.email !== "guest@example.com") {
+                openMyFilingsModal();
+            } else {
+                openLoginModal();
             }
         }
 
-        menuToggle.addEventListener('click', toggleMenu);
-        closeSidebar.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
+        // MY FILINGS
+        function openMyFilingsModal() {
+            goHome();
+            document.getElementById('myFilingsModal').classList.remove('hidden');
+            document.getElementById('myFilingsModal').classList.add('flex');
+            
+            const container = document.getElementById('myFilingsContainer');
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-24 text-gray-400">
+                    <i data-lucide="loader-2" class="w-10 h-10 animate-spin mb-4"></i>
+                    <p class="text-base font-semibold text-gray-600">Loading your records...</p>
+                </div>`;
+            lucide.createIcons();
 
-window.addEventListener("load", () => {
-    const splash = document.getElementById("splash-screen");
+            fetch(`${SCRIPT_URL}?action=GET_USER_DATA&email=${encodeURIComponent(currentUser.email)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.length === 0) {
+                        container.innerHTML = `
+                            <div class="flex flex-col items-center justify-center py-16 text-center">
+                                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                    <i data-lucide="folder-search" class="w-8 h-8 text-gray-400"></i>
+                                </div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">No Filings Found</h4>
+                                <p class="text-base text-gray-500">You haven't filed any returns yet.</p>
+                                <button onclick="openItrModal();" class="mt-6 bg-gray-900 text-white font-bold py-3.5 px-8 rounded-xl text-base hover:bg-black">File ITR Now</button>
+                            </div>`;
+                    } else {
+                        container.innerHTML = '';
+                        data.forEach(item => {
+                            const dateStr = new Date(item.Date).toLocaleDateString('en-IN', {day: 'numeric', month:'short', year:'numeric'});
+                            const card = `
+                                <div class="bg-white p-5 rounded-[20px] shadow-sm border border-gray-100 flex items-center justify-between gap-4">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+                                            <i data-lucide="file-check" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-sm font-bold text-gray-900">${item.Type}</h4>
+                                            <p class="text-[11px] text-gray-500 font-mono mt-0.5">${item.AppNo}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right flex flex-col items-end">
+                                        <span class="text-[9px] font-bold text-yellow-600 bg-yellow-50 px-2 py-1 rounded-md uppercase tracking-widest mb-1">${item.Status}</span>
+                                        <span class="text-[11px] text-gray-400 font-medium">${dateStr}</span>
+                                    </div>
+                                </div>
+                            `;
+                            container.innerHTML += card;
+                        });
+                    }
+                    lucide.createIcons();
+                })
+                .catch(err => {
+                    container.innerHTML = `<p class="text-center text-sm text-red-500 font-bold py-10">Error loading data. Please try again later.</p>`;
+                });
+        }
+        function closeMyFilingsModal() { document.getElementById('myFilingsModal').classList.add('hidden'); document.getElementById('myFilingsModal').classList.remove('flex'); }
 
-@keyframes logoFade{
-    from{
-        opacity:0;
-        transform:scale(.92);
-    }
-    to{
-        opacity:1;
-        transform:scale(1);
-    }
-}
+        // MODALS
+        function openLoginModal() { document.getElementById('loginScreen').classList.remove('hidden'); document.getElementById('loginScreen').classList.add('flex'); setTimeout(() => { document.getElementById('loginScreen').style.opacity = '1'; }, 10); }
+        function closeLoginModal() { document.getElementById('loginScreen').style.opacity = '0'; setTimeout(() => { document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('loginScreen').classList.remove('flex'); }, 300); }
+        function openMenu() { document.getElementById('sideMenu').classList.remove('hidden'); document.getElementById('sideMenu').classList.add('block'); }
+        function closeMenu() { document.getElementById('sideMenu').classList.add('hidden'); document.getElementById('sideMenu').classList.remove('block'); }
+        function openAlarmModal() { document.getElementById('alarmModal').classList.remove('hidden'); document.getElementById('alarmModal').classList.add('flex'); }
+        function closeAlarmModal() { document.getElementById('alarmModal').classList.add('hidden'); document.getElementById('alarmModal').classList.remove('flex'); }
+        function openPaymentSuccessModal() { document.getElementById('paymentSuccessModal').classList.remove('hidden'); document.getElementById('paymentSuccessModal').classList.add('flex'); }
+        function closePaymentSuccessModal() { document.getElementById('paymentSuccessModal').classList.add('hidden'); document.getElementById('paymentSuccessModal').classList.remove('flex'); }
+        function closeItrSuccessModal() { document.getElementById('itrSuccessModal').classList.add('hidden'); document.getElementById('itrSuccessModal').classList.remove('flex'); }
+        
+        function openSearch() { goHome(); document.getElementById('searchModal').classList.remove('hidden'); document.getElementById('searchModal').classList.add('flex'); document.getElementById('searchInput').focus(); }
+        function closeSearch() { document.getElementById('searchModal').classList.add('hidden'); document.getElementById('searchModal').classList.remove('flex'); }
+        function openPaymentModal() { goHome(); document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex'); }
+        function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); }
+        function openUploadModal() { goHome(); document.getElementById('uploadModal').classList.remove('hidden'); document.getElementById('uploadModal').classList.add('flex'); }
+        function closeUploadModal() { document.getElementById('uploadModal').classList.add('hidden'); document.getElementById('uploadModal').classList.remove('flex'); }
+        function openBusinessModal() { goHome(); document.getElementById('businessModal').classList.remove('hidden'); document.getElementById('businessModal').classList.add('flex'); }
+        function closeBusinessModal() { document.getElementById('businessModal').classList.add('hidden'); document.getElementById('businessModal').classList.remove('flex'); }
+        function openSettingsModal() { goHome(); document.getElementById('settingsModal').classList.remove('hidden'); document.getElementById('settingsModal').classList.add('flex'); }
+        function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); document.getElementById('settingsModal').classList.remove('flex'); }
 
-    setTimeout(() => {
-        splash.classList.add("hide");
+        // UI UTILS
+        function showToast(message, isError = false, isSuccessGreen = false) {
+            const toast = document.getElementById('toast');
+            toast.className = 'toast'; 
+            if (isError) { toast.classList.add('error'); toast.innerHTML = `<i data-lucide="alert-circle" class="w-5 h-5"></i> <span>${message}</span>`; } 
+            else if (isSuccessGreen) { toast.classList.add('success'); toast.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5"></i> <span>${message}</span>`; } 
+            else { toast.classList.add('default'); toast.innerHTML = `<i data-lucide="info" class="w-5 h-5 text-white"></i> <span>${message}</span>`; }
+            lucide.createIcons();
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
 
-        setTimeout(() => {
-            splash.remove();
-        }, 400); // matches CSS transition
-    }, 1800);
-});
+        function filterSearch() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let items = document.querySelectorAll('.search-item');
+            items.forEach(item => {
+                let text = item.querySelector('.search-text').innerText.toLowerCase();
+                if(text.includes(input)) { item.style.display = 'flex'; } 
+                else { item.style.display = 'none'; }
+            });
+        }
+
+        // PAYMENT LOGIC
+        function updatePaymentUI() {
+            let amt = parseFloat(document.getElementById('payAmount').value) || 0;
+            let total = amt + (amt * 0.02); 
+            document.getElementById('rzpBtnText').innerText = amt > 0 ? `Pay ₹${total.toFixed(2)} via Razorpay` : 'Pay via Razorpay';
+            
+            let name = document.getElementById('payName').value || '';
+            let akn = document.getElementById('payAkn').value || '';
+            let narration = (akn && name) ? `${akn} - ${name}` : (name || akn || '');
+            document.getElementById('payNarration').value = narration;
+            
+            let upiBase = "upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR";
+            if(narration) upiBase += `&tn=${encodeURIComponent(narration)}`;
+            document.getElementById('btnGpay').href = upiBase;
+            document.getElementById('btnPhonePe').href = upiBase;
+            document.getElementById('btnPaytm').href = upiBase;
+
+            let upiQrStr = "upi://pay?pa=accountree@ybl&pn=Accountree&cu=INR";
+            if(narration) upiQrStr += `&tn=${encodeURIComponent(narration)}`;
+            document.getElementById('upiQrCode').src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(upiQrStr);
+        }
+
+        function payViaRazorpayLink() {
+            let amt = parseFloat(document.getElementById('payAmount').value) || 0;
+            let total = amt + (amt * 0.02); 
+            let narration = document.getElementById('payNarration').value || '';
+            let url = "https://razorpay.me/@cmtaxexperts";
+            if(total > 0) {
+                url += `?amount=${total.toFixed(2)}`;
+                if(narration) url += `&description=${encodeURIComponent(narration)}`;
+            }
+            window.open(url, '_blank');
+        }
+
+        function calculateCountdown() {
+            const targetDate = new Date("July 31, 2026 23:59:59").getTime();
+            const now = new Date().getTime(); 
+            let days = Math.floor((targetDate - now) / (1000 * 60 * 60 * 24));
+            days = days > 0 ? days : 0;
+            document.getElementById('donutDaysLeft').innerText = days;
+            const circle = document.getElementById('donutProgress');
+            const totalDaysScale = 30; const radius = 42; const circumference = 2 * Math.PI * radius; 
+            const progress = days / totalDaysScale; const safeProgress = Math.max(0, Math.min(1, progress));
+            const offset = circumference - (safeProgress * circumference);
+            setTimeout(() => { circle.style.strokeDashoffset = offset; }, 100);
+        }
+
+        // ITR FORM
+        let currentStep = 1;
+        function openItrModal() { 
+            goHome();
+            document.getElementById('itrForm').classList.remove('hidden'); document.getElementById('itrForm').classList.add('block');
+            document.getElementById('itrModalNav').classList.remove('hidden'); document.getElementById('itrModalNav').classList.add('flex');
+            document.getElementById('itrModalFooter').classList.remove('hidden'); document.getElementById('itrModalFooter').classList.add('block');
+            document.getElementById('itrModal').classList.remove('hidden'); document.getElementById('itrModal').classList.add('flex'); 
+            showStep(1); 
+        }
+        function closeItrModal() { document.getElementById('itrModal').classList.add('hidden'); document.getElementById('itrModal').classList.remove('flex'); }
+        
+        function showStep(step) {
+            document.getElementById('step1').classList.add('hidden'); document.getElementById('step2').classList.add('hidden'); document.getElementById('step3').classList.add('hidden');
+            document.getElementById('step' + step).classList.remove('hidden');
+            for(let i=1; i<=3; i++) {
+                const nav = document.getElementById('navStep'+i);
+                if(i === step) { nav.classList.add('step-active'); nav.classList.remove('step-inactive'); }
+                else { nav.classList.remove('step-active'); nav.classList.add('step-inactive'); }
+            }
+            const btnBack = document.getElementById('btnBack'); const btnNext = document.getElementById('btnNext'); const btnSubmit = document.getElementById('btnSubmit');
+            if (step === 1) { btnBack.classList.add('hidden'); btnNext.classList.remove('hidden'); btnSubmit.classList.add('hidden'); }
+            else if (step === 2) { btnBack.classList.remove('hidden'); btnNext.classList.remove('hidden'); btnSubmit.classList.add('hidden'); }
+            else if (step === 3) { btnBack.classList.remove('hidden'); btnNext.classList.add('hidden'); btnSubmit.classList.remove('hidden'); }
+            currentStep = step;
+        }
+        function nextStep() { showStep(currentStep + 1); }
+        function prevStep() { showStep(currentStep - 1); }
+
+        function readFileAsBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function submitItrFinal() {
+            const btn = document.getElementById('btnSubmit'); const originalText = btn.innerHTML;
+            if(!document.getElementById('s1_name').value || !document.getElementById('s1_pan').value || !document.getElementById('s1_email').value || !document.getElementById('s2_fy').value || !document.getElementById('s2_head').value) {
+                showToast("Please complete all mandatory fields (*).", true, false); return;
+            }
+
+            try {
+                btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Submitting...`;
+                btn.disabled = true; lucide.createIcons();
+
+                const processFile = async (inputId) => {
+                    const fileInput = document.getElementById(inputId);
+                    if (fileInput && fileInput.files.length > 0) {
+                        const file = fileInput.files[0]; const base64 = await readFileAsBase64(file);
+                        return { base64: base64, mimeType: file.type, fileName: file.name };
+                    }
+                    return null;
+                };
+
+                const bankFile = await processFile('s3_bank');
+                const form16File = await processFile('s3_form16');
+                const pnlFile = await processFile('s3_pnl');
+                const othersFile = await processFile('s3_others');
+
+                const now = new Date();
+                const appNo = `ITR4${String(now.getFullYear()).slice(-2)}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+                currentItrAppNo = appNo; 
+                
+                document.getElementById('payPan').value = document.getElementById('s1_pan').value.toUpperCase();
+                document.getElementById('payMobile').value = document.getElementById('s1_mobile').value;
+                document.getElementById('payName').value = document.getElementById('s1_name').value.trim();
+                document.getElementById('payAkn').value = appNo;
+                updatePaymentUI();
+
+                const payload = {
+                    "action": "ITR", "#TimeStamp": new Date().toISOString(), "ApplicationNo": appNo,
+                    "Name": document.getElementById('s1_name').value.trim(), "Mobile": document.getElementById('s1_mobile').value,
+                    "Email": document.getElementById('s1_email').value.toLowerCase(), "PAN": document.getElementById('s1_pan').value.toUpperCase(),
+                    "Password(Optional)": document.getElementById('s1_password').value, "FY": document.getElementById('s2_fy').value,
+                    "HeadofIncome": document.getElementById('s2_head').value, "BankStatementURL": bankFile,
+                    "Form16/16AURL": form16File, "P&LStatementURL": pnlFile, "OthersURL": othersFile,
+                    "NameOfOtherStatement": document.getElementById('s3_other_name').value.trim()
+                };
+
+                fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), mode: 'no-cors' })
+                    .then(() => handleItrSuccess(appNo)).catch(() => handleItrSuccess(appNo)); 
+
+            } catch (error) { showToast("Error submitting application.", true, false); resetBtn(btn, originalText); }
+        }
+
+        function handleItrSuccess(appNo) {
+            closeItrModal(); 
+            document.getElementById('successAppNo').innerText = appNo;
+            document.getElementById('itrSuccessModal').classList.remove('hidden');
+            document.getElementById('itrSuccessModal').classList.add('flex');
+            document.getElementById('itrForm').reset();
+            const btn = document.getElementById('btnSubmit');
+            btn.innerHTML = `Submit Application`; btn.disabled = false; lucide.createIcons();
+        }
+
+        async function submitPaymentForm() {
+            const btn = document.getElementById('paySubmitBtn'); const origText = btn.innerHTML;
+            try {
+                btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Processing...`;
+                btn.disabled = true; lucide.createIcons();
+                
+                const processFile = async (inputId) => {
+                    const fileInput = document.getElementById(inputId);
+                    if (fileInput && fileInput.files.length > 0) {
+                        const file = fileInput.files[0]; const base64 = await readFileAsBase64(file);
+                        return { base64: base64, mimeType: file.type, fileName: file.name };
+                    }
+                    return null;
+                };
+                
+                const payProof = await processFile('payProof');
+                
+                // Generate PTRN
+                const now = new Date();
+                const ptrnNo = `PTRN${String(now.getFullYear()).slice(-2)}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+                
+                const userAkn = document.getElementById('payAkn').value;
+                const finalAkn = userAkn ? `${userAkn} / ${ptrnNo}` : ptrnNo;
+
+                const payload = {
+                    "action": 'PAYMENT', 
+                    "#TimeStamp": now.toISOString(),
+                    "Name": document.getElementById('payName').value, 
+                    "PAN": document.getElementById('payPan').value,
+                    "Mobile": document.getElementById('payMobile').value, 
+                    "AKN": finalAkn, 
+                    "Amount": document.getElementById('payAmount').value,
+                    "PaymentProof": payProof
+                };
+
+                fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), mode: 'no-cors' })
+                    .then(() => { 
+                        closePaymentModal(); 
+                        document.getElementById('successPtrnNo').innerText = ptrnNo;
+                        openPaymentSuccessModal(); 
+                    })
+                    .catch(() => { 
+                        closePaymentModal(); 
+                        document.getElementById('successPtrnNo').innerText = ptrnNo;
+                        openPaymentSuccessModal(); 
+                    });
+            } catch(e) { showToast("Error processing payment request.", true); } 
+            finally { btn.innerHTML = origText; btn.disabled = false; lucide.createIcons(); }
+        }
+
+        function copyText(text) { navigator.clipboard.writeText(text).then(() => showToast("Copied to clipboard!", false, false)); }
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(err => { console.error('PWA fail:', err); }); });
+        }
     </script>
 </body>
 </html>
