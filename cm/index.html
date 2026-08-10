@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | CM Business Flow</title>
+
+  <!-- Tailwind CDN & Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { navy: '#071d49', 'navy-soft': '#102a5c', yellow: '#ffc51b', 'yellow-dark': '#eab000', gray: '#f1f2f7', text: '#071d49' }, boxShadow: { custom: '0 24px 45px rgba(7, 29, 73, .18)' } } }
+    };
+  </script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="pb-24"> <!-- pb-24 prevents content hiding under bottom nav -->
+
+  <!-- INCLUDE: header.html goes here -->
+  
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+    
+    <!-- Welcome Hero -->
+    <div class="bg-navy rounded-3xl p-8 text-white shadow-custom relative overflow-hidden mb-8">
+      <div class="relative z-10">
+        <h2 class="text-3xl font-extrabold mb-2">Welcome to CM Business Flow</h2>
+        <p class="text-gray/80 text-lg mb-6">Your central hub for clients, compliance, and vouchers.</p>
+        <a href="signin.html" class="btn-primary no-underline inline-flex">
+          <i data-lucide="lock"></i> Secure Login
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Navigation Grid (Links to your sub-pages) -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      
+      <a href="company.html" class="bg-white p-6 rounded-2xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center">
+        <div class="w-12 h-12 bg-gray rounded-xl flex items-center justify-center text-navy mb-3"><i data-lucide="building-2"></i></div>
+        <h3 class="font-bold text-navy">Company</h3>
+      </a>
+
+      <a href="client.html" class="bg-white p-6 rounded-2xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center">
+        <div class="w-12 h-12 bg-gray rounded-xl flex items-center justify-center text-navy mb-3"><i data-lucide="users"></i></div>
+        <h3 class="font-bold text-navy">Clients</h3>
+      </a>
+
+      <a href="compliance.html" class="bg-white p-6 rounded-2xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center">
+        <div class="w-12 h-12 bg-gray rounded-xl flex items-center justify-center text-navy mb-3"><i data-lucide="shield-check"></i></div>
+        <h3 class="font-bold text-navy">Compliance</h3>
+      </a>
+
+      <a href="Voucher.html" class="bg-white p-6 rounded-2xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center">
+        <div class="w-12 h-12 bg-gray rounded-xl flex items-center justify-center text-navy mb-3"><i data-lucide="receipt"></i></div>
+        <h3 class="font-bold text-navy">Vouchers</h3>
+      </a>
+
+    </div>
+
+  </main>
+
+  <!-- INCLUDE: mobnav.html goes here -->
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
