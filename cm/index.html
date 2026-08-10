@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | CM Business Flow</title>
+
+  <!-- Google Font: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN & Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { 
+        extend: { 
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: { navy: '#071d49', 'navy-soft': '#102a5c', yellow: '#ffc51b', 'yellow-dark': '#eab000', gray: '#f1f2f7', text: '#071d49' }, 
+          boxShadow: { custom: '0 24px 45px rgba(7, 29, 73, .18)' } 
+        } 
+      }
+    };
+  </script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray text-navy font-sans antialiased flex">
+
+  <!-- ==========================================
+       1. DESKTOP SIDEBAR (Hidden on mobile)
+       ========================================== -->
+  <aside class="hidden lg:flex flex-col w-64 fixed inset-y-0 left-0 bg-white border-r border-gray/60 z-50 shadow-sm">
+    
+    <!-- Sidebar Logo Area -->
+    <div class="h-20 flex items-center px-6 border-b border-gray/60">
+      <div class="w-10 h-10 rounded-xl bg-navy flex items-center justify-center text-yellow shadow-md overflow-hidden mr-3">
+        <img src="assets/logo.png" alt="Logo" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <i data-lucide="briefcase" class="hidden" style="width: 20px; height: 20px;"></i>
+      </div>
+      <div>
+        <h1 class="text-lg font-extrabold text-navy leading-tight">CM Flow</h1>
+        <p class="text-[10px] text-navy-soft font-bold uppercase tracking-wider">Workspace</p>
+      </div>
+    </div>
+
+    <!-- Sidebar Navigation Links -->
+    <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1.5">
+      <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray text-navy font-bold transition-colors">
+        <i data-lucide="layout-dashboard" style="width: 18px; height: 18px;" class="text-yellow-dark"></i> Dashboard
+      </a>
+      <a href="company.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-navy-soft font-semibold hover:bg-gray/50 hover:text-navy transition-colors">
+        <i data-lucide="building-2" style="width: 18px; height: 18px;"></i> Company
+      </a>
+      <a href="client.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-navy-soft font-semibold hover:bg-gray/50 hover:text-navy transition-colors">
+        <i data-lucide="users" style="width: 18px; height: 18px;"></i> Clients
+      </a>
+      <a href="compliance.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-navy-soft font-semibold hover:bg-gray/50 hover:text-navy transition-colors">
+        <i data-lucide="shield-check" style="width: 18px; height: 18px;"></i> Compliance
+      </a>
+      <a href="Voucher.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-navy-soft font-semibold hover:bg-gray/50 hover:text-navy transition-colors">
+        <i data-lucide="receipt" style="width: 18px; height: 18px;"></i> Vouchers
+      </a>
+      <a href="report.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-navy-soft font-semibold hover:bg-gray/50 hover:text-navy transition-colors">
+        <i data-lucide="bar-chart-3" style="width: 18px; height: 18px;"></i> Reports
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ==========================================
+       MAIN CONTENT WRAPPER (Offset by sidebar width on desktop)
+       ========================================== -->
+  <div class="flex-1 lg:ml-64 flex flex-col min-h-screen pb-20 lg:pb-0">
+    
+    <!-- ==========================================
+         2. HEADER
+         ========================================== -->
+    <header class="bg-white border-b border-gray/60 sticky top-0 z-40 shadow-sm h-20 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+      
+      <!-- Mobile Logo & Hamburger (Hidden on Desktop) -->
+      <div class="flex items-center gap-3 lg:hidden">
+        <button class="p-2 text-navy-soft bg-gray rounded-lg">
+          <i data-lucide="menu"></i>
+        </button>
+        <h1 class="text-lg font-extrabold text-navy">CM Flow</h1>
+      </div>
+
+      <!-- Desktop Page Title (Hidden on Mobile) -->
+      <div class="hidden lg:block">
+        <h2 class="text-xl font-extrabold text-navy">Overview</h2>
+      </div>
+
+      <!-- Right Actions: Search & Profile -->
+      <div class="flex items-center space-x-2 sm:space-x-4 relative">
+        <button class="p-2 text-navy-soft hover:text-navy hover:bg-gray rounded-full transition-colors hidden sm:block">
+          <i data-lucide="search"></i>
+        </button>
+
+        <!-- Profile Dropdown Trigger -->
+        <button id="profileBtn" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray border border-gray/80 text-navy hover:ring-2 hover:ring-yellow transition-all focus:outline-none ml-2">
+          <i data-lucide="user"></i>
+        </button>
+
+        <!-- Profile Dropdown Menu -->
+        <div id="profileMenu" class="hidden absolute right-0 top-14 mt-2 w-48 bg-white rounded-2xl shadow-custom border border-gray/60 py-2">
+          <a href="signin.html" class="flex items-center gap-2 px-4 py-2 text-sm text-navy hover:bg-gray transition-colors font-semibold">
+            <i data-lucide="log-in" style="width: 16px; height: 16px;"></i> Login
+          </a>
+          <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors font-semibold border-t border-gray/50 mt-1 pt-3">
+            <i data-lucide="log-out" style="width: 16px; height: 16px;"></i> Logout
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==========================================
+         3. MAIN DASHBOARD CONTENT
+         ========================================== -->
+    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+      
+      <!-- Welcome Hero -->
+      <div class="bg-navy rounded-3xl p-8 sm:p-10 text-white shadow-custom relative overflow-hidden mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="relative z-10 max-w-xl">
+          <h2 class="text-3xl font-extrabold mb-2">Welcome to CM Business Flow</h2>
+          <p class="text-gray/80 text-lg mb-6">Your central hub for managing clients, tracking compliance, and generating vouchers securely.</p>
+          <div class="flex flex-wrap gap-4">
+            <a href="signin.html" class="btn-primary no-underline text-sm sm:text-base">
+              <i data-lucide="lock" style="width: 18px; height: 18px;"></i> Secure Login
+            </a>
+            <!-- Link to your new processing page -->
+            <a href="processing.html" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold px-6 py-3 rounded-xl inline-flex items-center gap-2 transition-all text-sm sm:text-base">
+              <i data-lucide="loader" style="width: 18px; height: 18px;"></i> Test Processing
+            </a>
+          </div>
+        </div>
+        
+        <!-- Decorative Icon in Hero -->
+        <div class="hidden md:flex relative z-10 opacity-20">
+          <i data-lucide="layers" style="width: 120px; height: 120px;" class="text-white"></i>
+        </div>
+      </div>
+
+      <!-- Main Navigation Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        
+        <a href="company.html" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center group">
+          <div class="w-14 h-14 bg-gray rounded-2xl flex items-center justify-center text-navy mb-4 group-hover:scale-110 transition-transform"><i data-lucide="building-2"></i></div>
+          <h3 class="font-extrabold text-navy">Company</h3>
+          <p class="text-xs text-navy-soft mt-1 hidden sm:block">Setup & Branches</p>
+        </a>
+
+        <a href="client.html" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center group">
+          <div class="w-14 h-14 bg-gray rounded-2xl flex items-center justify-center text-navy mb-4 group-hover:scale-110 transition-transform"><i data-lucide="users"></i></div>
+          <h3 class="font-extrabold text-navy">Clients</h3>
+          <p class="text-xs text-navy-soft mt-1 hidden sm:block">Directory & Credentials</p>
+        </a>
+
+        <a href="compliance.html" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center group">
+          <div class="w-14 h-14 bg-gray rounded-2xl flex items-center justify-center text-navy mb-4 group-hover:scale-110 transition-transform"><i data-lucide="shield-check"></i></div>
+          <h3 class="font-extrabold text-navy">Compliance</h3>
+          <p class="text-xs text-navy-soft mt-1 hidden sm:block">Track Requirements</p>
+        </a>
+
+        <a href="Voucher.html" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center group">
+          <div class="w-14 h-14 bg-gray rounded-2xl flex items-center justify-center text-navy mb-4 group-hover:scale-110 transition-transform"><i data-lucide="receipt"></i></div>
+          <h3 class="font-extrabold text-navy">Vouchers</h3>
+          <p class="text-xs text-navy-soft mt-1 hidden sm:block">Billing & Payments</p>
+        </a>
+
+        <a href="qr.html" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center group">
+          <div class="w-14 h-14 bg-gray rounded-2xl flex items-center justify-center text-navy mb-4 group-hover:scale-110 transition-transform"><i data-lucide="qr-code"></i></div>
+          <h3 class="font-extrabold text-navy">QR Codes</h3>
+          <p class="text-xs text-navy-soft mt-1 hidden sm:block">Payment Links</p>
+        </a>
+
+        <a href="report.html" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center group">
+          <div class="w-14 h-14 bg-gray rounded-2xl flex items-center justify-center text-navy mb-4 group-hover:scale-110 transition-transform"><i data-lucide="bar-chart-3"></i></div>
+          <h3 class="font-extrabold text-navy">Reports</h3>
+          <p class="text-xs text-navy-soft mt-1 hidden sm:block">Analytics & Data</p>
+        </a>
+
+        <a href="data.html" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center group">
+          <div class="w-14 h-14 bg-gray rounded-2xl flex items-center justify-center text-navy mb-4 group-hover:scale-110 transition-transform"><i data-lucide="arrow-up-down"></i></div>
+          <h3 class="font-extrabold text-navy">Import / Export</h3>
+          <p class="text-xs text-navy-soft mt-1 hidden sm:block">Data Management</p>
+        </a>
+
+        <a href="more.html" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray/60 hover:border-navy hover:shadow-custom transition-all flex flex-col items-center text-center group">
+          <div class="w-14 h-14 bg-gray rounded-2xl flex items-center justify-center text-navy mb-4 group-hover:scale-110 transition-transform"><i data-lucide="grid-3x3"></i></div>
+          <h3 class="font-extrabold text-navy">More</h3>
+          <p class="text-xs text-navy-soft mt-1 hidden sm:block">Settings & Tools</p>
+        </a>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==========================================
+       4. MOBILE BOTTOM NAV (Hidden on desktop)
+       ========================================== -->
+  <nav class="fixed bottom-0 w-full bg-white border-t border-gray/60 flex justify-around py-3 pb-safe lg:hidden z-50 shadow-[0_-4px_20px_rgba(7,29,73,0.05)]">
+    <a href="index.html" class="flex flex-col items-center gap-1 text-navy font-bold">
+      <i data-lucide="home" class="text-yellow-dark"></i>
+      <span class="text-[10px] uppercase tracking-wide">Home</span>
+    </a>
+    <a href="client.html" class="flex flex-col items-center gap-1 text-navy-soft font-semibold hover:text-navy transition-colors">
+      <i data-lucide="users"></i>
+      <span class="text-[10px] uppercase tracking-wide">Clients</span>
+    </a>
+    <a href="compliance.html" class="flex flex-col items-center gap-1 text-navy-soft font-semibold hover:text-navy transition-colors">
+      <i data-lucide="shield-check"></i>
+      <span class="text-[10px] uppercase tracking-wide">Compliance</span>
+    </a>
+    <a href="more.html" class="flex flex-col items-center gap-1 text-navy-soft font-semibold hover:text-navy transition-colors">
+      <i data-lucide="menu"></i>
+      <span class="text-[10px] uppercase tracking-wide">Menu</span>
+    </a>
+  </nav>
+
+  <!-- Javascript for Profile Menu Toggle and Icons -->
+  <script>
+    lucide.createIcons();
+    
+    // Toggle Profile Dropdown
+    document.getElementById('profileBtn')?.addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.getElementById('profileMenu').classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('profileMenu');
+      const btn = document.getElementById('profileBtn');
+      if (menu && !menu.classList.contains('hidden') && !menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
