@@ -1,47 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App Home</title>
-  <link rel="stylesheet" href="css/app.css">
+/* =========================================
+   css/app.css
+   ClientHub CRM - Base Styles & Variables
+========================================= */
+
+/* 1. Import Inter Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* 2. Core Color Variables */
+:root {
+  --navy: #071d49;
+  --navy-soft: #102a5c;
+  --yellow: #ffc51b;
+  --yellow-dark: #eab000;
+  --white: #ffffff;
+  --gray: #f1f2f7;
+  --text: #071d49;
+  --shadow: 0 24px 45px rgba(7, 29, 73, .18);
+}
+
+/* 3. Base Typography & Body */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--gray);
+  color: var(--text);
+  font-size: 18px; /* Increased base size for better visibility */
+  margin: 0;
+  padding: 0;
+  padding-bottom: 90px; /* Prevents content from hiding behind bottom nav */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 4. Main Layout */
+main {
+  max-w-7xl;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.025em;
+}
+
+/* 5. Important Action Buttons (Minimal Yellow) */
+.btn-primary {
+  background-color: var(--yellow);
+  color: var(--navy);
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px; /* Matches the rounded-xl aesthetic */
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
   
-  <!-- 1. Include Lucide Icons via CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body>
+  /* Flexbox to perfectly align the Lucide icon and text */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
 
-  <!-- Your main app content goes here -->
-  <main>
-    <h1>Welcome Home</h1>
-    <button class="btn-primary">
-      <i data-lucide="plus-circle"></i> Create New
-    </button>
-  </main>
+.btn-primary:hover {
+  background-color: var(--yellow-dark);
+}
 
-  <!-- 2. Bottom Navigation Structure -->
-  <nav class="bottom-nav">
-    <a href="index.html" class="nav-item active">
-      <i data-lucide="home"></i>
-      <span>Home</span>
-    </a>
-    <a href="clients.html" class="nav-item">
-      <i data-lucide="users"></i>
-      <span>Clients</span>
-    </a>
-    <a href="compliance.html" class="nav-item">
-      <i data-lucide="shield-check"></i>
-      <span>Compliance</span>
-    </a>
-    <a href="more.html" class="nav-item">
-      <i data-lucide="menu"></i>
-      <span>Menu</span>
-    </a>
-  </nav>
+.btn-primary:active {
+  transform: scale(0.98);
+}
 
-  <!-- 3. Initialize Lucide Icons -->
-  <script>
-    lucide.createIcons();
-  </script>
-</body>
-</html>
+/* 6. Standardized Lucide Icon Sizing */
+.lucide {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+/* 7. Bottom Navigation Styling */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--white);
+  box-shadow: 0 -4px 20px rgba(7, 29, 73, 0.1);
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  z-index: 1000;
+  border-top: 1px solid rgba(16, 42, 92, 0.05);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: var(--navy-soft);
+  font-size: 0.9rem;
+  font-weight: 500;
+  gap: 6px;
+  transition: color 0.2s ease;
+}
+
+.nav-item:hover {
+  color: var(--navy);
+}
+
+/* Active State Styles */
+.nav-item.active {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* The active nav item icon gets the minimal yellow accent */
+.nav-item.active .lucide {
+  color: var(--yellow-dark); 
+}
