@@ -3,111 +3,169 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In — ClientHub CRM</title>
+  <title>Sign In — CM BUSINESS FLOW</title>
+
+  <!-- Google Font: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            navy: '#071d49',
+            'navy-soft': '#102a5c',
+            yellow: '#ffc51b',
+            'yellow-dark': '#eab000',
+            gray: '#f1f2f7',
+            text: '#071d49',
+          },
+          boxShadow: {
+            custom: '0 24px 45px rgba(7, 29, 73, .18)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- CSS Variables & Base Styles -->
+  <style>
+    :root {
+      --navy: #071d49;
+      --navy-soft: #102a5c;
+      --yellow: #ffc51b;
+      --yellow-dark: #eab000;
+      --white: #ffffff;
+      --gray: #f1f2f7;
+      --text: #071d49;
+      --shadow: 0 24px 45px rgba(7, 29, 73, .18);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--gray);
+      color: var(--text);
+      font-size: 18px; 
+    }
+  </style>
 </head>
 
-<body class="bg-slate-50 text-slate-800">
-  <div class="min-h-screen flex items-center justify-center p-4 bg-slate-50">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <div class="w-full max-w-md">
+  <div class="w-full max-w-md">
 
-      <div class="text-center mb-6">
-        <a href="index.html"
-           class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-200 mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-               fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-        </a>
-        <h1 class="text-xl font-extrabold text-slate-900">Client Hub CRM</h1>
-        <p class="text-xs text-slate-500 mt-1">Firebase Edition</p>
-      </div>
-
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden">
-
-        <div class="p-5 sm:p-6 border-b border-slate-200 bg-slate-50">
-          <div class="flex items-center justify-between">
-            <div>
-              <h2 id="title" class="text-lg font-extrabold text-slate-900">Sign In</h2>
-              <p id="subtitle" class="text-xs text-slate-500 mt-1">Secure access to your CRM workspace.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="p-5 sm:p-6">
-
-          <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 mb-5">
-            <button id="signinTab" type="button"
-              class="flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all">
-              Sign In
-            </button>
-            <button id="signupTab" type="button"
-              class="flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all">
-              Sign Up
-            </button>
-          </div>
-
-          <form id="authForm" class="space-y-4">
-
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Email Address</label>
-              <input id="email" type="email" required
-                class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-slate-900"
-                placeholder="you@example.com">
-            </div>
-
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Password</label>
-              <input id="password" type="password" required minlength="6"
-                class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-slate-900"
-                placeholder="Minimum 6 characters">
-            </div>
-
-            <div id="confirmGroup" class="hidden">
-              <label class="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Confirm Password</label>
-              <input id="confirmPassword" type="password" minlength="6"
-                class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-slate-900"
-                placeholder="Repeat password">
-            </div>
-
-            <div id="message" class="hidden text-xs px-3 py-2.5 rounded-lg"></div>
-
-            <button id="submitBtn" type="submit"
-              class="w-full flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow-sm transition-colors">
-              Sign In
-            </button>
-
-          </form>
-
-          <div class="mt-5 text-center">
-            <a href="index.html" class="text-xs text-slate-500 hover:text-indigo-600 transition-colors">
-              ← Back to public dashboard
-            </a>
-          </div>
-
-        </div>
-      </div>
-
-      <p class="text-center text-[10px] text-slate-400 mt-4">
-        Secure authentication powered by Firebase
-      </p>
-
+    <!-- Header Area -->
+    <div class="text-center mb-8 flex flex-col items-center">
+      <a href="index.html"
+         class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-navy text-yellow shadow-md shadow-navy/20 mb-4 transition-transform hover:scale-105">
+        <i data-lucide="lock-keyhole" style="width: 32px; height: 32px;"></i>
+      </a>
+      <h1 class="text-2xl font-extrabold text-navy tracking-tight">Client Hub CRM</h1>
+      <p class="text-sm font-medium text-navy-soft mt-1">Firebase Edition</p>
     </div>
+
+    <!-- Main Auth Card: Round 1 (rounded-3xl) -->
+    <div class="bg-white rounded-3xl border border-gray/60 shadow-custom overflow-hidden">
+
+      <div class="p-6 sm:p-8 border-b border-gray/60 bg-white">
+        <h2 id="title" class="text-xl font-extrabold text-navy">Sign In</h2>
+        <p id="subtitle" class="text-sm text-navy-soft mt-1.5">Secure access to your CRM workspace.</p>
+      </div>
+
+      <div class="p-6 sm:p-8">
+
+        <!-- Tabs Container: Round 2 (rounded-2xl) -->
+        <div class="flex items-center bg-gray p-1.5 rounded-2xl border border-gray/80 mb-6">
+          <button id="signinTab" type="button"
+            class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-white text-navy shadow-sm transition-all">
+            Sign In
+          </button>
+          <button id="signupTab" type="button"
+            class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-navy-soft hover:text-navy transition-all">
+            Sign Up
+          </button>
+        </div>
+
+        <form id="authForm" class="space-y-5">
+
+          <!-- Email Input -->
+          <div>
+            <label class="block text-xs font-bold text-navy-soft uppercase tracking-wider mb-2">Email Address</label>
+            <input id="email" type="email" required
+              class="w-full px-4 py-3 text-sm bg-gray border border-gray/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-navy focus:bg-white text-navy transition-all"
+              placeholder="you@example.com">
+          </div>
+
+          <!-- Password Input -->
+          <div>
+            <label class="block text-xs font-bold text-navy-soft uppercase tracking-wider mb-2">Password</label>
+            <input id="password" type="password" required minlength="6"
+              class="w-full px-4 py-3 text-sm bg-gray border border-gray/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-navy focus:bg-white text-navy transition-all"
+              placeholder="Minimum 6 characters">
+          </div>
+
+          <!-- Confirm Password (Hidden by default) -->
+          <div id="confirmGroup" class="hidden">
+            <label class="block text-xs font-bold text-navy-soft uppercase tracking-wider mb-2">Confirm Password</label>
+            <input id="confirmPassword" type="password" minlength="6"
+              class="w-full px-4 py-3 text-sm bg-gray border border-gray/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-navy focus:bg-white text-navy transition-all"
+              placeholder="Repeat password">
+          </div>
+
+          <!-- Alert Message Area -->
+          <div id="message" class="hidden text-sm px-4 py-3 rounded-xl font-medium"></div>
+
+          <!-- Submit Button (Yellow Minimal) -->
+          <button id="submitBtn" type="submit"
+            class="w-full flex items-center justify-center gap-2 bg-yellow hover:bg-yellow-dark disabled:opacity-50 text-navy text-base font-bold px-4 py-3.5 rounded-xl shadow-sm transition-colors cursor-pointer mt-2">
+            <span>Sign In</span>
+            <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+          </button>
+
+        </form>
+
+        <div class="mt-8 text-center">
+          <a href="index.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-navy-soft hover:text-navy transition-colors">
+            <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+            Back to public dashboard
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="text-center text-xs font-medium text-navy-soft/60 mt-6 flex items-center justify-center gap-1.5">
+      <i data-lucide="shield-check" style="width: 14px; height: 14px;"></i>
+      Secure authentication powered by Firebase
+    </p>
+
   </div>
 
+  <!-- FIREBASE AUTH LOGIC -->
   <script type="module">
+    // Make sure your path to auth.js matches your actual project structure
     import { watchAuth, login, signup, saveUserProfile } from "./js/auth.js";
+
+    // Initialize Lucide Icons
+    lucide.createIcons();
 
     const $ = id => document.getElementById(id);
 
     let mode = new URLSearchParams(location.search).get("mode") === "signup"
       ? "signup"
       : "signin";
+
+    // Tab Style Constants
+    const activeTabClass = "flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-white text-navy shadow-sm transition-all";
+    const inactiveTabClass = "flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-navy-soft hover:text-navy transition-all";
 
     function setMode(nextMode) {
       mode = nextMode;
@@ -118,18 +176,19 @@
         ? "Create your secure CRM account."
         : "Secure access to your CRM workspace.";
 
-      $("submitBtn").textContent = signupMode ? "Create Account" : "Sign In";
+      // Update button text but keep the icon
+      $("submitBtn").innerHTML = `
+        <span>${signupMode ? "Create Account" : "Sign In"}</span>
+        <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+      `;
+      lucide.createIcons(); // Re-render the icon inside the button
 
       $("confirmGroup").classList.toggle("hidden", !signupMode);
       $("confirmPassword").required = signupMode;
 
-      $("signinTab").className = signupMode
-        ? "flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all"
-        : "flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all";
-
-      $("signupTab").className = signupMode
-        ? "flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all"
-        : "flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all";
+      // Update Tab Styles with new theme colors
+      $("signinTab").className = signupMode ? inactiveTabClass : activeTabClass;
+      $("signupTab").className = signupMode ? activeTabClass : inactiveTabClass;
 
       $("message").className = "hidden";
       $("message").textContent = "";
@@ -138,9 +197,10 @@
     function showMessage(text, type) {
       const el = $("message");
       el.textContent = text;
+      // Using standard semantic colors for form errors/success so they are obvious
       el.className = type === "error"
-        ? "text-xs px-3 py-2.5 rounded-lg bg-rose-50 text-rose-700 border border-rose-200"
-        : "text-xs px-3 py-2.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200";
+        ? "text-sm px-4 py-3 rounded-xl bg-red-50 text-red-700 border border-red-200 block"
+        : "text-sm px-4 py-3 rounded-xl bg-green-50 text-green-700 border border-green-200 block";
     }
 
     function firebaseMessage(error) {
@@ -170,7 +230,11 @@
 
       const button = $("submitBtn");
       button.disabled = true;
-      button.textContent = mode === "signup" ? "Creating Account..." : "Signing In...";
+      button.innerHTML = `
+        <i data-lucide="loader-circle" class="animate-spin" style="width: 20px; height: 20px;"></i>
+        <span>${mode === "signup" ? "Creating Account..." : "Signing In..."}</span>
+      `;
+      lucide.createIcons();
 
       try {
         const email = $("email").value.trim();
@@ -199,7 +263,11 @@
       } catch (error) {
         showMessage(firebaseMessage(error), "error");
         button.disabled = false;
-        button.textContent = mode === "signup" ? "Create Account" : "Sign In";
+        button.innerHTML = `
+          <span>${mode === "signup" ? "Create Account" : "Sign In"}</span>
+          <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+        `;
+        lucide.createIcons();
       }
     });
   </script>
