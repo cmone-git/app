@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClientHub CRM (Firebase Edition)</title>
+
+  <!-- 1. Import Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- 2. Include Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- 3. Tailwind Configuration updated with your Custom Colors -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            navy: '#071d49',
+            'navy-soft': '#102a5c',
+            yellow: '#ffc51b',
+            'yellow-dark': '#eab000',
+            gray: '#f1f2f7',
+            text: '#071d49',
+          },
+          boxShadow: {
+            custom: '0 24px 45px rgba(7, 29, 73, .18)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- 4. Exact Custom CSS Core Styles -->
+  <style>
+    :root {
+      --navy: #071d49;
+      --navy-soft: #102a5c;
+      --yellow: #ffc51b;
+      --yellow-dark: #eab000;
+      --white: #ffffff;
+      --gray: #f1f2f7;
+      --text: #071d49;
+      --shadow: 0 24px 45px rgba(7, 29, 73, .18);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--gray);
+      color: var(--text);
+      font-size: 18px; /* Increased base size for better visibility */
+    }
+
+    /* Enforce larger Lucide Icon Sizing */
+    .lucide {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* Bottom Navigation Styling */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: var(--white);
+      box-shadow: 0 -4px 20px rgba(7, 29, 73, 0.1);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      z-index: 1000;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--navy-soft);
+      font-size: 0.9rem;
+      font-weight: 500;
+      gap: 6px;
+    }
+
+    .nav-item.active {
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    /* Minimal yellow used for the active icon accent */
+    .nav-item.active .lucide {
+      color: var(--yellow-dark); 
+    }
+  </style>
+</head>
+
+<body class="pb-24"> <!-- pb-24 ensures content doesn't hide behind the bottom nav -->
+
+  <div class="min-h-screen antialiased">
+
+    <!-- HEADER -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20"> <!-- Increased header height -->
+
+          <a href="index.html" class="flex items-center space-x-3">
+            <div class="w-12 h-12 rounded-xl bg-navy flex items-center justify-center text-yellow shadow-md">
+              <i data-lucide="layout-dashboard"></i>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-navy leading-tight">Client Hub CRM</h1>
+              <p class="text-sm text-navy-soft font-medium">Firebase Edition</p>
+            </div>
+          </a>
+
+          <div class="flex items-center space-x-4">
+            <a href="signin.html"
+               class="flex items-center space-x-2 px-3.5 py-2 rounded-lg text-base font-semibold text-navy hover:text-navy-soft hover:bg-gray transition-all">
+              <span>Sign In</span>
+            </a>
+            <!-- Primary Button: Minimal Yellow -->
+            <a href="signin.html"
+               class="flex items-center space-x-2 bg-yellow hover:bg-yellow-dark text-navy text-base font-bold px-5 py-2.5 rounded-lg shadow-custom transition-colors">
+              <span>Sign Up</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+
+      <!-- HERO SECTION -->
+      <div class="bg-navy rounded-2xl p-8 text-white shadow-custom relative overflow-hidden">
+        <div class="absolute right-0 top-0 translate-x-8 -translate-y-8 opacity-10 pointer-events-none text-white">
+          <i data-lucide="network" style="width: 250px; height: 250px;"></i>
+        </div>
+
+        <div class="relative z-10 max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-navy-soft text-gray border border-gray/30 text-sm font-medium px-3 py-1.5 rounded-full mb-4">
+            <i data-lucide="sparkles" class="w-4 h-4 text-yellow"></i>
+            <span>Client Management Platform</span>
+          </div>
+
+          <h2 class="text-3xl font-extrabold tracking-tight text-white mb-2">Client Portfolio Intelligence</h2>
+
+          <p class="text-gray/80 text-base sm:text-lg mt-2 leading-relaxed mb-6">
+            A professional workspace for managing clients, compliance, contacts,
+            branches and business records. Public dashboard — no client data is loaded here.
+          </p>
+
+          <div class="mt-4 flex flex-wrap gap-4">
+            <a href="signin.html"
+               class="bg-white text-navy hover:bg-gray text-base font-bold px-6 py-3 rounded-lg transition-colors shadow-sm">
+              Sign In
+            </a>
+            <!-- Primary Button: Minimal Yellow -->
+            <a href="signin.html"
+               class="bg-yellow hover:bg-yellow-dark text-navy text-base font-bold px-6 py-3 rounded-lg shadow-custom transition-colors">
+              Create Account
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI CARDS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+
+        <div class="bg-white rounded-xl p-6 border border-gray/50 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-navy-soft uppercase tracking-wider">Total Portfolio</span>
+            <div class="w-10 h-10 rounded-lg bg-gray text-navy flex items-center justify-center">
+              <i data-lucide="briefcase"></i>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="text-4xl font-extrabold text-navy">0</div>
+            <div class="flex items-center text-sm text-navy-soft mt-1">
+              Public preview
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 border border-gray/50 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-navy-soft uppercase tracking-wider">Active Status</span>
+            <div class="w-10 h-10 rounded-lg bg-gray text-navy flex items-center justify-center">
+              <i data-lucide="check-circle"></i>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="text-4xl font-extrabold text-navy">—</div>
+            <div class="w-full bg-gray h-2 rounded-full mt-3 overflow-hidden">
+              <div class="bg-navy h-full rounded-full" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 border border-gray/50 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-navy-soft uppercase tracking-wider">PAN Coverage</span>
+            <div class="w-10 h-10 rounded-lg bg-gray text-navy flex items-center justify-center">
+              <i data-lucide="credit-card"></i>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="text-4xl font-extrabold text-navy">—</div>
+            <div class="flex items-center justify-between text-sm text-navy-soft mt-1">
+              <span>Sign in to view</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 border border-gray/50 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-navy-soft uppercase tracking-wider">Contact Info</span>
+            <div class="w-10 h-10 rounded-lg bg-gray text-navy flex items-center justify-center">
+              <i data-lucide="phone"></i>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="text-4xl font-extrabold text-navy">—</div>
+            <div class="w-full bg-gray h-2 rounded-full mt-3 overflow-hidden">
+              <div class="bg-navy-soft h-full rounded-full" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURE CARDS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+        <a href="signin.html" class="bg-white rounded-xl p-6 border border-gray/50 shadow-sm hover:border-navy hover:shadow-custom transition-all">
+          <div class="w-12 h-12 rounded-lg bg-navy text-white flex items-center justify-center mb-4">
+            <i data-lucide="users"></i>
+          </div>
+          <h3 class="text-lg font-bold text-navy">Client Directory</h3>
+          <p class="text-sm text-navy-soft mt-2 leading-relaxed">Access the complete client directory after signing in.</p>
+        </a>
+
+        <a href="signin.html" class="bg-white rounded-xl p-6 border border-gray/50 shadow-sm hover:border-navy hover:shadow-custom transition-all">
+          <div class="w-12 h-12 rounded-lg bg-navy text-white flex items-center justify-center mb-4">
+            <i data-lucide="shield-check"></i>
+          </div>
+          <h3 class="text-lg font-bold text-navy">Compliance</h3>
+          <p class="text-sm text-navy-soft mt-2 leading-relaxed">Manage PAN, GSTIN, Aadhaar references and compliance data.</p>
+        </a>
+
+        <a href="signin.html" class="bg-white rounded-xl p-6 border border-gray/50 shadow-sm hover:border-navy hover:shadow-custom transition-all">
+          <div class="w-12 h-12 rounded-lg bg-navy text-white flex items-center justify-center mb-4">
+            <i data-lucide="contact"></i>
+          </div>
+          <h3 class="text-lg font-bold text-navy">Contacts</h3>
+          <p class="text-sm text-navy-soft mt-2 leading-relaxed">Quickly access client phone and communication tools.</p>
+        </a>
+
+        <a href="signin.html" class="bg-white rounded-xl p-6 border border-gray/50 shadow-sm hover:border-navy hover:shadow-custom transition-all">
+          <div class="w-12 h-12 rounded-lg bg-navy text-white flex items-center justify-center mb-4">
+            <i data-lucide="bar-chart-3"></i>
+          </div>
+          <h3 class="text-lg font-bold text-navy">Reports & Tools</h3>
+          <p class="text-sm text-navy-soft mt-2 leading-relaxed">Use your secure CRM workspace and business tools.</p>
+        </a>
+      </div>
+
+      <!-- PUBLIC NOTICE -->
+      <div class="mt-8 mb-8 bg-white rounded-xl border border-gray/50 shadow-sm p-5 flex items-start gap-4">
+        <div class="w-10 h-10 rounded-lg bg-gray text-navy flex items-center justify-center shrink-0">
+          <i data-lucide="info"></i>
+        </div>
+        <div>
+          <p class="text-base font-bold text-navy">Public Dashboard</p>
+          <p class="text-sm text-navy-soft mt-1">
+            This page intentionally contains no Firebase client data. Sign in or create an account
+            to enter the secure CRM workspace.
+          </p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- 5. BOTTOM NAVIGATION -->
+  <nav class="bottom-nav">
+    <!-- Active State Applied Here -->
+    <a href="index.html" class="nav-item active">
+      <i data-lucide="home"></i>
+      <span>Home</span>
+    </a>
+    <a href="clients.html" class="nav-item">
+      <i data-lucide="users"></i>
+      <span>Clients</span>
+    </a>
+    <a href="compliance.html" class="nav-item">
+      <i data-lucide="shield-check"></i>
+      <span>Compliance</span>
+    </a>
+    <a href="more.html" class="nav-item">
+      <i data-lucide="menu"></i>
+      <span>Menu</span>
+    </a>
+  </nav>
+
+  <!-- 6. Initialize Lucide Icons -->
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
