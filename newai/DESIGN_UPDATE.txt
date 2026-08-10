@@ -1,0 +1,14 @@
+ClientHub CRM — Design Update
+
+Updated:
+- Primary palette: Navy #071d49 / Navy Soft #102a5c
+- Accent: Yellow #ffc51b / Yellow Dark #eab000
+- Neutral: White #ffffff / Gray #f1f2f7
+- Font: Inter
+- Increased base font sizes, table readability and controls
+- Increased icon visibility
+- Yellow reserved mainly for important CTAs and small active/icon accents
+- Added responsive mobile bottom navigation:
+  Home | Clients | Compliance | Menu
+- Menu button opens the existing mobile sidebar
+- Public dashboard remains data-free

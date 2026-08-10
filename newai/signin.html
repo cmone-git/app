@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — ClientHub CRM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>body{font-family:"Inter",system-ui,sans-serif}</style>
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+  <div class="min-h-screen flex items-center justify-center p-4 bg-slate-50">
+
+    <div class="w-full max-w-md">
+
+      <div class="text-center mb-6">
+        <a href="index.html"
+           class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#071d49] text-white shadow-md shadow-slate-200 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </a>
+        <h1 class="text-xl font-extrabold text-slate-900">Client Hub CRM</h1>
+        <p class="text-xs text-slate-500 mt-1">Firebase Edition</p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden">
+
+        <div class="p-5 sm:p-6 border-b border-slate-200 bg-slate-50">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 id="title" class="text-lg font-extrabold text-slate-900">Sign In</h2>
+              <p id="subtitle" class="text-xs text-slate-500 mt-1">Secure access to your CRM workspace.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-5 sm:p-6">
+
+          <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 mb-5">
+            <button id="signinTab" type="button"
+              class="flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold bg-white text-[#071d49] shadow-sm transition-all">
+              Sign In
+            </button>
+            <button id="signupTab" type="button"
+              class="flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all">
+              Sign Up
+            </button>
+          </div>
+
+          <form id="authForm" class="space-y-4">
+
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Email Address</label>
+              <input id="email" type="email" required
+                class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#071d49] focus:bg-white text-slate-900"
+                placeholder="you@example.com">
+            </div>
+
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Password</label>
+              <input id="password" type="password" required minlength="6"
+                class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#071d49] focus:bg-white text-slate-900"
+                placeholder="Minimum 6 characters">
+            </div>
+
+            <div id="confirmGroup" class="hidden">
+              <label class="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Confirm Password</label>
+              <input id="confirmPassword" type="password" minlength="6"
+                class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#071d49] focus:bg-white text-slate-900"
+                placeholder="Repeat password">
+            </div>
+
+            <div id="message" class="hidden text-xs px-3 py-2.5 rounded-lg"></div>
+
+            <button id="submitBtn" type="submit"
+              class="w-full flex items-center justify-center bg-[#071d49] hover:bg-[#102a5c] disabled:opacity-50 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow-sm transition-colors">
+              Sign In
+            </button>
+
+          </form>
+
+          <div class="mt-5 text-center">
+            <a href="index.html" class="text-xs text-slate-500 hover:text-[#071d49] transition-colors">
+              <i data-lucide="arrow-left"></i> Back to public dashboard
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <p class="text-center text-[10px] text-slate-400 mt-4">
+        Secure authentication powered by Firebase
+      </p>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { watchAuth, login, signup, saveUserProfile } from "./js/auth.js";
+
+    const $ = id => document.getElementById(id);
+
+    let mode = new URLSearchParams(location.search).get("mode") === "signup"
+      ? "signup"
+      : "signin";
+
+    function setMode(nextMode) {
+      mode = nextMode;
+      const signupMode = mode === "signup";
+
+      $("title").textContent = signupMode ? "Create Account" : "Sign In";
+      $("subtitle").textContent = signupMode
+        ? "Create your secure CRM account."
+        : "Secure access to your CRM workspace.";
+
+      $("submitBtn").textContent = signupMode ? "Create Account" : "Sign In";
+
+      $("confirmGroup").classList.toggle("hidden", !signupMode);
+      $("confirmPassword").required = signupMode;
+
+      $("signinTab").className = signupMode
+        ? "flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all"
+        : "flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold bg-white text-[#071d49] shadow-sm transition-all";
+
+      $("signupTab").className = signupMode
+        ? "flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold bg-white text-[#071d49] shadow-sm transition-all"
+        : "flex-1 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all";
+
+      $("message").className = "hidden";
+      $("message").textContent = "";
+    }
+
+    function showMessage(text, type) {
+      const el = $("message");
+      el.textContent = text;
+      el.className = type === "error"
+        ? "text-xs px-3 py-2.5 rounded-lg bg-rose-50 text-rose-700 border border-rose-200"
+        : "text-xs px-3 py-2.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200";
+    }
+
+    function firebaseMessage(error) {
+      return ({
+        "auth/invalid-credential": "Invalid email or password.",
+        "auth/email-already-in-use": "An account already exists with this email.",
+        "auth/weak-password": "Password must be at least 6 characters.",
+        "auth/invalid-email": "Please enter a valid email address.",
+        "auth/network-request-failed": "Network error. Please check your internet connection."
+      })[error.code] || error.message || "Authentication failed.";
+    }
+
+    $("signinTab").onclick = () => setMode("signin");
+    $("signupTab").onclick = () => setMode("signup");
+
+    setMode(mode);
+
+    watchAuth(user => {
+      if (user) {
+        // After authentication, enter the secure CRM area.
+        location.href = "clients.html";
+      }
+    });
+
+    $("authForm").addEventListener("submit", async event => {
+      event.preventDefault();
+
+      const button = $("submitBtn");
+      button.disabled = true;
+      button.textContent = mode === "signup" ? "Creating Account..." : "Signing In...";
+
+      try {
+        const email = $("email").value.trim();
+        const password = $("password").value;
+
+        if (mode === "signup") {
+          if (password !== $("confirmPassword").value) {
+            throw new Error("Passwords do not match.");
+          }
+
+          const result = await signup(email, password);
+
+          await saveUserProfile(result.user, {
+            role: "user",
+            createdAt: new Date().toISOString()
+          });
+        } else {
+          await login(email, password);
+        }
+
+        showMessage(
+          mode === "signup" ? "Account created successfully." : "Signed in successfully.",
+          "success"
+        );
+
+      } catch (error) {
+        showMessage(firebaseMessage(error), "error");
+        button.disabled = false;
+        button.textContent = mode === "signup" ? "Create Account" : "Sign In";
+      }
+    });
+  </script>
+<script>window.addEventListener("DOMContentLoaded",()=>window.lucide&&lucide.createIcons());</script>
+</body>
+</html>

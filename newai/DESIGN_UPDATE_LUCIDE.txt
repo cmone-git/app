@@ -1,0 +1,29 @@
+ClientHub CRM — Full Responsive / Lucide Update
+
+Design:
+- Navy #071d49
+- Navy Soft #102a5c
+- Yellow #ffc51b
+- Yellow Dark #eab000
+- White #ffffff
+- Grey #f1f2f7
+- Inter font
+- Larger typography and controls
+- Higher icon visibility
+- Yellow reserved for important actions, active states and selected icons
+
+Icons:
+- Lucide icons only
+- Removed Unicode UI symbols from the authenticated navigation/actions
+- Lucide loaded from the official unpkg distribution
+- Icons are refreshed after dynamically rendered content
+
+Responsive:
+- Desktop fixed sidebar
+- Tablet adaptive layout
+- Mobile slide-out sidebar
+- Mobile bottom navigation:
+  Home / Clients / Compliance / Menu
+- Safe-area support for mobile devices
+- Responsive cards, forms, tables and dialogs
+- Touch-friendly 44px controls
