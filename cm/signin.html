@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | CM Business Flow</title>
+
+  <!-- Tailwind CDN & Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { 
+        extend: { 
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: { navy: '#071d49', 'navy-soft': '#102a5c', yellow: '#ffc51b', 'yellow-dark': '#eab000', gray: '#f1f2f7', text: '#071d49' }, 
+          boxShadow: { custom: '0 24px 45px rgba(7, 29, 73, .18)' } 
+        } 
+      }
+    };
+  </script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 bg-gray">
+
+  <!-- STANDALONE AUTH CONTAINER -->
+  <main class="w-full max-w-md">
+
+    <!-- Header Area -->
+    <div class="text-center mb-8 flex flex-col items-center">
+      <a href="index.html" class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-navy text-yellow shadow-md shadow-navy/20 mb-4 transition-transform hover:scale-105">
+        <i data-lucide="lock-keyhole" style="width: 32px; height: 32px;"></i>
+      </a>
+      <h1 class="text-2xl font-extrabold text-navy tracking-tight">CM Business Flow</h1>
+      <p class="text-sm font-medium text-navy-soft mt-1">Secure Workspace Access</p>
+    </div>
+
+    <!-- Main Auth Card: Round 1 (rounded-3xl) -->
+    <div class="bg-white rounded-3xl border border-gray/60 shadow-custom overflow-hidden">
+
+      <div class="p-6 sm:p-8">
+
+        <!-- Tabs Container: Round 2 (rounded-2xl) -->
+        <div id="tabsContainer" class="flex items-center bg-gray p-1.5 rounded-2xl border border-gray/80 mb-6">
+          <button id="signinTab" type="button" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-white text-navy shadow-sm transition-all">
+            Sign In
+          </button>
+          <button id="signupTab" type="button" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-navy-soft hover:text-navy transition-all">
+            Sign Up
+          </button>
+        </div>
+
+        <h2 id="title" class="text-xl font-extrabold text-navy mb-1 hidden">Reset Password</h2>
+        <p id="subtitle" class="text-sm text-navy-soft mb-6 hidden">Enter your email to receive a reset link.</p>
+
+        <form id="authForm" class="space-y-5">
+
+          <!-- Email Input -->
+          <div>
+            <label class="block text-xs font-bold text-navy-soft uppercase tracking-wider mb-2">Email Address</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i data-lucide="mail" class="text-navy-soft" style="width: 18px; height: 18px;"></i>
+              </div>
+              <input id="email" type="email" required
+                class="w-full pl-11 pr-4 py-3 text-sm bg-gray border border-gray/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-navy focus:bg-white text-navy transition-all"
+                placeholder="you@example.com">
+            </div>
+          </div>
+
+          <!-- Password Input -->
+          <div id="passwordGroup">
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-xs font-bold text-navy-soft uppercase tracking-wider">Password</label>
+              <button type="button" id="forgotBtn" class="text-xs font-bold text-navy hover:text-yellow-dark transition-colors">
+                Forgot Password?
+              </button>
+            </div>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i data-lucide="key" class="text-navy-soft" style="width: 18px; height: 18px;"></i>
+              </div>
+              <input id="password" type="password" required minlength="6"
+                class="w-full pl-11 pr-4 py-3 text-sm bg-gray border border-gray/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-navy focus:bg-white text-navy transition-all"
+                placeholder="Minimum 6 characters">
+            </div>
+          </div>
+
+          <!-- Confirm Password (Hidden by default) -->
+          <div id="confirmGroup" class="hidden">
+            <label class="block text-xs font-bold text-navy-soft uppercase tracking-wider mb-2">Confirm Password</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i data-lucide="shield-check" class="text-navy-soft" style="width: 18px; height: 18px;"></i>
+              </div>
+              <input id="confirmPassword" type="password" minlength="6"
+                class="w-full pl-11 pr-4 py-3 text-sm bg-gray border border-gray/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-navy focus:bg-white text-navy transition-all"
+                placeholder="Repeat password">
+            </div>
+          </div>
+
+          <!-- Alert Message Area -->
+          <div id="message" class="hidden text-sm px-4 py-3 rounded-xl font-medium"></div>
+
+          <!-- Submit Button (Yellow Minimal) -->
+          <button id="submitBtn" type="submit"
+            class="w-full flex items-center justify-center gap-2 bg-yellow hover:bg-yellow-dark disabled:opacity-50 text-navy text-base font-bold px-4 py-3.5 rounded-xl shadow-sm transition-colors cursor-pointer mt-4">
+            <span>Sign In</span>
+            <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+          </button>
+          
+          <!-- Cancel Reset Button (Hidden by default) -->
+          <button id="cancelResetBtn" type="button" class="hidden w-full text-center text-sm font-bold text-navy-soft hover:text-navy transition-colors mt-3">
+            Back to Sign In
+          </button>
+
+        </form>
+
+        <div class="mt-8 text-center">
+          <a href="index.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-navy-soft hover:text-navy transition-colors">
+            <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+            Back to Dashboard
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="text-center text-xs font-medium text-navy-soft/60 mt-6 flex items-center justify-center gap-1.5">
+      <i data-lucide="shield-check" style="width: 14px; height: 14px;"></i>
+      Secure authentication powered by Firebase
+    </p>
+
+  </main>
+
+  <!-- FIREBASE AUTH LOGIC -->
+  <script type="module">
+    // Update these imports if you add the password reset function to your auth.js
+    import { watchAuth, login, signup, saveUserProfile } from "./js/auth.js";
+    // NOTE: To make forgot password work, you'll need to export `sendPasswordResetEmail(FB.auth, email)` from auth.js
+
+    lucide.createIcons();
+
+    const $ = id => document.getElementById(id);
+
+    let mode = new URLSearchParams(location.search).get("mode") === "signup" ? "signup" : "signin";
+
+    const activeTabClass = "flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-white text-navy shadow-sm transition-all";
+    const inactiveTabClass = "flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-navy-soft hover:text-navy transition-all";
+
+    function setMode(nextMode) {
+      mode = nextMode;
+      
+      $("message").className = "hidden";
+      $("message").textContent = "";
+
+      if (mode === "reset") {
+        $("tabsContainer").classList.add("hidden");
+        $("title").classList.remove("hidden");
+        $("subtitle").classList.remove("hidden");
+        $("passwordGroup").classList.add("hidden");
+        $("confirmGroup").classList.add("hidden");
+        $("password").required = false;
+        $("confirmPassword").required = false;
+        $("cancelResetBtn").classList.remove("hidden");
+        
+        $("submitBtn").innerHTML = `<span>Send Reset Link</span><i data-lucide="mail" style="width: 20px; height: 20px;"></i>`;
+      } else {
+        const signupMode = mode === "signup";
+        
+        $("tabsContainer").classList.remove("hidden");
+        $("title").classList.add("hidden");
+        $("subtitle").classList.add("hidden");
+        $("passwordGroup").classList.remove("hidden");
+        $("cancelResetBtn").classList.add("hidden");
+        $("password").required = true;
+
+        $("submitBtn").innerHTML = `<span>${signupMode ? "Create Account" : "Sign In"}</span><i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>`;
+
+        $("confirmGroup").classList.toggle("hidden", !signupMode);
+        $("confirmPassword").required = signupMode;
+        $("forgotBtn").classList.toggle("hidden", signupMode);
+
+        $("signinTab").className = signupMode ? inactiveTabClass : activeTabClass;
+        $("signupTab").className = signupMode ? activeTabClass : inactiveTabClass;
+      }
+      lucide.createIcons();
+    }
+
+    function showMessage(text, type) {
+      const el = $("message");
+      el.textContent = text;
+      el.className = type === "error"
+        ? "text-sm px-4 py-3 rounded-xl bg-red-50 text-red-700 border border-red-200 block"
+        : "text-sm px-4 py-3 rounded-xl bg-green-50 text-green-700 border border-green-200 block";
+    }
+
+    $("signinTab").onclick = () => setMode("signin");
+    $("signupTab").onclick = () => setMode("signup");
+    $("forgotBtn").onclick = () => setMode("reset");
+    $("cancelResetBtn").onclick = () => setMode("signin");
+
+    setMode(mode);
+
+    watchAuth(user => {
+      if (user) location.href = "client.html"; // Redirects to client dashboard after login
+    });
+
+    $("authForm").addEventListener("submit", async event => {
+      event.preventDefault();
+
+      const button = $("submitBtn");
+      button.disabled = true;
+      button.innerHTML = `<i data-lucide="loader-circle" class="animate-spin" style="width: 20px; height: 20px;"></i><span>Processing...</span>`;
+      lucide.createIcons();
+
+      try {
+        const email = $("email").value.trim();
+
+        if (mode === "reset") {
+          // You will need to implement resetPassword in auth.js using sendPasswordResetEmail
+          // await resetPassword(email);
+          showMessage("If an account exists, a reset link has been sent.", "success");
+          setTimeout(() => setMode("signin"), 3000);
+        } else {
+          const password = $("password").value;
+          
+          if (mode === "signup") {
+            if (password !== $("confirmPassword").value) throw new Error("Passwords do not match.");
+            const result = await signup(email, password);
+            await saveUserProfile(result.user, { role: "user", createdAt: new Date().toISOString() });
+          } else {
+            await login(email, password);
+          }
+          showMessage(mode === "signup" ? "Account created successfully." : "Signed in successfully.", "success");
+        }
+      } catch (error) {
+        showMessage(error.message || "Authentication failed.", "error");
+      } finally {
+        button.disabled = false;
+        setMode(mode); // Resets button text state
+      }
+    });
+  </script>
+</body>
+</html>
