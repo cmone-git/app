@@ -21,18 +21,20 @@
 
     <div id="loginPanel">
       <h2>Client Login</h2>
-      <p>Access your compliance, documents, payments and COREBIQ assistant.</p>
+      <p>Enter the email registered in the <b>Clients</b> module to access your client portal.</p>
+      <div id="loginStatus" class="auth-status" aria-live="polite"></div>
       <form id="loginForm">
         <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="email" required></div>
         <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" required></div>
         <button class="btn primary full" type="submit">Sign In</button>
       </form>
-      <div class="auth-links"><button class="btn" type="button" data-auth="signup">New client? Request access</button></div>
+      <div class="auth-links"><button class="btn" type="button" data-auth="signup">Email matched in Clients? Create Sign Up</button></div>
     </div>
 
     <div id="signupPanel" class="hidden">
       <h2>Client Registration</h2>
-      <p>Create an account. COREBIQ will verify and approve the request before a client ID is issued.</p>
+      <p>Your email must already exist in the <b>Clients</b> module. Create your password below; portal access will remain locked until admin approval.</p>
+      <div id="signupNotice" class="auth-status" aria-live="polite"></div>
       <form id="signupForm">
         <div class="field"><label>Full name</label><input id="signupName" required></div>
         <div class="field"><label>Email</label><input id="signupEmail" type="email" required></div>
@@ -42,7 +44,7 @@
       </form>
       <div class="auth-links"><button class="btn" type="button" data-auth="login">Already registered? Sign in</button></div>
     </div>
-    <div class="notice">Use the email registered with COREBIQ. New accounts remain pending until approval and client ID assignment.</div>
+    <div class="notice">Security: login and signup are checked against the <b>Clients</b> module first. Firebase Auth users without a matching client record cannot enter this portal.</div>
   </div>
 </section>
 
