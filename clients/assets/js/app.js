@@ -76,20 +76,20 @@ function renderCurrent(){
   if(state.view==="assistant") renderAssistant();
 }
 
-async function findClientByEmail(email){
-  const q = query(
-    collection(db,"clients"),
-    where("email","==",email.toLowerCase()),
-    limit(5)
-  );
-  const snap = await getDocs(q);
+async function findClientRecordByEmail(email){
+  const q=query(collection(db,"clients"),where("email","==",email.toLowerCase()),limit(5));
+  const snap=await getDocs(q);
   if(snap.empty) return null;
-  const active = snap.docs.find(d => {
-    const x=d.data();
-    return !x.status || String(x.status).toLowerCase()==="active" || String(x.status).toLowerCase()==="approved";
-  });
-  if(!active) return null;
-  return {id:active.id,...active.data()};
+  const d=snap.docs[0];
+  return {id:d.id,...d.data()};
+}
+
+async function findClientByEmail(email){
+  const record=await findClientRecordByEmail(email);
+  if(!record) return null;
+  const status=String(record.status||"active").toLowerCase();
+  if(!["active","approved"].includes(status)) return null;
+  return record;
 }
 
 async function loadClientData(){
@@ -125,20 +125,23 @@ async function loadByEmail(name){
 
 async function ensureSignupRequest(){
   try{
-    const q=query(
-      collection(db,"signup_requests"),
-      where("email","==",currentUser.email.toLowerCase()),
-      limit(5)
-    );
+    const email=currentUser.email.toLowerCase();
+    const client=await findClientRecordByEmail(email);
+    if(!client) return;
+
+    const q=query(collection(db,"signup_requests"),where("email","==",email),limit(5));
     const snap=await getDocs(q);
     if(!snap.empty) return;
-    const name=currentUser.displayName || currentUser.email.split("@")[0];
+
     await addDoc(collection(db,"signup_requests"),{
-      name,
-      email:currentUser.email.toLowerCase(),
-      mobile:"",
+      clientId:client.clientId||client.id,
+      clientName:client.clientName||client.name||"",
+      name:client.clientName||client.name||currentUser.displayName||email.split("@")[0],
+      email,
+      mobile:client.mobile||client.mobileNo||"",
       status:"pending",
       firebaseUid:currentUser.uid,
+      source:"CLIENTS_EMAIL_MATCH",
       createdAt:serverTimestamp()
     });
   }catch(e){
@@ -359,35 +362,115 @@ async function submitSignup(){
   const mobile=$("#signupMobile").value.trim();
   const password=$("#signupPassword").value;
   if(!name||!email||!mobile||password.length<6){alert("Enter name, email, mobile and a password of at least 6 characters.");return;}
+
   try{
+    // IMPORTANT: signup is allowed only when the email already exists in Clients.
+    const client=await findClientRecordByEmail(email);
+    if(!client){
+      alert("This email is not available in the COREBIQ Clients module. Please contact COREBIQ.");
+      return;
+    }
+
     const cred=await createUserWithEmailAndPassword(auth,email,password);
     await sendEmailVerification(cred.user);
+
+    await addDoc(collection(db,"signup_requests"),{
+      clientId:client.clientId||client.id,
+      clientName:client.clientName||client.name||name,
+      name,
+      email,
+      mobile,
+      status:"pending",
+      firebaseUid:cred.user.uid,
+      source:"CLIENTS_EMAIL_MATCH",
+      createdAt:serverTimestamp()
+    });
+
     await signOut(auth);
-    alert("Account created. Verify your email, then sign in. If your email is not already in the client master, COREBIQ will receive an approval request.");
+    $("#loginEmail").value=email;
+    $("#signupPassword").value="";
+    $("#signupNotice").textContent="Account created. Verify your email. Your password will become usable for portal access after COREBIQ admin approval.";
     showAuth("login");
-  }catch(e){alert(e.message||"Signup failed.");}
+  }catch(e){
+    if(e.code==="auth/email-already-in-use"){
+      alert("This email already has a login account. Please sign in and use the existing password.");
+    }else{
+      alert(e.message||"Signup failed.");
+    }
+  }
 }
 
 async function doLogin(){
-  const email=$("#loginEmail").value.trim();
+  const email=$("#loginEmail").value.trim().toLowerCase();
   const password=$("#loginPassword").value;
   if(!email||!password){alert("Enter email and password.");return;}
+
+  // First check the Clients module. Auth alone is never enough to enter this portal.
+  let clientRecord=null;
+  try{
+    clientRecord=await findClientRecordByEmail(email);
+  }catch(e){
+    console.error(e);
+    alert("Could not check the Clients module. Please try again.");
+    return;
+  }
+
+  if(!clientRecord){
+    $("#loginStatus").innerHTML=`<div class="auth-error">No client record found for <b>${esc(email)}</b>. Signup is available only for an email already registered in the Clients module.</div>`;
+    showAuth("login");
+    return;
+  }
+
   try{
     const cred=await signInWithEmailAndPassword(auth,email,password);
     if(!cred.user.emailVerified){
       await sendEmailVerification(cred.user).catch(()=>{});
       await signOut(auth);
-      alert("Please verify your email before accessing the client portal.");
+      $("#loginStatus").textContent="Please verify your email first. A new verification link has been sent.";
       return;
     }
-  }catch(e){alert(e.message||"Login failed.");}
+
+    const status=String(clientRecord.status||"active").toLowerCase();
+    if(!["active","approved"].includes(status)){
+      await signOut(auth);
+      $("#loginStatus").textContent="Your login account exists, but portal access is waiting for COREBIQ admin approval.";
+      return;
+    }
+  }catch(e){
+    if(e.code==="auth/user-not-found"){
+      $("#signupEmail").value=email;
+      $("#signupName").value=clientRecord.clientName||clientRecord.name||"";
+      $("#signupMobile").value=clientRecord.mobile||clientRecord.mobileNo||"";
+      $("#signupNotice").textContent="Your email matches a COREBIQ Clients record. Create your login password below. Portal access will remain locked until admin approval.";
+      showAuth("signup");
+      return;
+    }
+    if(e.code==="auth/wrong-password" || e.code==="auth/invalid-credential"){
+      $("#loginStatus").textContent="Invalid password. If you are a new client, use the signup option to create your login.";
+      return;
+    }
+    alert(e.message||"Login failed.");
+  }
 }
 
 function showAuth(mode){
   $("#loginPanel").classList.toggle("hidden",mode!=="login");
   $("#signupPanel").classList.toggle("hidden",mode!=="signup");
 }
-$$("[data-auth]").forEach(b=>b.addEventListener("click",()=>showAuth(b.dataset.auth)));
+$$(["[data-auth]"]).flat().forEach(b=>b.addEventListener("click",async()=>{
+  if(b.dataset.auth!=="signup"){ showAuth("login"); return; }
+  const email=$("#loginEmail").value.trim().toLowerCase();
+  if(!email){ $("#loginStatus").textContent="Enter your client email first, then choose Sign up."; return; }
+  try{
+    const c=await findClientRecordByEmail(email);
+    if(!c){ $("#loginStatus").textContent="Signup is available only when the email already exists in the Clients module."; return; }
+    $("#signupEmail").value=email;
+    $("#signupName").value=c.clientName||c.name||"";
+    $("#signupMobile").value=c.mobile||c.mobileNo||"";
+    $("#signupNotice").textContent="Email matched in Clients. Create your password. Portal access will wait for admin approval.";
+    showAuth("signup");
+  }catch(e){ $("#loginStatus").textContent="Could not check the Clients module. Please try again."; }
+}));
 
 $("#loginForm").addEventListener("submit",e=>{e.preventDefault();doLogin()});
 $("#signupForm").addEventListener("submit",e=>{e.preventDefault();submitSignup()});
