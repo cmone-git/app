@@ -1,0 +1,98 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function verified() {
+      return signedIn() && request.auth.token.email_verified == true;
+    }
+
+    function email() {
+      return request.auth.token.email;
+    }
+
+    function isAdmin() {
+      return signedIn() && (
+        email() in [
+          "shanicm@gmail.com",
+          "cmexpertsgroup@gmail.com"
+        ] ||
+        (
+          exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+        )
+      );
+    }
+
+    function ownsEmail() {
+      return verified() && resource.data.email == email();
+    }
+
+    function newOwnEmail() {
+      return verified() && request.resource.data.clientEmail == email();
+    }
+
+    // Existing client master data: client can read only matching verified email.
+    match /clients/{clientId} {
+      allow read: if verified() && resource.data.email == email();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Compliance statement.
+    match /compliance/{id} {
+      allow read: if verified() && resource.data.clientEmail == email();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Client document metadata.
+    match /documents/{id} {
+      allow read: if verified() && resource.data.clientEmail == email();
+      allow create: if verified()
+                    && request.resource.data.clientEmail == email()
+                    && request.resource.data.firebaseUid == request.auth.uid
+                    && request.resource.data.contentHash is string
+                    && request.resource.data.storagePath.matches('client_files/' + request.auth.uid + '/.*');
+      allow update, delete: if isAdmin();
+    }
+
+    // Payment records. Clients may create an initiation record, not mark it paid.
+    match /payments/{id} {
+      allow read: if verified() && resource.data.clientEmail == email();
+      allow create: if verified()
+                    && request.resource.data.clientEmail == email()
+                    && request.resource.data.firebaseUid == request.auth.uid
+                    && request.resource.data.status == "QR_GENERATED";
+      allow update, delete: if isAdmin();
+    }
+
+    // New-client registration requests.
+    match /signup_requests/{id} {
+      allow create: if verified()
+                    && request.resource.data.email == email()
+                    && request.resource.data.firebaseUid == request.auth.uid
+                    && request.resource.data.status == "pending";
+      allow read: if verified() && resource.data.email == email();
+      allow update, delete: if isAdmin();
+    }
+
+    // User profiles.
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // Notifications.
+    match /notifications/{id} {
+      allow read: if verified() && resource.data.clientEmail == email();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

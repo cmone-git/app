@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f7a55">
+<meta name="description" content="COREBIQ Client Portal">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="assets/logo-corebiq.png">
+<title>COREBIQ Client Portal</title>
+</head>
+<body>
+
+<section id="authShell" class="auth-shell">
+  <div class="auth-card">
+    <div class="brand">
+      <div class="brand-mark">C</div>
+      <div><h1>COREBIQ</h1><small>Client Portal</small></div>
+    </div>
+
+    <div id="loginPanel">
+      <h2>Client Login</h2>
+      <p>Access your compliance, documents, payments and COREBIQ assistant.</p>
+      <form id="loginForm">
+        <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="email" required></div>
+        <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" required></div>
+        <button class="btn primary full" type="submit">Sign In</button>
+      </form>
+      <div class="auth-links"><button class="btn" type="button" data-auth="signup">New client? Request access</button></div>
+    </div>
+
+    <div id="signupPanel" class="hidden">
+      <h2>Client Registration</h2>
+      <p>Create an account. COREBIQ will verify and approve the request before a client ID is issued.</p>
+      <form id="signupForm">
+        <div class="field"><label>Full name</label><input id="signupName" required></div>
+        <div class="field"><label>Email</label><input id="signupEmail" type="email" required></div>
+        <div class="field"><label>Mobile</label><input id="signupMobile" inputmode="tel" required></div>
+        <div class="field"><label>Password</label><input id="signupPassword" type="password" minlength="6" required></div>
+        <button class="btn primary full" type="submit">Submit Registration</button>
+      </form>
+      <div class="auth-links"><button class="btn" type="button" data-auth="login">Already registered? Sign in</button></div>
+    </div>
+    <div class="notice">Use the email registered with COREBIQ. New accounts remain pending until approval and client ID assignment.</div>
+  </div>
+</section>
+
+<section id="portalShell" class="portal hidden">
+  <header class="topbar">
+    <div class="top-left">
+      <button id="menuBtn" class="menu-btn">☰</button>
+      <div class="page-title" id="pageTitle">Home</div>
+    </div>
+    <div class="user-mini" id="clientName">Client</div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <nav class="nav">
+        <button class="nav-item active" data-view="home">⌂ &nbsp; Home</button>
+        <button class="nav-item" data-view="compliance">✓ &nbsp; Compliance</button>
+        <button class="nav-item" data-view="documents">▣ &nbsp; Documents</button>
+        <button class="nav-item" data-view="upload">↑ &nbsp; Upload</button>
+        <button class="nav-item" data-view="payments">₹ &nbsp; Payments</button>
+        <button class="nav-item" data-view="assistant">✦ &nbsp; AI Assistant</button>
+        <button class="nav-item" data-view="profile">◎ &nbsp; Profile</button>
+      </nav>
+      <div class="side-bottom"><button id="logoutBtn" class="btn full">Sign Out</button></div>
+    </aside>
+
+    <main class="main">
+      <div id="clientPending" class="pending hidden panel">
+        <h2 id="pendingTitle">Approval pending</h2>
+        <p id="pendingText">Your request is under review.</p>
+        <button id="refreshBtn" class="btn primary">Check Again</button>
+        <button id="logoutBtn2" class="btn">Sign Out</button>
+      </div>
+
+      <div id="portalContent">
+        <section id="view-home" class="view active">
+          <div class="hero"><h2>Welcome, <span id="homeClient">Client</span></h2><p>Client ID: <b id="homeId">—</b></p></div>
+          <div class="stats">
+            <div class="stat"><label>Compliance</label><b id="statCompliance">0</b></div>
+            <div class="stat"><label>Pending</label><b id="statPending">0</b></div>
+            <div class="stat"><label>Documents</label><b id="statDocuments">0</b></div>
+            <div class="stat"><label>Payments</label><b id="statPayments">0</b></div>
+          </div>
+          <div class="panel"><h3>Compliance updates</h3><div id="recentCompliance"></div></div>
+        </section>
+
+        <section id="view-compliance" class="view"><div class="panel"><h3>Statement of Compliance</h3><div id="complianceTable"></div></div></section>
+
+        <section id="view-documents" class="view"><div class="panel"><h3>My Documents</h3><div id="documentsList"></div></div></section>
+
+        <section id="view-upload" class="view">
+          <div class="panel"><h3>Upload Document</h3>
+            <p>Client ID: <b id="uploadClientId">—</b></p>
+            <div class="field"><label>Category</label><select id="uploadCategory"><option>GST</option><option>Income Tax</option><option>TDS</option><option>Accounts</option><option>Audit</option><option>MCA</option><option>PF</option><option>ESI</option><option>General</option></select></div>
+            <div class="field"><label>File</label><input id="fileInput" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.csv"></div>
+            <button id="uploadBtn" class="btn primary">Upload</button>
+            <p id="uploadStatus"></p>
+          </div>
+        </section>
+
+        <section id="view-payments" class="view">
+          <div class="panel"><h3>Make a Payment</h3>
+            <div class="field"><label>Amount</label><input id="paymentAmount" type="number" min="1" step="0.01" placeholder="₹"></div>
+            <div class="field"><label>Description</label><input id="paymentDescription" placeholder="e.g. GST filing fee"></div>
+            <button id="payBtn" class="btn primary">Generate Payment</button>
+            <div id="paymentResult" style="margin-top:14px"></div>
+          </div>
+          <div class="panel"><h3>Payment History</h3><div id="paymentRows"></div></div>
+        </section>
+
+        <section id="view-profile" class="view"><div class="panel"><h3>Profile</h3><div id="profile"></div></div></section>
+
+        <section id="view-assistant" class="view">
+          <div class="panel chat-box">
+            <h3>COREBIQ Gemini Assistant</h3>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input"><textarea id="chatInput" placeholder="Ask about your compliance, documents or payments..."></textarea><button id="aiSend" class="btn primary">Send</button></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="drawer" class="mobile-drawer">
+    <div class="drawer-card">
+      <button id="drawerClose" class="btn drawer-close">×</button>
+      <div class="brand"><div class="brand-mark">C</div><div><h1>COREBIQ</h1><small>Client Portal</small></div></div>
+      <div class="drawer-nav">
+        <button class="nav-item active" data-view="home">Home</button>
+        <button class="nav-item" data-view="compliance">Compliance</button>
+        <button class="nav-item" data-view="documents">Documents</button>
+        <button class="nav-item" data-view="upload">Upload</button>
+        <button class="nav-item" data-view="payments">Payments</button>
+        <button class="nav-item" data-view="assistant">AI Assistant</button>
+        <button class="nav-item" data-view="profile">Profile</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="module" src="assets/js/app.js"></script>
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(console.warn));
+}
+</script>
+</body>
+</html>

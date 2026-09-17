@@ -1,0 +1,32 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function verified() {
+      return signedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return signedIn() && (
+        request.auth.token.email in [
+          "shanicm@gmail.com",
+          "cmexpertsgroup@gmail.com"
+        ]
+      );
+    }
+
+    // Client files are isolated by Firebase UID.
+    match /client_files/{uid}/{fileName=**} {
+      allow read: if isAdmin() || (verified() && request.auth.uid == uid);
+      allow write: if verified()
+                   && request.auth.uid == uid
+                   && request.resource.size <= 15 * 1024 * 1024;
+      allow delete: if isAdmin();
+    }
+  }
+}
